@@ -1,0 +1,7 @@
+Toán tử
+==          --> Bằng
+!=          --> Không bằng
+>           --> Lớn hơn
+<           --> Nhỏ hơn
+>=          --> Lớn hơn hoặc bằng
+<=          --> Nhỏ hơn hoặc bằng

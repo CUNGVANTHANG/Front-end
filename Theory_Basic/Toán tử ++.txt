@@ -1,0 +1,44 @@
+#1 Sử dụng ++ làm hậu tố
+
+VD1:
+var number = 1;
+
+number++; // dùng làm hậu tố, ++ ở phía sau biến
+console.log(number); // 2
+
+number++;
+console.log(number); // 3
+
+VD2:
+var number = 1;
+
+console.log(number++); // 1
+console.log(number); // 2
+
+console.log(number++); // 2
+console.log(number); // 3
+
+-->  Toán tử ++ khi dùng là hậu tố sẽ tăng giá trị của biến lên 1 và trả về giá trị trước khi tăng.
+
+
+#2 Sử dụng ++ làm tiền tố
+
+VD1:
+var number = 1;
+
+++number; // dùng làm tiền tố, ++ ở phía trước biến
+console.log(number); // 2
+
+++number;
+console.log(number); // 3
+
+VD2:
+var number = 1;
+
+console.log(++number); // 2
+console.log(number); // 2
+
+console.log(++number); // 3
+console.log(number); // 3
+
+--> Toán tử ++ khi dùng là tiền tố sẽ tăng giá trị của biến lên 1 và trả về giá trị sau khi tăng.

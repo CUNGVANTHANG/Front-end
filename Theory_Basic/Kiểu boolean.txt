@@ -1,0 +1,15 @@
+var isSucces = true;
+
+console.log(isSucces);
+
+// true
+
+
+var a = 1;
+var b = 2;
+
+var isSucces = a > b;
+
+console.log(isSucces);
+
+// false

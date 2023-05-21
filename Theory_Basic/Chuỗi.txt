@@ -1,0 +1,41 @@
+1. Tạo chuỗi
+
+Cách 1: Nên sử dụng
+
+var fullName = 'Cung Thang';
+
+Cách 2:
+
+var fullName = new String('Cung Thang);
+console.log(typeof fullName)
+
+// object
+
+
+2. Một số case sử dụng backslash (\)
+VD1:
+var fullName = 'Cung Van \'Thang\'';
+console.log(fullName)
+
+// Cung Van 'Thang'
+
+VD2: 
+var fullName = "Day la dau \\";
+console.log(fullName)
+
+// Day la dau \
+
+
+3. Xem độ dài chuỗi
+var fullName = 'Cung Thang';
+
+console.log(fullName.length)
+
+
+4. Template string ES6
+var firtsName = 'Thang';
+var lastName = 'Cung';
+
+console.log(`Toi la: ${firtsName} ${lastName}`);
+
+// Toi la: Thang Cung

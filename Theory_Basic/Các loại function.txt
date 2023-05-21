@@ -1,0 +1,37 @@
+Các loại function
+
+1. Declaration function
+2. Expression function
+3. Arrow function
+
+VD1: Declaration function
+function showMessage() {
+
+}
+
+VD2: Expression function
+var showMessage2 = function() {
+
+}
+
+setTimeout(function autoLogin() {
+
+});
+
+var myObject = {
+    myFunction: function() {
+
+    }
+}
+
+VD3: Phân biệt Declaration function và  Expression function
+
+showMessage() --> Có thể gọi trước khi viết function
+
+function showMessage() {
+    console.log('Declaration function');
+}
+
+var showMessage2 = function() {
+    console.log('Expression function');
+}

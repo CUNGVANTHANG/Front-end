@@ -1,0 +1,3 @@
+var weight = 19
+
+Nghĩa là var (biến) weight (cân nặng) = 19

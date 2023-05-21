@@ -1,0 +1,7 @@
+1. && - AND
+2. || - OR
+3. ! - NOT
+
+if (a > 0 && b > 0) {
+    console.log('DIEU KIEN DUNG');
+}

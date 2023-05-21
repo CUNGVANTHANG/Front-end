@@ -1,0 +1,21 @@
+Giới thiệu một số hàm built-in
+    1. alert - In ra dòng thông báo trên web
+    
+    2. console - In ra dòng thông báo bên console
+       console.log
+       console.warn
+       console.error
+    
+    3. confirm - In ra dòng thông báo trên web để xác nhận
+    
+    4. prompt - Tạo ô input để nhập
+    
+    5. setTimeout - Chạy 1 đoạn code sau một khoảng thời gian
+       setTimeout(function() {
+          alert('Thong bao')
+       }, 1000) 
+    
+    6. setInterval - Chạy 1 đoạn code liên tục lặp đi lặp lại sau một khoảng thời gian
+       setInterval(function() {
+          console.log('Day la log' + Math.random())
+       })

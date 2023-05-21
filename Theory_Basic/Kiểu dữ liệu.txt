@@ -1,0 +1,58 @@
+#Kiểu dữ liệu trong JavaScript
+
+1. Dữ liệu nguyên thủy - Primitive Data
+    - Number
+    - String
+    - Boolean
+    - Undefined
+    - Null
+    - Symbol
+
+VD: Symbol
+var id = Symbol('id'); // unique
+var id2 = Symbol('id'); // unique
+
+console.log(id === id2);
+
+// false
+
+2. Dữ liệu phức tạp - Complex Data
+    - Function
+    - Object
+
+VD1: Function
+var myFunction = function() {
+    alert('Hi. Xin chao cac ban');
+}
+
+myFunction();
+
+VD2: Object types
+var myObject = {
+    name: 'Cung Thang',
+    age: 19,
+    adress: 'Ha Noi',
+    myFunction: function () {
+
+    }
+};
+
+console.log('myObject', myObject);
+
+VD3: Array
+var myArray = [
+    'JavaScript',
+    'PHP',
+    'Ruby'
+];
+
+console.log(myArray)
+
+
+---------------------------------------------
+#Kiểm tra kiểu dữ liệu
+var fullName = 'Cung Thang';
+
+console.log(typeof fullName)
+
+// string

@@ -1,0 +1,3 @@
+alert('Hello world')
+
+In ra màn hình web "Hello world"

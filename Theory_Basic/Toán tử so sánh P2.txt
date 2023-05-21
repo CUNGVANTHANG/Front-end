@@ -1,0 +1,38 @@
+TOÁN TỬ SO SÁNH - P2
+So sánh tuyệt đối: So sánh value và data type
+1. ===  
+2. !==
+
+VD1:
+var a = 1;
+var b = '1';
+
+console.log(a == b);
+
+// true
+
+-->
+
+var a = 1;
+var b = '1';
+
+console.log(a === b);
+
+// false
+
+VD2: 
+var a = '1';
+var b = 1;
+
+console.log(a != b);
+
+// false
+
+-->
+
+var a = '1';
+var b = 1;
+
+console.log(a !== b);
+
+// true

@@ -1,0 +1,26 @@
+#Truthy - Bất cứ giá trị nào trong Javascript khi chuyển đổi sang kiểu dữ liệu boolean mà có giá trị true thì ta gọi giá trị đó là Truthy
+
+VD:
+console.log(Boolean(1)) // true
+console.log(Boolean(['BMW'])) // true
+console.log(Boolean({ name: 'Miu' })) // true
+
+console.log(!!'hi') // true
+
+!! là gì? Đơn giản thôi. Toán tử ! là toán tử not (phủ định) nên !! là 2 lần phủ định, mà 2 lần phủ định lại 
+trở thành "khẳng định". Trong Javascript thì đây là một "tip" để convert (chuyển đổi) mọi kiểu dữ liệu khác sang Boolean.
+
+VD:
+console.log(!!1) // true
+console.log(!!'f8') // true
+console.log(!!['Mercedes']) // true
+
+#Falsy - Bất cứ giá trị nào trong Javascript khi chuyển đổi sang kiểu dữ liệu boolean mà có giá trị false thì ta gọi giá trị đó là Falsy
+
+Trong Javascript có 6 giá trị sau được coi là Falsy:
+1. false
+2. 0 (số không)
+3. '' or "" (chuỗi rỗng)
+4. null
+5. undefined
+6. NaN

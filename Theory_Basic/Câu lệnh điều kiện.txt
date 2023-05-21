@@ -1,0 +1,10 @@
+var isSucces = 1 < 2;
+
+if (isSucces) {
+    console.log('DIEU KIEN DUNG');
+}
+else {
+    console.log('DIEU KIEN SAI');
+}
+
+// DIEU KIEN DUNG

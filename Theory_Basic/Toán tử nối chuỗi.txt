@@ -1,0 +1,14 @@
+var firstName = 'Cung';
+var lastName = 'Thang';
+
+console.log(firstName + ' ' + lastName);
+
+// Cung Thang
+
+
+var name = 'Cung';
+name = name + ' Thang';
+
+console.log(name);
+
+// Cung Thang

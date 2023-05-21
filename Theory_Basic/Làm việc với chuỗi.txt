@@ -1,0 +1,60 @@
+Keyword: Javascript string methods
+
+var myString = 'Cung Van Thang';
+
+1. length
+console.log(myString.length)
+
+// 14
+
+
+2. Find index
+VD1: indexOf trả về vị trí chuỗi tìm thấy đầu tiên
+console.log(myString.indexOf('Van'))
+
+// 5
+
+VD2: search và lastIndexOf
+
+3. Cut string
+console.log(myString.slice(5, 8)) --- 5 là vị trí ban đầu, 9 là vị trí muốn cắt
+
+// Van
+
+4. Replace
+VD1:
+console.log(myString.replace('Van', 'Dinh'))
+
+// Cung Dinh Thang 
+
+VD2: Dùng biểu thức chính quy giúp thay thế tất cả các từ trong chuỗi
+var myString1 = 'Cung Van Van Van Thang'
+console.log(myString1.replace(/Van/g, 'Dinh'))
+
+// Cung Dinh Dinh Dinh Thang
+
+5. Convert to upper case
+console.log(myString.toUpperCase())
+
+// CUNG VAN THANG
+
+6. Convert to lower case
+console.log(myString.toLowerCase())
+
+// cung van thang
+
+
+7. Trim (loại bỏ ký tự khoảng trắng ở 2 hai đầu)
+console.log(myString.trim())
+
+8. Split (Tách chuỗi thành array dựa vào điểm chung)
+var languages = 'Javascript,PHP,Ruby';
+console.log(languages.split(','))
+
+// [ 'Javascript', 'PHP', 'Ruby' ]
+
+9. Get a character by index
+const myString2 = 'Cung Thang';
+console.log(myString2.charAt(0))
+
+// C
