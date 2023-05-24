@@ -1,0 +1,42 @@
+1. Tạo mảng
+C1:
+var languages = [
+    'Javascript',
+    'PHP',
+    'Ruby',
+    'Dart',
+    null,
+    undefined,
+    function () {
+        
+    },
+    {},
+    123
+];
+
+console.log(languages)
+
+C2:
+var languages = new Array(
+    'Javascript',
+    'PHP',
+    'Ruby',
+    'Dart',
+    null,
+    undefined,
+    function () {
+        
+    },
+    {},
+    123
+);
+    
+console.log(languages)
+
+.Kiểm tra có phải là Array không'
+console.log(Array.isArray(languages))
+
+2. Truy xuất mảng
+console.log(languages.length) // Tìm độ dài mảng
+
+console.log(languages[0]) // index

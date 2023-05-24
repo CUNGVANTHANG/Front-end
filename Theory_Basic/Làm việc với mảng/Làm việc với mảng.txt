@@ -1,0 +1,71 @@
+Làm việc với Array
+
+1. To string
+2. Join
+3. Pop
+4. Push
+5. Shift
+6. Unshift
+7. Splicing
+8. Concat
+9. Slicing
+
+///////////////////
+var languages = [
+    'Javascript',
+    'PHP',
+    'Ruby'
+];
+
+var languages2 = [
+    'Dart',
+    'Ruby'
+];
+
+1. To string
+console.log(languages.toString()) // Javascript,PHP,Ruby
+
+2. Join
+console.log(languages.join('-')) // Javascript-PHP-Ruby
+
+3. Pop (Xóa element cuối mảng và trả về phần tử đã xóa)
+console.log(languages.pop()) // Xóa Ruby còn Javascript, PHP
+console.log(languages.pop()) // Xóa PHP còn Javascript
+console.log(languages.pop()) // Xóa Javascript, mảng rỗng
+console.log(languages.pop()) // Trả về undefined
+
+console.log(languages)
+
+4. Push (Thêm phần tử hoặc nhiều phần tử vào cuối mảng)
+console.log(languages.push('Dart', 'Java'))
+
+console.log(languages)
+
+5. Shift (Xóa element đầu mảng và trả về phần tử đã xóa)
+console.log(languages.shift()) // Xóa Javascript ở cuối mảng
+
+console.log(languages) // Còn PHP, Ruby
+
+6. Unshift (Thêm phần tử hoặc nhiều phần tử vào đầu mảng)
+console.log(languages.unshift('Dart')) // Thêm Dart vào đầu mảng
+
+console.log(languages)
+
+7. Splicing 
+*(Xóa element vị trí bất kỳ)
+languages.splice(1, 1)  // splice(vị trí index, số lượng phần tử cần xóa)
+
+console.log(languages) // Còn Javascript, Ruby
+
+*(Chèn element vị trí bất kỳ)
+languages.splice(1, 0, 'Dart') // splice(vị trí index, sô lượng phần tử cần xóa, phần tử muốn chèn)
+
+console.log(languages) // Javascript, Dart, PHP, Ruby
+
+8. Concat (Nối mảng)
+console.log(languages.concat(languages2))
+
+9. Slicing (Cắt element tại vị trí) - slice(vị trí bắt đầu cắt, vị trí cuối cùng cắt)
+console.log(languages.slice(0)) // Copy mảng
+console.log(languages.slice(1, 2)) // PHP
+console.log(languages.slice(-2, -1)) // PHP
