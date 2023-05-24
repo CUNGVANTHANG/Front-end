@@ -1,0 +1,25 @@
+1. Khai báo số
+var age = 18; // number
+var PI = 3.14 // number
+
+var otherNumber = new Number(9) // object
+
+var result = 20 / 'ABC'; // NaN
+
+console.log(isNaN(result)) // Cách kiểm tra NaN bằng hàm isNaN
+
+2. Làm việc với Number
+   - To string
+   - To Fixed
+
+a. To string
+var age = 18;
+var PI = 3.14;
+
+console.log(age.toString())
+
+b. To Fixed
+var age = 18;
+var PI = 3.14;
+
+console.log(age.toFixed())
