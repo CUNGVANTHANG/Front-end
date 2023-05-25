@@ -1,0 +1,21 @@
+// Object prototype // Đối tượng nguyên mẫu
+
+function User(firstName, lastName, avatar) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.avatar = avatar;
+    this.getName = function() {
+        return `${this.firstName} ${this.lastName}
+    }
+}
+
+User.prototype.className = 'F8'
+User.prototype.getClassName = function() {
+    return this.className
+}
+
+var user = new User('Thang', 'Cung', 'Avatar1');
+var user2 = new User('Cung', 'Thang', 'Avatar2');
+
+console.log(user.className);
+console.log(user2);

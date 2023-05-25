@@ -1,0 +1,29 @@
+Math object
+- Math.PI           // Trả về số PI
+- Math.round()      // Làm tròn số
+- Math.abs()        // Giá trị tuyệt đối
+- Math.ceil()       // Làm tròn trên
+- Math.floor()      // Làm tròn dưới
+- Math.random()     // random số
+- Math.min()        // số nhỏ nhất
+- Math.max()        // số lớn nhất
+
+VD1: Math.random()
+var random = Math.floor(Math.random() * 5);
+
+var bonus = [
+    '10 coin',
+    '20 coin',
+    '30 coin',
+    '40 coin',
+    '50 coin',
+];
+
+console.log(bonus[random]);
+
+VD2: Math.random()
+var random = Math.floor(Math.random() * 5);
+
+if (random < 50) {
+    console.log('Cường hóa thành công!');
+}

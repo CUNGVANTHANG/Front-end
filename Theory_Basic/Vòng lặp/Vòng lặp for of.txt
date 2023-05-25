@@ -1,0 +1,40 @@
+VD1:
+var languages = [
+    'Javascript',
+    'PHP',
+    'Java'
+];
+
+for (var value of languages) {
+    console.log(value);
+}
+
+// Javascript, PHP, Java
+
+VD2:
+var languages = 'Javascript';
+
+for (var value of languages) {
+    console.log(value);
+}
+
+// J, a, v, a, s, c, r, i, p, t
+
+VD3: Với object
+var myInfo = {
+    name: 'Cung Thang'
+    age: 19
+};
+
+* Cách 1:
+for (var value of Object.keys(myInfo)) {
+    console.log(myInfo[value]);
+}
+
+* Cách 2:
+for (var value of Object.value(myInfo)) {
+    console.log(value);
+}
+
+// Cung Thang
+   19

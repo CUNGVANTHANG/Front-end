@@ -1,0 +1,21 @@
+VD1:
+var myInfo = {
+    name: 'Cung Thang',
+    age: 19,
+    address: 'Ha Noi'
+};
+
+for (var key in myInfo) {
+    console.log(myInfo[key]); // key: name, age, address
+}
+
+// Cung Thang
+   19
+   Ha Noi
+
+VD2:
+var languages = 'Javascript';
+
+for (var key in languages) {
+    console.log(languages[key]) // key: 0 1 2 3 4 5 6 7 8 9
+}

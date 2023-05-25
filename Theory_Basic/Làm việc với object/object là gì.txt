@@ -1,0 +1,28 @@
+var emailKey = 'email2'
+
+var myInfo = {
+    name: 'Cung Thang',
+    age: 19,
+    address: 'Ha Noi, VN'
+    [emailKey]: cungvanthang2k3
+    getName: function() {
+        return this.name;
+    }
+}
+
+myInfo.email1 = 'cungvanthang2k3@gmail.com'
+
+console.log(myInfo) // name: Cung Thang
+                       age: 19
+                       address: Ha Noi, VN
+                       email1: cungvanthang2k3
+                       email2: cungvanthang2k3
+
+*Xóa key value
+delete myInfo.age // Xóa age: 19
+
+
+console.log(myInfo.getName()) // name: Cung Thang
+
+// Function -- > Phương thức // method
+// Others -- > Thuộc tính // property

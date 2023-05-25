@@ -1,0 +1,55 @@
+VD1:
+var array = ['a', 'b', 'c', 'a', 'b', 'c']
+
+console.log([...(new Set(array))]);
+
+// 'a', 'b', 'c'
+
+VD2: Đệ quy
+function countDown(num) {
+    if (num > 0) {
+        console.log(num);
+        return countDown(num - 1);
+    }
+    return num;
+}
+
+countDown(10);
+
+VD3: Đệ quy
+function loop(start, end, cb) {
+    if (start <= end) {
+        cb(start);
+        return loop(start + 1, end, cb);
+    }
+}
+
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+loop(0, array.length - 1; function(index)) {
+    console.log(array[index]);
+}
+
+// Javascript, PHP, Ruby
+
+VD4: Đệ quy
+C1: Không đệ quy
+function giaiThua(num) {
+    var output = 1;
+    for (var i = num; i > 0; i--){
+        output = output * i;
+    }
+    return output;
+}
+
+giaiThua(6);
+
+C2: Đệ quy
+function giaiThua(num) {
+    if (num > 0) {
+        return giaiThua(num - 1) * num;
+    }
+    return 1;
+}
+
+giaiThua(6);
