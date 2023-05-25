@@ -1,0 +1,13 @@
+function myFunction(param) {
+    if (typeof param === 'function') {
+        param('Học lập trình');
+    }
+}
+
+function myCallback(value) {
+    console.log('Value: ', value);
+}
+
+myFunction(myCallback);
+
+Callback là hàm (function) được truyền qua đối số khi gọi hàm khác
