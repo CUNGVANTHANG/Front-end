@@ -1,0 +1,37 @@
+Array.prototype.every2 = function(callback) {
+    var output = true;
+    for (var index in this) {
+        if (this.hasOwnProperty(index)) {
+            var result = callback(this[index], index, this);
+            if (!result) {
+                output = false;
+                break;
+            }
+        }
+    }
+    return output;
+}
+
+var course = [
+    {
+        name: 'Javascript',
+        coin: 680,
+        isFinish: true,
+    },
+    {
+        name: 'PHP',
+        coin: 860,
+        isFinish: false,
+    },
+    {
+        name: 'Ruby',
+        coin: 980,
+        isFinish: false,
+    }
+];
+
+var result = courses.every2(function(course, index, array)) {  // Tất cả đúng thì return đúng, chỉ cần 1 cái bị sai thì return sai
+    return course.isFinish;
+};
+
+console.log(result);

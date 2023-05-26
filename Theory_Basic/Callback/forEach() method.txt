@@ -1,0 +1,22 @@
+Array.prototype.forEach2 = function(callback) {
+    for (var index in this) {
+        if(this.hasOwnProperty(index)) {  // this.hasOwnProperty(index) dùng để loại bỏ key nằm trong proto (forEach2)
+            callback(this[index], index, this);
+        }
+        
+    }
+}
+
+// Javascript(true), PHP(true), Ruby(true), forEach2(false) --> forEach2 là key nằm trong proto
+
+var courses = [
+    'Javascript',
+    'PHP',
+    'Ruby'
+];
+
+var output = courses.forEach2(function(course, index, array) {
+    console.log(course, index, array);
+})
+
+console.log(output) // undefined --> forEach() không trả về return output

@@ -1,0 +1,42 @@
+Trường hợp xảy ra khi:
+var courses = [
+    'Javascript',
+    'PHP'
+];
+
+courses.length = 10;
+
+for(var i = 0; i < courses.length; i++) {
+    console.log(courses[i]);
+}
+
+// Javascript, PHP, 8 undefined
+
+Khắc phục:
+var courses = [
+    'Javascript',
+    'PHP'
+];
+
+courses.length = 10;
+
+for(var index in courses) {
+    console.log(courses[index]);
+}
+
+// Javascript, PHP
+
+VD1:
+var courses = new Array(10); // Nếu nhập 1 đối số sẽ là độ dài mảng
+var courses = new Array(10, 12); // Nếu nhập 2 đối số trở lên thì sẽ là phần tử của mảng
+
+VD2:
+var courses = new Array(10);
+
+courses.push('Javascript', 'PHP');
+
+for (var index in courses) {
+    console.log(courses[index]);
+}
+
+// Javascript, PHP // Số lượng phần tử ban đầu là 10 giờ đã tăng lên 12 (Javascript (10), PHP (11))
