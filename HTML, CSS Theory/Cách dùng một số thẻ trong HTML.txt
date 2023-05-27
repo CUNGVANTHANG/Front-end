@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- 1. h1 - h6    - heading
+     2. p          - paragraph
+     3 .img        - image
+     4. a          - anchor
+     5. ul, li     - unordered list, list item
+     6. table
+     7. input
+     8. button
+     9. div
+-->
+<html>
+    <!-- Phần đầu <CRT />--> 
+    <head>
+        <title>Web Cung Văn Thắng</title>
+        <meta charset="utf-8">
+ 
+    </head>
+    <!-- Phần thân -->
+
+    <body>
+        <div>
+            <h1>XIN CHÀO CÁC BẠN! </h1>
+        <h6>Cung Văn Thắng</h6>
+        <button>Đăng nhập</button>
+        <button>Đăng ký</button>
+        
+        <!-- Tạo input hình vuông -->
+        <input type="checkbox">
+        <input type="checkbox">
+        <input type="checkbox">
+        <!-- Tạo input hình tròn -->
+        <input type="radio">
+        <input type="radio">
+        <input type="radio">
+        <!-- Tạo input chọn được 1 đáp án -->
+        <input name="gender" type="radio">
+        <input name="gender" type="radio">
+        <input name="gender" type="radio">
+        <p>Đây là Wikipedia phiên bản tiếng Việt. Hiện nay, Wikipedia còn có nhiều phiên bản ngôn ngữ khác, dưới đây là các phiên bản ngôn ngữ lớn nhất.</p>
+        <img src="https://i.pinimg.com/564x/20/e1/0d/20e10d7f0556722e4b4e32c7241d0638.jpg" alt="Hình ảnh anime">
+        <a href="https://www.facebook.com/thang.cungvan.21">Facebook cá nhân</a>
+        <ul>
+            <li>Tên</li>
+            <li>Danh sách</li>
+            
+        </ul>
+        <table>
+            <thead>
+                <th>STT</th>
+                <th>Tên</th>
+                <th>Địa chỉ</th>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Cung Thắng</td>
+                    <td>Hà Nội</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Văn Thắng</td>
+                    <td>Hà Nội</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        </div>
+        <div>
+            Tên đăng nhập <input type="text">
+            <br>  
+            <!-- <br> là xuống dòng -->
+            Mật khẩu <input type="password">
+        </div>
+        <div>
+            <input name="gender" type="radio"> Nam 
+            <input name="gender" type="radio"> Nữ 
+            <input name="gender" type="radio"> Khác
+        </div>
+        <div>
+            <input name="answer" type="checkbox"> Đáp án 1
+            <input name="answer" type="checkbox"> Đáp án 2
+            <input name="answer" type="checkbox"> Đáp án 3
+            <input name="answer" type="checkbox"> Đáp án 4
+        </div>
+        <div>
+            <input type="submit" value="Đăng ký"> 
+        </div>
+    </body>
+</html>

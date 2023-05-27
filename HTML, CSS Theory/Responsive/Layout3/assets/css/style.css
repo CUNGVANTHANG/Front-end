@@ -1,0 +1,41 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.item {
+    margin-top: 16px;
+    font-size: 40px;
+    color: #fff;
+    text-align: center;
+    min-height: 180px;
+    line-height: 180px;
+    background-color: orange;
+}
+
+.main {
+    display: flex;
+    padding: 0 32px;
+}    
+
+.sidebar {
+    width: 300px;
+    background-color: #666;
+}    
+
+.content {
+    flex: 1;
+}    
+
+@media (min-width: 740px) and (max-width: 1023px) {
+    .hide-on-tablet {
+        display: none;
+    }
+}
+
+@media (max-width: 739px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}

@@ -1,0 +1,10 @@
+Thuộc tính padding (đệm)
+Thuộc tính boder (đường viền) 
+Thuộc tính margin (khoảng cách lề) 
+Thuộc tính box-sizing 
+Thuộc tính background-image
+Thuộc tính background-color
+Thuộc tính background-size (cover, contain) 
+Thuộc tính background-origin
+Thuộc tính background-positon
+

@@ -1,0 +1,6 @@
+1. var()
+2. linear-gradient()
+3. rgba()
+4. rgb()
+5. calc()
+6. attr()

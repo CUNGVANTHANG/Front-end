@@ -1,0 +1,5 @@
+1. ::before
+2. ::after
+3. ::first-letter
+4. ::first-line
+5. ::selection

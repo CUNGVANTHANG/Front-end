@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./grid.css">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .col {
+        text-align: center;
+        background-color: #ccc;
+        background-clip: content-box;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+
+<!-- 
+    Column: .col
+    Prefix class:
+        - c - mobile
+        - m - tablet
+        - l - PC
+        - o - offset
+ -->
+
+
+  <body>
+    <div class="grid wide">
+      <div class="row">
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+        <div class="col l-2 m-4 c-12">
+          <h2>l-2 m-4 c-12</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-3 m-6 c-6">
+          <h2>l-3 m-6 c-6</h2>
+        </div>
+        <div class="col l-3 m-6 c-6">
+          <h2>l-3 m-6 c-6</h2>
+        </div>
+        <div class="col l-3 m-6 c-6">
+          <h2>l-3 m-6 c-6</h2>
+        </div>
+        <div class="col l-3 m-6 c-6">
+          <h2>l-3 m-6 c-6</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-4 m-12 c-12">
+          <h2>l-4 m-12 c-12</h2>
+        </div>
+        <div class="col l-4 m-12 c-12">
+          <h2>l-4 m-12 c-12</h2>
+        </div>
+        <div class="col l-4 m-12 c-12">
+          <h2>l-4 m-12 c-12</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-6 m-6 c-12">
+          <h2>l-6 m-6 c-12</h2>
+        </div>
+        <div class="col l-6 m-6 c-12">
+          <h2>l-6 m-6 c-12</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-12 m-12 c-12">
+          <h2>l-12 m-12 c-12</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-4 m-0 c-0">
+          <h2>l-4 m-0 c-0</h2>
+        </div>
+        <div class="col l-8 m-12 c-12">
+          <h2>l-8 m-12 c-12</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-8 m-12 c-12">
+          <h2>l-8 m-12 c-12</h2>
+        </div>
+        <div class="col l-4 m-0 c-0">
+          <h2>l-4 m-0 c-0</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-4 m-4 c-6">
+          <h2>l-4 m-4 c-6</h2>
+        </div>
+        <div class="col l-4 m-4 c-6 l-o-4 m-o-4">
+          <h2>l-4 m-4 c-6 l-o-4 m-o-4</h2>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col l-4 m-4 c-12 l-o-4 m-o-4">
+          <h2>l-4 m-4 c-12 l-o-4 m-o-4</h2>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+@index.html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Web CVT</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="main.css">
+    </head>
+
+    <body>
+        <div>
+           <h1 id="first-heading">CSS selectors?</h1>
+           <h1 class="second-heading">CSS selectors?</h1>
+           <h1 class="second-heading">CSS selectors?</h1>
+           <h2 class="second-heading">ID & Class?</h2>
+           <!-- ID chỉ dùng được 1 cái <h1 id="first-heading">CSS selectors?</h1> -->
+           <!-- Class dùng được nhiều cái <h1 class="second-heading">CSS selectors?</h1> -->
+        </div>
+    </body>
+</html>
+
+@main.css
+/* Sử dụng ID thêm # */
+#first-heading {
+    color: red;
+}
+/* Sử dụng Class thêm . */
+.second-heading {
+    color: green;
+    font-size: 20px;
+}

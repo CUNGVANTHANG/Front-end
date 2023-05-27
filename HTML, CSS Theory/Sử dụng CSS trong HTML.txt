@@ -1,0 +1,37 @@
+@index.html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Web CVT</title>
+        <meta charset="utf-8">
+    <!-- Kiểu External: Sử dụng 1 thẻ dẫn tới link ở bên ngoài-->  
+       <!-- <link rel="stylesheet" href="main.css"> -->
+    <!-- Kiểu Internal: Sử dụng 1 cặp thẻ style trong html-->  
+        <!-- <style>
+            h1 {
+                color: red;
+                font-size: 300px;
+            }
+        </style> --> 
+    </head>
+    <body>
+        <div>
+            <!-- Kiểu Inline: Sử dụng thuộc tính Attribute-->
+            <h1 style="color: red;font-size: 50px">CSS in HTML?</h1>
+            <ol> 
+                <!-- <ol> đánh thứ tự số -->
+                    <li>Sử dụng CSS trong HTML có 3 cách:</li>
+                <li>Internal</li>
+                <li>External</li>
+                <li>Inline</li>
+            </ol>
+        </div>
+
+    </body>
+</html>
+
+@main.css
+h1 {
+    color: red;
+    font-size: 300px;
+}

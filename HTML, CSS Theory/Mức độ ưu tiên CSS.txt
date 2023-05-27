@@ -1,0 +1,7 @@
+1. Internal <> External
+2. Inline - 1000
+3. #id - 100
+4. .class - 10
+5. tag - 1
+6. * - 0
+7. !important - 10000

@@ -1,0 +1,6 @@
+1. px
+2. % (phụ thuộc vào thẻ chứa nó)
+3. rem (phụ thuộc vào thẻ html) - 100% tương đương 16px
+4. em (phụ thuộc vào thẻ gần nhất chứa nó)
+5. vw (chiều ngang của trình duyệt)
+6. vh (chiều dọc của trình duyệt)

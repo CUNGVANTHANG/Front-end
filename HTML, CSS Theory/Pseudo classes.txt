@@ -1,0 +1,5 @@
+1. :root
+2. :hover
+3. :active
+4. :first-child
+5. :last-child
