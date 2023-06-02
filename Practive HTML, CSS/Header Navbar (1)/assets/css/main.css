@@ -1,0 +1,51 @@
+.app {
+    overflow: hidden;
+}
+
+.header,
+.header__navbar {
+    background: #222;
+    height: var(--header-height);
+    position: relative;
+}
+
+.header__navbar {
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__navbar-list {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__navbar-item {
+    color: var(--gray-color);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__navbar-topleft .header__navbar-item {
+    margin-right: 36px;
+}
+
+.header__navbar-topleft .header__navbar-item img {
+    margin-right: 6px;
+}
+
+.header__navbar-topleft .header__navbar-item i {
+    margin-left: 6px;
+}
+
+.header__navbar-topright .header__navbar-item {
+    padding-left: 36px;
+}
+
+.header__navbar-topright .header__navbar-item i {
+    margin-right: 6px;
+}
