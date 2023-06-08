@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML DOM</title>
+</head>
+<body>
+    <h1 id="heading">HTML DOM</h1>
+
+    <form action="" id="testForm"></form>
+    <form action="" id="form-1"></form>
+    <form action="" id="form-2"></form>
+    <form action="" id="form-3"></form>
+
+    <a href="" name="youtube">My youtube</a>
+
+</body>
+<script src="./main.js"></script>
+</html>
+
+
+HTML DOM
+
+Có 3 thành phần chính
+1. Element: ID, class, tag,
+CSS selector, HTML collection
+
+VD1: id
+var headingNode = document.getElementById('heading');
+console.log({
+    element: headingNode
+});
+
+VD2: class
+var headingNodes = document.getElementsByClassName('heading'); // Chọn tất cả phần tử class
+console.log({
+    element: headingNodes
+});
+
+VD3: CSS selector
+var headingNode = document.querySelector('.heading');
+console.log({
+    element: headingNode
+});
+
+VD4: CSS selector
+var headingNodes = document.querySelectorAll('.heading'); // Chọn tất cả phần tử
+console.log({
+    element: headingNodes
+});
+
+VD5: HTML collection
+console.log(document.forms['form-1']);
+console.log(document.forms.testForm);  // Phân biệt form-1 nghĩa là form dùng toán tử trừ đi 1 xảy ra lỗi
+
+VD6: HTML collection
+console.log(document.anchors);  // Lấy ra thẻ a nhưng với điều kiện thẻ a phải có thuộc tính name=""
+
+2. Attribute
+3. Text
+
