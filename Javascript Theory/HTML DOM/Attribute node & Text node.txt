@@ -1,0 +1,9 @@
+1. Element
+2. Attribute
+3. Text
+
+VD: <h1 id="heading" class="heading" title="heading">Heading 123</h1>
+Trong đoạn code: 
+h1 là Element node
+id, class, title là Attribute node
+Heading 123 là Text node
