@@ -16,7 +16,7 @@ var courses = [
 ];
 
 var output = courses.forEach2(function(course, index, array) {
-    console.log(course, index, array);
+    console.log(course, index, array); --> Dùng để lặp qua từng phần tử
 })
 
 console.log(output) // undefined --> forEach() không trả về return output

@@ -29,7 +29,7 @@ var course = [
     }
 ];
 
-var result = courses.some2(function(course, index, array)) {  // Tối thiểu 1 phần tử thỏa mãn
+var result = courses.some2(function(course, index, array)) {  // Tối thiểu 1 phần tử thỏa mãn sẽ trả về true hoặc false, nghĩa là 1 hoặc nhiều ông true thì trả về true, còn không có ông nào true thì trả về false
     return course.isFinish;
 };
 

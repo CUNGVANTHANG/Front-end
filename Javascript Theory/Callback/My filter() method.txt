@@ -26,8 +26,8 @@ var courses = [
     }
 ];
 
-var filterCourses = courses.filter2(function(course, index, array) {
-    return course.coin > 700;
+var filterCourses = courses.filter2(function(course, index, array) { 
+    return course.coin > 700; --> Trả về tất cả element thỏa mãn điều kiện
 });
 
 console.log(filterCourses);  
