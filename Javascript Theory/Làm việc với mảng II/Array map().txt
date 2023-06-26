@@ -46,6 +46,6 @@ function coursesHandler(course, index) {
     }
 };
 
-var newCourses = courses.map(coursesHandler);
+var newCourses = courses.map(coursesHandler); // Dùng để nhặt ra 
 
 console.log(newCourses);
