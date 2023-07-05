@@ -1,0 +1,58 @@
+/* Bước 1: Cài extension "Custom CSS and JS Loader */
+/* Bước 2: Vào setting.json add "vscode_custom_css.imports": ["Đường dẫn tới file color.css"] */
+/* Bước 3: Bấm Crt + Shift + P gõ '>Developer: Toggle Developer Tools' để xem class */
+
+/* Class: */
+/* 'to' ';' */
+.mtk1 {
+    color: transparent;
+    background-image: linear-gradient(to right top, mã màu, mã màu);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Comment */
+.mtk5 {
+    color: transparent;
+    background-image: linear-gradient(to right top, mã màu, mã màu);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* div, html, header, body... */
+.mtk6 { 
+    color: transparent;
+    background-image: linear-gradient(to right top, #F14658, #DC2537);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* rel, class, id, href... */
+.mtk10 {
+    color: transparent;
+    background-image: linear-gradient(to right top, #D6FF7F, #00B3CC);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* UTF-8, stylesheet, viewport */
+.mtk12 {
+    color: transparent;
+    background-image: linear-gradient(to right top, #F06966, #FAD6A6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* '>' '<' */
+.mtk14 {
+    color: transparent;
+    background-image: linear-gradient(to right top, #F06966, #FAD6A6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
