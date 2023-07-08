@@ -53,8 +53,4 @@ button.onclick = teacher1.getFullName // undefined undefined
 // Khắc phục: ràng buộc tới teacher1
 button.onclick = teacher1.getFullName.bind(teacher1) // Minh Thảo
 
-// VD3:
-const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll.bind(document)
-
 

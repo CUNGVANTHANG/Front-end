@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="main">
+        <form action="" method="POST" class="form" id="register-form">
+            <h3 class="heading">Thành viên đăng ký</h3>
+            <p class="desc">Cùng nhau học lập trình miễn phí</p>
+            <div class="spacer"></div>
+      
+            <div class="form-group">
+                <label for="fullname" class="form-label">Tên đầy đủ</label>
+                <input id="fullname" name="fullname" rules="required" type="text" placeholder="VD: Cung Thắng" class="form-control">
+                <span class="form-message"></span>
+            </div>
+      
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" name="email" rules="required|email" type="text" placeholder="VD: email@domain.com" class="form-control">
+                <span class="form-message"></span>
+            </div>
+      
+            <div class="form-group">
+                <label for="password" class="form-label">Mật khẩu</label>
+                <input id="password" name="password" rules="required|min:6" type="password" placeholder="Nhập mật khẩu" class="form-control">
+                <span class="form-message"></span>
+            </div>
+      
+            <!-- <div class="form-group">
+                <label for="password_confirmation" class="form-label">Nhập lại mật khẩu</label>
+                <input id="password_confirmation" name="password_confirmation" rules="required|min:6" placeholder="Nhập lại mật khẩu" type="password" class="form-control">
+                <span class="form-message"></span>
+            </div> -->
+      
+            <button class="form-submit">Đăng ký</button>
+        </form>
+      
+    </div>
+
+    <script src="./validator.js"></script>
+    <script>
+        // 1. Mong muốn / Kỳ vọng / Thành quả đạt được ==> Output là gì?
+        var form = new validator('#register-form')
+        form.onSubmit = function (formData) {
+            console.log(formData)
+        }
+    </script>
+    
+</body>
+</html>
