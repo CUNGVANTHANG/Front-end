@@ -27,9 +27,9 @@ var courses = [
 ];
 
 // forEach
-// courses.forEach(function(course, index) { // Duyệt qua từng phần tử của mảng
-//     console.log(index, course);
-// });
+courses.forEach(function(course, index) { // Duyệt qua từng phần tử của mảng
+    console.log(index, course);
+});
 
 
 // every
@@ -57,8 +57,8 @@ var courses = [
 
 
 // filter
-var isFree = courses.filter(function(course, index) { // Tìm kiếm trả về tất cả đối tượng tìm thấy
-    return course.name === 'Ruby';
-});
+// var isFree = courses.filter(function(course, index) { // Tìm kiếm trả về tất cả đối tượng tìm thấy
+//     return course.name === 'Ruby';
+// });
 
-console.log(isFree)
+// console.log(isFree)

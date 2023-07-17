@@ -1,0 +1,1 @@
+alert("Tôi đang tự học JavaScript từ cafedev!")
