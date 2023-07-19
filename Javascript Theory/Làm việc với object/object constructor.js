@@ -6,7 +6,7 @@ var User = function(firstName, lastName, avatar) {
     this.avatar = avatar;
 
     this.getName = function() {
-        return `${this.firstName} ${this.lastName}
+        return `${this.firstName} ${this.lastName}`
     }
 }
 
