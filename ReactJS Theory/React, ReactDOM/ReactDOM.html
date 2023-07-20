@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script> 
+</head>
+<body>
+    <!-- 1. Tại sao phải sử dụng React-DOM?
+         2. Tại sao lại tách React-DOM ra?
+         3. Reader UI
+    -->
+    <div id="root"></div>
+
+    <script>
+        // VD1:
+        const postItem = React.createElement(
+            'div',
+            {
+                className: 'post-item'
+            },
+            React.createElement('h2', { title: 'Học React tại F8' }, 'Học ReactJS'),
+            React.createElement('p', null, 'Học ReactJS từ cơ bản tới nâng cao')
+        )
+
+        console.log(postItem)
+
+        // Get root element
+        const root = document.getElementById('root')
+
+        // React-DOM -> Render UI
+        ReactDOM.render(postItem, root)
+        
+        // VD2:
+        ReactDOM.render(
+            React.createElement('h1', { title: 'Hello', className: 'heading' }, 'Hello guys!'), 
+            root
+        ) 
+
+        // VD3:
+        ReactDOM.render(React.createElement(
+            'ul',
+            null,
+            React.createElement('li', null, 'Javascript'),
+            React.createElement('li', null, 'ReactJS')
+        ), root)
+    </script>
+</body>
+</html>

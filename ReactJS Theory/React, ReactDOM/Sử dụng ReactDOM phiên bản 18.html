@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script> 
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        const postItem = React.createElement(
+            'div',
+            {
+                className: 'post-item'
+            },
+            React.createElement('h2', { title: 'Học React tại F8' }, 'Học ReactJS'),
+            React.createElement('p', null, 'Học ReactJS từ cơ bản tới nâng cao')
+        )
+
+        console.log(postItem)
+
+        // Get root element
+        const container = document.getElementById('root')
+
+        // React@17
+        // React-DOM -> Render UI
+        // ReactDOM.render(postItem, container)
+
+        // React@18
+        const root = ReactDOM.createRoot(container)
+        root.render(postItem)
+        
+    </script>
+</body>
+</html>

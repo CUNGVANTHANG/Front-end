@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script> 
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <!-- Câu hỏi thường gặp:
+        - Tại sao khi code thuần dùng map phải join()...
+        - Gặp lỗi khi render từ mảng (prop "key")
+        - Không render được 2 elements cùng lúc -->
+    
+    <div id="root"></div>
+    <script type="text/babel">
+        // const reactCourse = 'ReactJS F8'
+        // const courses = [
+        //     {
+        //         name: 'HTML, CSS'
+        //     },
+        //     {
+        //         name: 'Responsive web design'
+        //     },
+        //     {
+        //         name: 'ReactJS'
+        //     }
+        // ]
+        
+        // const jsx = <ul>
+        //     {courses.map((course, index) => <li key={index}>{course.name}</li>)}
+        // </ul>
+
+        // Khắc phục lỗi 2 element render cùng lúc
+        // 1.
+        // const jsx = (
+        //     <React.Fragment>
+        //         <h1>Heading 1</h1>
+        //         <h2>Heading 2</h2>
+        //     </React.Fragment>
+        // )
+
+        // 2. 
+        const jsx = React.createElement(
+            React.Fragment,
+            null,
+            React.createElement('h1', null, 'Heading 1'),
+            React.createElement('h1', null, 'Heading 2')
+        )
+
+        ReactDOM.render(jsx, document.getElementById('root'))
+    </script>
+</body>
+</html>
