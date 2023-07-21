@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script> 
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+    <style>
+        #wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #wrapper a,
+        #wrapper button {
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #000;
+            text-decoration: none;
+            font-size: 26px;
+            color: #fff;
+            box-sizing: border-box;
+            cursor: pointer;
+            font-family: Arial, Helvetica, sans-serif;
+            border-width: 0;
+        }
+    </style>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Button.js
+        function Button({ title, href, onClick }) {
+            let Component = 'button'
+            const props = {}
+
+            if (href) {
+                Component = 'a'
+                props.href = href
+            }
+            if (onClick) {
+                props.onClick = onClick
+            }
+
+            return (
+                <Component {...props}>{title}</Component>
+            )
+        }
+
+        // App.js
+        function App() {
+            return (
+                <div id="wrapper">
+                    <Button 
+                        title="Click me!"
+                        href="https://fullstack.edu.vn"
+                        onClick={() => console.log(Math.random())}
+                    />
+                </div>
+            )
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'))
+    </script>
+</body>
+</html>

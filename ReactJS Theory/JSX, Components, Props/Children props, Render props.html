@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script> 
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <!-- Phần I:
+    - Xử lý DOM events
+    - Component do chúng ta định nghĩa phải viết in hoa ký tự đầu
+        - Chọn Component trong 1 object
+    - Booleans, Null & Undefined không được render
+    - Kết hợp toán tử logic để render theo điều kiện
+
+        Phần II:
+    - Props trong JSX
+        - <YourComponent
+            propName1="String literals"
+            propName2={expression}
+        />
+        - Props default to "true"
+        - Spread/Rest props
+        - Children prop
+            - <YourComponent>String literals</YourComponent>
+            - <YourComponent>{expression}</YourComponent>
+        - Render props
+    -->
+    <div id="root"></div>
+    <script type="text/babel">
+        function Input({ label, ...inputProps }) { // Toán tử Rest
+            // Toán tử spread (dải ra)
+            return (
+                <div>
+                    <label>{label}</label>
+                    <input {...inputProps} /> 
+                </div>
+            )
+        }
+
+        function Button({ children }) {
+            return <button>{children}</button>
+        }
+
+        function List({ data, children }) {
+            return (
+                <ul>
+                    {data.map((...props) => children(...props))}
+                </ul>
+            )
+        }
+        
+        // App.js
+        function App() {
+            const title = "Hello anh em"
+            const cars = ['BMW', 'Honda', 'Mazda']
+            return (
+                <div id="wrapper">
+                    <Input 
+                        label="Full name"
+                        type="text"
+                        placeholder="Enter name..."
+                        title="Day la input"
+                    />
+                    <Button>Click me!</Button>
+                    <List data={cars}>
+                        {(item, index) => <li key={index}>{item}</li>}
+                    </List>
+                </div>
+                
+            )
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'))
+    </script>
+</body>
+</html>
