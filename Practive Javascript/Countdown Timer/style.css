@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #dddddd;
+    height: 100vh; 
+}
+
+body,
+.root,
+.timer__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.root {
+    display: inline-flex;
+    background-color: #fff;
+    padding: 24px 32px;
+    border-radius: 32px;
+    font-family: sans-serif;
+}   
+
+.timer__part {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.timer__btn {
+    margin-left: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: #8208e6;
+    cursor: pointer;
+}
+
+.timer__btn img {
+    filter: invert(100%);
+}
+
+.timer__btn--play {
+    background-color: #00b84c;
+}
+  
+.timer__btn--pause {
+    background-color: #ff0256;
+}
