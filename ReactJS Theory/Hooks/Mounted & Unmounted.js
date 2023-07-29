@@ -1,4 +1,12 @@
-// Mounted / Unmounted
+// Mounted (khi sử dụng)/ Unmounted (khi không sử dụng)
+
+// function Content() {
+//     return (
+//         <h1>Hello world</h1>
+//     )
+// }
+
+// export default Content
 import { useState } from 'react'
 import Content from "./Content"
 
