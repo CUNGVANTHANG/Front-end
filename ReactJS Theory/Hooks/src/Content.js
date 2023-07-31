@@ -1,15 +1,11 @@
-import { memo } from 'react'
+import Paragraph from "./Paragraph";
 
-// === 
-
-function Content({ count }) {
-    
-    console.log('re-render')
+function Content() {
     return (
         <div>
-            <h2>Hello World {count}</h2>
+            <Paragraph />
         </div>
     )
 }
 
-export default memo(Content)
+export default Content
