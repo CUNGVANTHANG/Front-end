@@ -7,6 +7,9 @@
 - [4. Làm việc với chuỗi](#4-làm-việc-với-chuỗi)
 - [5. Làm việc với số](#5-làm-việc-với-số)
 - [6. Làm việc với mảng](#6-làm-việc-với-mảng)
+- [7. Làm việc với object](#7-làm-việc-với-object)
+- [8. Vòng lặp](#8-vòng-lặp)
+- [9. Callback](#9-callback)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -464,4 +467,134 @@ var evenNumbers = numbers.filter(function(number) {
 });
 
 console.log(evenNumbers); // Kết quả: [2, 4, 6, 10]
+```
+
+## 7. Làm việc với object
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+var person = {
+    firstName: "John",
+    lastName: "Doe",
+    age: 30,
+    sayHello: function() {
+        console.log("Hello, my name is " + this.firstName + " " + this.lastName);
+    }
+};
+
+console.log(person.firstName); // Kết quả: John
+console.log(person.age); // Kết quả: 30
+person.sayHello(); // Kết quả: Hello, my name is John Doe
+```
+Trong đó:
+- `person` là biến đối tượng.
+- `firstName`, `lastName`, `age` là các thuộc tính của đối tượng, có thể chứa các kiểu dữ liệu khác nhau như chuỗi, số, mảng, hoặc thậm chí là một đối tượng khác.
+- `sayHello` là một phương thức của đối tượng, chứa một hàm được thực thi khi gọi phương thức.
+
+- **Object constructor**
+
+```js
+function Person(firstName, lastName, age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+    this.sayHello = function() {
+        console.log("Hello, my name is " + this.firstName + " " + this.lastName);
+    };
+}
+
+var person1 = new Person("John", "Doe", 30);
+var person2 = new Person("Jane", "Smith", 28);
+
+person1.sayHello(); // Kết quả: Hello, my name is John Doe
+person2.sayHello(); // Kết quả: Hello, my name is Jane Smith
+```
+Trong đó:
+- `new` để tạo đối tượng
+- `this` trong constructor sẽ trỏ tới đối tượng đó
+
+- **Object prototype**
+
+`prototype` dùng để thêm các phương thức và thuộc tính cho các đối tượng
+
+```js
+function Person(firstName, lastName, age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+}
+
+Person.prototype.sayHello = function() {
+    console.log("Hello, my name is " + this.firstName + " " + this.lastName);
+};
+
+var person1 = new Person("John", "Doe", 30);
+var person2 = new Person("Jane", "Smith", 28);
+
+person1.sayHello(); // Kết quả: Hello, my name is John Doe
+person2.sayHello(); // Kết quả: Hello, my name is Jane Smith
+```
+
+- **Object Math**
+
+| Object | Mô tả |
+| :--- | :--- |
+| `Math.PI` | Trả về số PI |
+| `Math.round()` | Làm tròn số |
+| `Math.abs()` | Giá trị tuyệt đối |
+| `Math.ceil()` | Làm tròn trên |
+| `Math.floor()` | Làm tròn dưới |
+| `Math.random()` | Random số |
+| `Math.round()` | Làm tròn số |
+| `Math.min()` | Trả về số nhỏ nhất|
+| `Math.max()` | Trả về số lớn nhất |
+
+## 8. Vòng lặp
+[:arrow_up: Mục lục](#mục-lục)
+
+- **1. Vòng lặp for in dùng để lặp qua các key**
+
+```js
+var myInfo = {
+    name: 'Cung Thang',
+    age: 19,
+    address: 'Ha Noi'
+};
+
+for (var key in myInfo) {
+    console.log(myInfo[key]); // key: name, age, address
+}
+```
+
+- **2. Vòng lặp for of dùng để lặp qua các value**
+
+```js
+var languages = [
+    'Javascript',
+    'PHP',
+    'Java'
+];
+
+for (var value of languages) {
+    console.log(value); // Javascript, PHP, Java
+} 
+```
+
+## 9. Callback
+[:arrow_up: Mục lục](#mục-lục)
+
+**Callback là hàm (function) được truyền qua đối số khi gọi hàm khác**
+
+```js
+function myFunction(param) {
+    if (typeof param === 'function') {
+        param('Học lập trình');
+    }
+}
+
+function myCallback(value) {
+    console.log('Value: ', value);
+}
+
+myFunction(myCallback);
 ```
