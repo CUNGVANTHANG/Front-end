@@ -104,6 +104,8 @@ Trong Javascript có 6 giá trị sau được coi là Falsy:
 6. `NaN`
 
 ## 3. Làm việc với hàm
+[:arrow_up: Mục lục](#mục-lục)
+
 ```js
 function addNumbers(a, b) {
     return a + b;
@@ -163,6 +165,8 @@ const person2 = {
 `Arrow function` không có ngữ cảnh riêng biệt về `this`, nó kế thừa giá trị this từ ngữ cảnh bên ngoài. Trong khi `Declaration function` có ngữ cảnh riêng biệt về `this`, được xác định bởi cách hàm được gọi.
 
 ## 4. Làm việc với chuỗi
+[:arrow_up: Mục lục](#mục-lục)
+
 - **Sử dụng backslash (\)**
 ```js
 var fullName = "Day la dau \\";
@@ -195,6 +199,8 @@ console.log(`Toi la: ${firtsName} ${lastName}`);
 | `charAt` | Lấy kí tự |
 
 ## 5. Làm việc với số
+[:arrow_up: Mục lục](#mục-lục)
+
 - **Kiểm tra xem giá trị có phải là một số hữu hạn hay không**
 ```js
 Number.isFinite(value)
@@ -203,4 +209,259 @@ Number.isFinite(value)
 - **Kiểm tra xem giá trị có phải là NaN hay không**
 ```js
 isNaN(value)
+```
+
+- **Làm việc với số**
+
+| Phương thức | Mô tả |
+| :--- | :--- |
+| `toString()` | Chuyển đổi giá trị thành chuỗi |
+| `toFixed()` |  Làm tròn một số thực đến một số lượng chữ số thập phân cụ thể và **trả về một chuỗi** đại diện cho số đã được làm tròn |
+
+## 6. Làm việc với mảng
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Khởi tạo mảng**
+
+*Cách 1:*
+```js
+var languages = ['Javascript', 'PHP', 'Ruby', 'Dart', null, undefined, function () {}, {}, 123];
+```
+
+*Cách 2:*
+```js
+var languages = new Array('Javascript', 'PHP', 'Ruby', 'Dart', null, undefined, function () {}, {}, 123)
+```
+
+- **Kiểm tra có phải mảng (Array) không, sử dụng phương thức `isArray`**
+```js
+console.log(Array.isArray(languages))
+// true
+```
+
+- **Làm việc với mảng I**
+
+| Phương thức | Mô tả |
+| :--- | :--- |
+| `length` | Độ dài mảng |
+| `toString()` | Chuyển đổi giá trị thành chuỗi |
+| `join()` | Nối chuỗi |
+| `pop()` | Xóa element cuối mảng và trả về phần tử đã xóa |
+| `push()` | Thêm phần tử hoặc nhiều phần tử vào cuối mảng |
+| `shift()` | Xóa element đầu mảng và trả về phần tử đã xóa |
+| `unshift()` | Thêm phần tử hoặc nhiều phần tử vào đầu mảng |
+| `splice()` | Xóa element vị trí bất kỳ trong mảng |
+| `concat()` | Nối mảng |
+| `slice()` | Cắt element tại vị trí trong mảng |
+
+- **Làm việc với mảng II**
+
+| Phương thức | Mô tả |
+| :--- | :--- |
+| `map()` | Dùng để tạo ra một mảng mới bằng cách áp dụng một hàm vào từng phần tử của mảng gốc |
+| `reduce()` | Dùng để thực hiện một phép tích tổng hoặc tích luỹ trên các phần tử của mảng để trả về một giá trị duy nhất |
+| `forEach()` | Dùng để lặp qua từng phần tử của mảng và thực hiện một hàm cho mỗi phần tử |
+| `every()` | Dùng để kiểm tra xem tất cả các phần tử trong mảng có thỏa mãn một điều kiện cụ thể hay không |
+| `some()` | Dùng để kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện cụ thể hay không. |
+| `find()` | Dùng để tìm phần tử đầu tiên trong mảng thỏa mãn một điều kiện cụ thể |
+| `filter()` | Dùng để tạo một mảng mới chứa tất cả các phần tử thỏa mãn một điều kiện cụ thể |
+
+**1. map()**
+
+Phương thức `map()` dùng để tạo ra một mảng mới bằng cách áp dụng một hàm vào từng phần tử của mảng gốc.
+
+```js
+var newArray = array.map(function(currentValue, index, array) {
+    // return a new value based on currentValue
+});
+```
+Trong đó:
+- `array` là mảng gốc mà bạn muốn áp dụng phương thức `map()` lên.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `newArray` là mảng mới được tạo ra sau khi áp dụng hàm lên từng phần tử của array.
+
+Ví dụ:
+```js
+var numbers = [1, 2, 3, 4, 5];
+var doubledNumbers = numbers.map(function(num) {
+    return num * 2;
+});
+
+console.log(doubledNumbers); // Kết quả: [2, 4, 6, 8, 10]
+```
+
+**2. reduce()**
+
+Phương thức `reduce` dùng để thực hiện một phép tích tổng hoặc tích luỹ trên các phần tử của mảng để trả về một giá trị duy nhất.
+
+```js
+var result = array.reduce(function(accumulator, currentValue, index, array) {
+    // perform a reduction operation and return the updated accumulator
+}, initialValue);
+```
+Trong đó: 
+- `array` là mảng gốc mà bạn muốn áp dụng phương thức `reduce()` lên.
+- `accumulator` là biến chứa giá trị tích luỹ trong quá trình duyệt qua các phần tử.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `initialValue` là giá trị ban đầu của `accumulator` (có thể bỏ qua).
+
+Ví dụ:
+```js
+var numbers = [1, 2, 3, 4, 5];
+var sum = numbers.reduce(function(accumulator, currentValue) {
+    return accumulator + currentValue;
+}, 0);
+
+console.log(sum); // Kết quả: 15
+```
+
+**3. forEach()**
+
+Phương thức `forEach()` dùng để lặp qua từng phần tử của mảng và thực hiện một hàm cho mỗi phần tử.
+
+```js
+array.forEach(function(currentValue, index, array) {
+    // code to be executed for each element
+});
+```
+Trong đó: 
+- `array` là mảng mà bạn muốn lặp qua.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+
+Ví dụ:
+```js
+var colors = ['red', 'green', 'blue'];
+
+colors.forEach(function(color) {
+    console.log(color);
+});
+
+// Kết quả:
+// red
+// green
+// blue
+```
+
+**4. every()**
+
+Phương thức `every()` dùng để kiểm tra xem tất cả các phần tử trong mảng có thỏa mãn một điều kiện cụ thể hay không.
+
+```js
+var allPass = array.every(function(currentValue, index, array) {
+    // return true or false based on a condition
+});
+```
+Trong đó:
+- `array` là mảng mà bạn muốn kiểm tra.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `allPass` sẽ là `true` nếu tất cả các phần tử thỏa mãn điều kiện, và `false` nếu có ít nhất một phần tử không thỏa mãn.
+
+Ví dụ:
+```js
+var numbers = [2, 4, 6, 8, 10];
+var allEven = numbers.every(function(number) {
+    return number % 2 === 0;
+});
+
+console.log(allEven); // Kết quả: true
+
+var someOdd = numbers.every(function(number) {
+    return number % 2 !== 0;
+});
+
+console.log(someOdd); // Kết quả: false
+```
+
+**5. some()**
+
+Phương thức `some()` dùng để kiểm tra xem có ít nhất một phần tử trong mảng thỏa mãn một điều kiện cụ thể hay không.
+```js
+var anyPass = array.some(function(currentValue, index, array) {
+    // return true or false based on a condition
+});
+```
+Trong đó:
+- `array` là mảng mà bạn muốn kiểm tra.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `anyPass` sẽ là `true` nếu có ít nhất một phần tử thỏa mãn điều kiện, và `false` nếu không có phần tử nào thỏa mãn.
+
+Ví dụ:
+```js
+var numbers = [2, 4, 6, 7, 10];
+var anyOdd = numbers.some(function(number) {
+    return number % 2 !== 0;
+});
+
+console.log(anyOdd); // Kết quả: true
+
+var allOdd = numbers.some(function(number) {
+    return number % 2 === 1;
+});
+
+console.log(allOdd); // Kết quả: true
+```
+
+**6. find()**
+
+Phương thức `find()` dùng để tìm phần tử đầu tiên trong mảng thỏa mãn một điều kiện cụ thể.
+```js
+var foundElement = array.find(function(currentValue, index, array) {
+    // return true or false based on a condition
+});
+```
+Trong đó:
+- `array` là mảng mà bạn muốn tìm kiếm.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `foundElement` là phần tử đầu tiên thỏa mãn điều kiện, hoặc `undefined` nếu không tìm thấy phần tử nào thỏa mãn.
+
+Ví dụ:
+```js
+var numbers = [2, 4, 6, 7, 10];
+var oddNumber = numbers.find(function(number) {
+    return number % 2 !== 0;
+});
+
+console.log(oddNumber); // Kết quả: 7
+
+var evenNumber = numbers.find(function(number) {
+    return number % 2 === 0;
+});
+
+console.log(evenNumber); // Kết quả: 2
+```
+
+**7. filter()**
+
+Phương thức `filter()` dùng để tạo một mảng mới chứa tất cả các phần tử thỏa mãn một điều kiện cụ thể
+```js
+var newArray = array.filter(function(currentValue, index, array) {
+    // return true or false based on a condition
+});
+```
+Trong đó:
+- `array` là mảng mà bạn muốn tìm kiếm.
+- `currentValue` là giá trị hiện tại của mảng đang được xử lý.
+- `index` là vị trí (chỉ số) của `currentValue` trong mảng.
+- `newArray` là mảng mới được tạo ra, chứa các phần tử thỏa mãn điều kiện.
+
+Ví dụ:
+```js
+var numbers = [2, 4, 6, 7, 10];
+var oddNumbers = numbers.filter(function(number) {
+    return number % 2 !== 0;
+});
+
+console.log(oddNumbers); // Kết quả: [7]
+
+var evenNumbers = numbers.filter(function(number) {
+    return number % 2 === 0;
+});
+
+console.log(evenNumbers); // Kết quả: [2, 4, 6, 10]
 ```
