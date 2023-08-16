@@ -1,9 +1,12 @@
 # Javascript Theory
 
 ## Mục lục
-- [1. Biến, comments, built-in]()
-- [2. Toán tử, kiểu dữ liệu]()
-- [3. Làm việc với hàm]()
+- [1. Biến, comments, built-in](#1-biến-comments-built-in)
+- [2. Toán tử, kiểu dữ liệu](#2-toán-tử-kiểu-dữ-liệu)
+- [3. Làm việc với hàm](#3-làm-việc-với-hàm)
+- [4. Làm việc với chuỗi](#4-làm-việc-với-chuỗi)
+- [5. Làm việc với số](#5-làm-việc-với-số)
+- [6. Làm việc với mảng](#6-làm-việc-với-mảng)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -65,6 +68,15 @@ setInterval(function() {
 | `+` | Cộng và Nối chuỗi |
 | `===` | So sánh hai biểu thức có cùng kiểu dữ liệu và giá trị, thì kết quả là `true`, ngược lại là `false` |
 | `!==` | So sánh ít nhất một trong hai điều kiện là đúng (khác kiểu hoặc khác giá trị), thì kết quả là `true`, ngược lại là `false` |
+
+- **Kiểm tra kiểu dữ liệu sử dụng `typeof`**
+```js
+var fullName = 'Cung Thang';
+
+console.log(typeof fullName)
+
+// string
+```
 
 - **Kiểu dữ liệu nguyên thủy**
 
@@ -149,3 +161,46 @@ const person2 = {
 };
 ```
 `Arrow function` không có ngữ cảnh riêng biệt về `this`, nó kế thừa giá trị this từ ngữ cảnh bên ngoài. Trong khi `Declaration function` có ngữ cảnh riêng biệt về `this`, được xác định bởi cách hàm được gọi.
+
+## 4. Làm việc với chuỗi
+- **Sử dụng backslash (\)**
+```js
+var fullName = "Day la dau \\";
+console.log(fullName)
+
+// Day la dau \
+```
+
+- **Template string ES6**
+```js
+var firtsName = 'Thang';
+var lastName = 'Cung';
+
+console.log(`Toi la: ${firtsName} ${lastName}`);
+// Toi la: Thang Cung
+```
+
+- **Làm việc với phương thức chuỗi**
+
+| Phương thức | Mô tả |
+| :--- | :--- |
+| `length` | Kích thước chuỗi |
+| `indexOf()` | Tìm vị trí chuỗi tìm thấy đầu tiên |
+| `slice()` | Cắt chuỗi |
+| `replace()` | Thay thế chuỗi |
+| `toUpperCase()` | Chuỗi viết hoa |
+| `toLowerCase()` | Chuỗi viết thường |
+| `trim()` | Loại bỏ ký tự khoảng trắng ở 2 hai đầu |
+| `split()` | Tách chuỗi thành mảng (Array) dựa vào điểm chung |
+| `charAt` | Lấy kí tự |
+
+## 5. Làm việc với số
+- **Kiểm tra xem giá trị có phải là một số hữu hạn hay không**
+```js
+Number.isFinite(value)
+```
+
+- **Kiểm tra xem giá trị có phải là NaN hay không**
+```js
+isNaN(value)
+```
