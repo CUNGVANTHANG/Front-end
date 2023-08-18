@@ -644,7 +644,7 @@ Các phương thức lấy element:
 ```js
 var headingElement = document.querySelector('h1');
 ```
-Cách 1: Setter - Điều kiện thuộc tính phải hợp lệ nghĩa là tồn tại trong element
+**Cách 1**: Setter - Điều kiện thuộc tính phải hợp lệ nghĩa là tồn tại trong element
 
 ```js
 headingElement.title = 'heading'; // Thêm thuộc tính title vào thẻ h1
@@ -660,7 +660,7 @@ console.log(headingElement.getAttribute('data')); // Sử dụng phương thức
 // data
 ```
 
-Cách 2: Dùng để tạo thuộc tính mới hoặc thuộc tính đã có của element
+**Cách 2**: Dùng để tạo thuộc tính mới hoặc thuộc tính đã có của element
 
 ```js
 headingElement.setAttribute('class', 'heading');
@@ -727,3 +727,184 @@ New Heading
 ```
 
 - **5. innerHTML & outerHTML**
+
+- **`innerHTML`**
+
+```html
+ <div class="box"></div>
+```
+```js
+var boxElement = document.querySelector('.box');
+```
+```js
+boxElement.innerHTML = '<h1>Heading</h1>';
+{/* 
+<div class="box">
+    <h1>Heading</h1>
+</div> 
+*/}
+
+boxElement.innerHTML = 'New heading';
+{/*
+<div class="box">New heading</div>
+*/}
+
+boxElement.innerHTML = '<h1 title="Heading">New heading</h1>';
+{/* 
+<div class="box">
+    <h1 title="Heading">New heading</h1>
+</div> 
+*/}
+```
+
+- **`outerHTML`**
+
+```html
+<div class="box">
+    <h1 title="Heading">New heading</h1>
+</div> 
+```
+```js
+var boxElement = document.querySelector('.box');
+```
+```js
+
+console.log(boxElement.innerHTML);    // --> innerHTML lấy tất cả element nằm bên trong element box
+// <h1 title="Heading">New heading</h1>
+
+console.log(boxElement.outerHTML);   // --> outerHTML lấy tất cả element nằm trong và element box của element box
+{/* 
+<div class="box">
+    <h1 title="Heading">New heading</h1>
+</div>  
+*/}
+
+boxElement.innerHTML = '<span>Test</span>'; // --> Ghi đề thẻ h1 là element nằm bên trong element box
+{/* 
+<div class="box">
+    <span>Test</span>
+</div>  
+*/}
+
+boxElement.outerHTML = '<span>Test</span>'; // --> Ghi đề element box
+{/*
+<span>Test</span>
+*/}
+```
+
+- **6. Node properties**
+
+```js
+// Cách xem tất cả các node
+
+var boxElement = document.querySelector('.box');
+
+console.log([boxElement]); // Thêm []
+```
+
+- **7. DOM CSS**
+
+```js
+// background-position <-> backgroundPosition (kiểu viết camelCase)
+
+var boxElement = document.querySelector('.box');
+
+// Cách 1: Thêm từng thuộc tính
+boxElement.style.width = '100px';
+boxElement.style.height = '200px';
+boxElement.style.backgroundColor = 'red';
+
+// Cách 2: Thêm nhiều thuộc tính
+Object.assign(boxElement.style, {
+    width: '200px',
+    height: '100px',
+    backgroundColor: 'green',
+});
+```
+
+- **8. classList**
+
+```html
+<style>
+    .red {
+        color: red;
+    }
+</style>
+
+<div class = "box box-2"></div> 
+```
+```js
+var boxElement = document.querySelector('.box');
+```
+```js
+// 1. add (thêm class vào class)
+boxElement.classList.add('red');
+
+{/* <div class = "box box-2 red"></div>  */}
+
+// 2. contains (kiểm tra class có tồn tại trả về true/false)
+boxElement.classList.contains('red');
+
+{/* <div class = "box box-2 red"></div>  */}
+// true
+
+// 3. remove (xóa class trong class)
+boxElement.classList.remove('red');
+
+{/* <div class = "box box-2"></div>  */}
+
+// 4. toggle (nếu red tồn tại trong class thì xóa đi, nếu red không tồn tại trong class thì thêm vào)
+setInterval(() => {
+    boxElement.classList.toggle('red');
+}, 1000);
+
+{/* <div class = "box box-2 red"></div>  */}
+// Sau 1 giây
+{/* <div class = "box box-2"></div>  */}
+// Sau 1 giây
+{/* <div class = "box box-2 red"></div>  */}
+// ...
+```
+
+- **9. DOM Events**
+
+**1. Attribute events (Sử dụng thuộc tính trong file HTML)**
+
+```js
+<h1 onclick="console.log(this)">
+    <span onclick="console.log(this)">DOM events</span>
+</h1>
+```
+console:
+
+```
+<span onclick="console.log(this)">DOM events</span> 
+<h1 onclick="console.log(this)">
+    <span onclick="console.log(this)">DOM events</span>
+</h1> 
+```
+Sự kiện nổi bọt: Nghĩa là nó sẽ lắng nghe sự kiện của thằng con trước xong mới đến thằng cha là thẻ h1
+
+**2. Assign envent using the element node**
+
+```html
+<h1>
+    <span>DOM events 1</span>
+</h1>
+<h1>
+    <span>DOM events 2</span>
+</h1>
+<h1>
+    <span>DOM events 3</span>
+</h1> 
+```
+```js
+var h1Element = document.querySelectorAll('h1');
+
+for(var i = 0; i < h1Element.length; i++){
+    h1Element[i].onclick = function(e) { // e ở đây nghĩa là event
+        console.log(e.target);
+    }
+}
+```
+
