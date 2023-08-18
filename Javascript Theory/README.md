@@ -10,6 +10,7 @@
 - [7. Làm việc với object](#7-làm-việc-với-object)
 - [8. Vòng lặp](#8-vòng-lặp)
 - [9. Callback](#9-callback)
+- [10. HTML DOM](#10-html-dom)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -491,7 +492,7 @@ Trong đó:
 - `firstName`, `lastName`, `age` là các thuộc tính của đối tượng, có thể chứa các kiểu dữ liệu khác nhau như chuỗi, số, mảng, hoặc thậm chí là một đối tượng khác.
 - `sayHello` là một phương thức của đối tượng, chứa một hàm được thực thi khi gọi phương thức.
 
-- **Object constructor**
+- **1. Object constructor**
 
 ```js
 function Person(firstName, lastName, age) {
@@ -513,7 +514,7 @@ Trong đó:
 - `new` để tạo đối tượng
 - `this` trong constructor sẽ trỏ tới đối tượng đó
 
-- **Object prototype**
+- **2. Object prototype**
 
 `prototype` dùng để thêm các phương thức và thuộc tính cho các đối tượng
 
@@ -535,7 +536,7 @@ person1.sayHello(); // Kết quả: Hello, my name is John Doe
 person2.sayHello(); // Kết quả: Hello, my name is Jane Smith
 ```
 
-- **Object Math**
+- **3. Object Math**
 
 | Object | Mô tả |
 | :--- | :--- |
@@ -598,3 +599,131 @@ function myCallback(value) {
 
 myFunction(myCallback);
 ```
+
+## 10. HTML DOM
+DOM - Document Object Model (mô hình tài liệu)
+
+HTML DOM có 3 thành phần:
+
+1. Element
+2. Attribute
+3. Text
+
+- **1. Element Node & Attribute Node & Text Node**
+
+```js
+<h1 id="heading" class="heading" title="heading">Heading 123</h1>
+```
+Trong đoạn code: 
+- `h1` là Element node
+- `id`, `class`, `title` là Attribute node
+- `Heading 123` là Text node
+
+- **2. Get element methods**
+
+Các phương thức lấy element:
+
+1. `getElementById()`  --> Trả về element
+2. `getElementsByClassName()`  --> Trả về HTML collection
+3. `getElementsByTagName()`  --> Trả về HTML collection
+4. `querySelector()`  --> Trả về element
+5. `querySelectorAll()`  --> Trả về Node List
+6. HTML collection
+
+`document.anchors` Lấy ra thẻ a nhưng với điều kiện thẻ a phải có thuộc tính name=""
+
+`document.forms` Lấy ra thẻ form
+
+7. `document.write()`
+
+- **3. DOM attribute**
+
+```html
+<h1>Heading</h1>
+```
+```js
+var headingElement = document.querySelector('h1');
+```
+Cách 1: Setter - Điều kiện thuộc tính phải hợp lệ nghĩa là tồn tại trong element
+
+```js
+headingElement.title = 'heading'; // Thêm thuộc tính title vào thẻ h1
+// <h1 title="heading">Heading</h1>
+
+headingElement.className = 'heading'; // Thêm thuộc tính class vào thẻ h1
+// <h1 class="heading">Heading</h1>
+
+headingElement.data = 'heading'; // data không phải thuộc tính có sẵn trong element nên không hợp lệ
+// <h1>Heading</h1>
+
+console.log(headingElement.getAttribute('data')); // Sử dụng phương thức getAttribute có thể lấy ra được thuộc tính tự tạo mới
+// data
+```
+
+Cách 2: Dùng để tạo thuộc tính mới hoặc thuộc tính đã có của element
+
+```js
+headingElement.setAttribute('class', 'heading');
+// <h1 class="heading">Heading</h1>
+
+headingElement.setAttribute('data', 'heading');
+// <h1 data="heading">Heading</h1>
+```
+
+- **4. innerText & textContent**
+
+```html
+<h1 class="heading">
+
+    <span style="display: none">Heading</span>
+    <span>text</span>
+
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</h1>
+```
+
+```js
+var headingElement = document.querySelector('.heading');
+```
+
+```js
+// innerText chỉ tồn tại trên element node, nên muốn lấy text node phải thông qua element node
+console.log(headingElement.innerText); //  --> innerText sẽ in ra text node có trên màn hình trình duyệt
+// text
+
+
+// textContent tồn tại cả trên element node và text node
+console.log(headingElement.textContent); // --> textContent sẽ in ra text node có trong html
+//
+// Heading
+// text
+// 
+//
+// .box {
+//     width: 100px;
+//     height: 100px;
+// }
+
+headingElement.innerText = `
+
+New Heading
+
+`
+//
+// New Heading
+//
+
+headingElement.textContent = `
+
+New Heading
+
+`
+// New Heading
+```
+
+- **5. innerHTML & outerHTML**
