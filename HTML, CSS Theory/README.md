@@ -1,159 +1,161 @@
 # HTML, CSS Theory
 ## Mục lục
-- [I. HTML](#i-html)
-  - [1. Cấu trúc trang web](#1-cấu-trúc-trang-web)
-  - [2. Thẻ heading](#2-thẻ-heading)
-  - [3. Thẻ p](#3-thẻ-p)
-  - [4. Thẻ a](#4-thẻ-a)
-  - [5. Thẻ div](#5-thẻ-div)
-- [II. CSS](#ii-css)
 
-## I. HTML
-### 1. Cấu trúc trang web
-#### 1. Cấu trúc HTML
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>This is a heading</h1>
-    <p>This is a paragraph.</p>
-    <p>This is another paragraph.</p>
-</body>
-</html>
-```
-*Cú pháp gõ nhanh cấu trúc trang HTML trong Visual Studio Code:* 
-```! Tab```
-
-- `<!DOCTYPE html>` khai báo xác định rằng tài liệu này là tài liệu HTML5
-
-- Thẻ `<html lang="en"></html>` phần tử là phần tử gốc của trang HTML
-
+## I. CSS mặc định của các thẻ HTML
+- **Thẻ html**
 ```css
-html {
-    display: block;
+  display: block;
+```
+
+- **Thẻ body**
+```css
+  display: block;
+  margin: 8px;
+```
+
+- **Thẻ header, nav, section, article, aside, footer, div**
+```css
+header, nav, section, article, aside, footer, div {
+  display: block;
 }
 ```
 
-- Thẻ `<head></head>` phần tử chứa thông tin meta về trang HTML
-
-```css
-head {
-    display: none;
-}
-```
-
-- Thẻ `<title></title>` phần tử chỉ định tiêu đề cho trang HTML (được hiển thị trên thanh tiêu đề của trình duyệt hoặc trong tab của trang)
-
-- Thẻ `<body></body>` phần tử xác định nội dung của tài liệu và là nơi chứa tất cả nội dung hiển thị, chẳng hạn như tiêu đề, đoạn văn, hình ảnh, siêu liên kết, bảng, danh sách, v.v.
-
-*CSS mặc định:*
-```css
-body {
-    display: block;
-    margin: 8px;
-}
-```
-
-- Thẻ `<h1></h1>` phần tử xác định một tiêu đề lớn
-
-- Thẻ `<p></p>` phần tử xác định một đoạn văn
-
-- Thẻ `<br>` xuống dòng văn bản
-
-<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/fdf0ab45-e553-4444-a09a-e14131e2b4a6" height=250px>
-
-#### 2. Cấu trúc thẻ body
-<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/4ae52d80-ac07-49f0-b916-b9d82e303e3d" height=200px>
-
-- Thẻ `<header></header>` đại diện cho một vùng chứa nội dung giới thiệu hoặc một tập hợp các liên kết điều hướng.
-
-*CSS mặc đinh:*
-
-```css
-header {
-    display: block;
-}
-```
-
-- Thẻ `<nav></nav>` xác định một tập hợp các liên kết điều hướng
-
-*CSS mặc đinh:*
-
-```css
-nav {
-    display: block;
-}
-```
-
-- Thẻ <footer></footer> xác định chân trang cho tài liệu hoặc phần.
-
-*CSS mặc đinh:*
-
-```css
-footer {
-    display: block;
-}
-```
-
-### 2. Thẻ heading
-*Cú pháp:*
-```html
-<h1>Heading 1</h1>
-<h2>Heading 2</h2>
-<h3>Heading 3</h3>
-<h4>Heading 4</h4>
-<h5>Heading 5</h5>
-<h6>Heading 6</h6>
-```
-
-*CSS mặc định:*
+- **Thẻ h1, h2, h3, h4, h5, h6**
 ```css
 h1, h2, h3, h4, h5, h6 {
   display: block;
   font-weight: bold;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+h1 {
+  font-size: 2em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}
+
+h3 {
+  font-size: 1.17em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+h4 {
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+}
+
+h5 {
+  font-size: .83em;
+  margin-top: 1.67em;
+  margin-bottom: 1.67em;
+}
+
+h6 {
+  font-size: .67em;
+  margin-top: 2.33em;
+  margin-bottom: 2.33em;
 }
 ```
 
-<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/b445958b-80dd-441e-961a-17c6300ebea4" height=250px>
-
-### 3. Thẻ p
-*Cú pháp:*
-
-```html
-<p>Đoạn văn bản</p>
-```
-
-*CSS mặc định:**
+- **Thẻ p**
 ```css
-p {
   display: block;
-}
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: 0;
+  margin-right: 0;
 ```
 
-![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/08288c2d-cc46-4324-aaad-52cbed5cc04b)
-
-### 4. Thẻ a
-*Cú pháp:*
-
-```html
-<a href="url">Click vào đây!</a>
-```
-
-*CSS mặc định:**
-
+- **Thẻ a**
 ```css
-a {
-  color: -webkit-link;
-  cursor: pointer;
+  color: (internal value);
   text-decoration: underline;
+  cursor: auto;
+```
+
+- **Thẻ ul, li**
+```css
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-top: 1em;
+  margin-bottom: 1 em;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 40px;
+}
+
+li {
+  display: list-item;
 }
 ```
 
-![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/bfff29c3-621a-446f-ab95-d50b65ee9672)
+- **Thẻ img**
+```css
+img {
+  display: inline-block;
+}
+```
 
+- **Thẻ input, button, span, br**
+
+~Không có định dạng CSS mặc định~
+
+- **Thẻ label**
+```css
+label {
+  cursor: default;
+}
+```
+
+- **Thẻ i**
+```css
+i {
+  font-style: italic;
+}
+```
+
+## II. CSS
+3 cách chèn CSS:
+1. Internal (Tạo thẻ <style>)
+2. External (Sử dụng thẻ link tham chiếu đến file .css)
+3. Inline (Tạo thuộc tính style trong thẻ HTML)
+
+### 1. CSS Selectors
+| **Selector** | **Ví dụ** | **Mô tả** |
+| :--- | :--- | :--- |
+| `.class` | `.intro` |	Chọn tất cả các thẻ có class="intro" |
+| `.class1.class2` | `.name1.name2` | Chọn tất cả các thẻ có cả name1 và name2 được đặt trong thuộc tính class của nó |
+| `.class1 .class2` |	`.name1 .name2` |	Chọn tất cả các thẻ có class="name2" là con của một phần tử có class="name1" |
+| `*` |	`*` |	Chọn tất cả các thẻ |
+| `element` |	`h2` | Chọn tất cả các thẻ h2 |
+| `element.class` |	`div.box`	| Chọn tất cả thẻ div có class="box"|
+| `element, element` | `div, h2` | Chọn tất cả thẻ div và h2 |
+| `element element` |	`div p`	| Chọn tất cả thẻ p trong thẻ div |
+| `element > element` |	`div > p`	| Chọn tất cả thẻ p là con trực tiếp của thẻ div |
+| `element + element` | `div + p`	| Chọn thẻ p đứng liền kề sau thẻ div |
+| `element ~ element` |	`div ~ p`	| Chọn tất cả thẻ p đứng sau thẻ div |
+
+### 2. CSS display
+| Giá trị | Mô tả |
+| :--- | :--- |
+| `block` | Hiển thị phần tử dưới dạng phần tử khối (như `<p>`). Nó bắt đầu trên một dòng mới và chiếm toàn bộ chiều rộng |
+| `inline-block` | Hiển thị một phần tử dưới dạng bộ chứa khối cấp độ nội tuyến. Bản thân phần tử được định dạng là phần tử nội tuyến, nhưng bạn có thể áp dụng các giá trị chiều cao và chiều rộng |
+| `flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp khối |
+| `inline-flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp nội tuyến |
+| `grid` | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp khối |
+| `inline-grid` | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp độ nội tuyến |
+
+Trang web tham khảo flexbox: https://codepen.io/enxaneta/full/adLPwv/
+
+### 3. CSS position
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/e6d45506-ca6c-43fd-a36d-e131c02e1aa8)
