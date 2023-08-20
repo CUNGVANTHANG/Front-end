@@ -43,7 +43,7 @@ html {
 - Thẻ `<head></head>` phần tử chứa thông tin meta về trang HTML
 
 ```css
-header {
+head {
     display: none;
 }
 ```
@@ -71,7 +71,35 @@ body {
 #### 2. Cấu trúc thẻ body
 <img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/4ae52d80-ac07-49f0-b916-b9d82e303e3d" height=200px>
 
-- Thẻ `<header></header>` 
+- Thẻ `<header></header>` đại diện cho một vùng chứa nội dung giới thiệu hoặc một tập hợp các liên kết điều hướng.
+
+*CSS mặc đinh:*
+
+```css
+header {
+    display: block;
+}
+```
+
+- Thẻ `<nav></nav>` xác định một tập hợp các liên kết điều hướng
+
+*CSS mặc đinh:*
+
+```css
+nav {
+    display: block;
+}
+```
+
+- Thẻ <footer></footer> xác định chân trang cho tài liệu hoặc phần.
+
+*CSS mặc đinh:*
+
+```css
+footer {
+    display: block;
+}
+```
 
 ### 2. Thẻ heading
 *Cú pháp:*
