@@ -11,7 +11,16 @@
 - [8. Vòng lặp](#8-vòng-lặp)
 - [9. Callback](#9-callback)
 - [10. HTML DOM](#10-html-dom)
-  - [A. Element Node & Attribute Node & Text Node](#a-element-node-&-attribute-node-&-text-node)
+  - [A. Element Node & Attribute Node & Text Node](#a-element-node--attribute-node--text-node)
+  - [B. Get element methods](#b-get-element-methods)
+  - [C. DOM attribute](#c-dom-attribute)
+  - [D. InnerText & textContent](#d-innertext--textcontent)
+  - [E. InnerHTML & outerHTML](#e-innerhtml--outerhtml)
+  - [F. Node properties](#f-node-properties)
+  - [G. DOM CSS](#g-dom-css)
+  - [H. ClassList](#h-classlist)
+  - [J. DOM Events](#j-dom-events)
+  - [K. PreventDefault and StopPropagation](#k-preventdefault-and-stoppropagation)
 - [11. JSON, Fetch, Postman](#11-json-fetch-postman)
 
 ## 1. Biến, comments, built-in
@@ -614,6 +623,7 @@ HTML DOM có 3 thành phần:
 3. Text
 
 ### A. Element Node & Attribute Node & Text Node
+[:arrow_up: Mục lục](#mục-lục)
 
 ```js
 <h1 id="heading" class="heading" title="heading">Heading 123</h1>
@@ -623,7 +633,8 @@ Trong đoạn code:
 - `id`, `class`, `title` là Attribute node
 - `Heading 123` là Text node
 
-- **2. Get element methods**
+### B. Get element methods
+[:arrow_up: Mục lục](#mục-lục)
 
 Các phương thức lấy element:
 
@@ -640,7 +651,8 @@ Các phương thức lấy element:
 
 7. `document.write()`
 
-- **3. DOM attribute**
+### C. DOM attribute
+[:arrow_up: Mục lục](#mục-lục)
 
 ```html
 <h1>Heading</h1>
@@ -674,7 +686,8 @@ headingElement.setAttribute('data', 'heading');
 // <h1 data="heading">Heading</h1>
 ```
 
-- **4. innerText & textContent**
+### D. InnerText & textContent
+[:arrow_up: Mục lục](#mục-lục)
 
 ```html
 <h1 class="heading">
@@ -730,7 +743,8 @@ New Heading
 // New Heading
 ```
 
-- **5. innerHTML & outerHTML**
+### E. InnerHTML & outerHTML
+[:arrow_up: Mục lục](#mục-lục)
 
 - **`innerHTML`**
 
@@ -796,7 +810,8 @@ boxElement.outerHTML = '<span>Test</span>'; // --> Ghi đề element box
 */}
 ```
 
-- **6. Node properties**
+### F. Node properties
+[:arrow_up: Mục lục](#mục-lục)
 
 ```js
 // Cách xem tất cả các node
@@ -806,7 +821,8 @@ var boxElement = document.querySelector('.box');
 console.log([boxElement]); // Thêm []
 ```
 
-- **7. DOM CSS**
+### G. DOM CSS
+[:arrow_up: Mục lục](#mục-lục)
 
 ```js
 // background-position <-> backgroundPosition (kiểu viết camelCase)
@@ -826,7 +842,8 @@ Object.assign(boxElement.style, {
 });
 ```
 
-- **8. classList**
+### H. ClassList
+[:arrow_up: Mục lục](#mục-lục)
 
 ```html
 <style>
@@ -870,7 +887,8 @@ setInterval(() => {
 // ...
 ```
 
-- **9. DOM Events**
+### J. DOM Events
+[:arrow_up: Mục lục](#mục-lục)
 
 **1. Attribute events (Sử dụng thuộc tính trong file HTML)**
 
@@ -1005,7 +1023,7 @@ document.onkeydown = function(e) {
 // onkeypress là nhấp phím xuống và giữ
 ```
 
-- **10. PreventDefault and StopPropagation**
+### K. PreventDefault and StopPropagation
 
 **1. preventDefault dùng để ngăn chặn hành vi mặc định** 
 
