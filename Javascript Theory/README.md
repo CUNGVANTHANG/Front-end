@@ -11,6 +11,8 @@
 - [8. Vòng lặp](#8-vòng-lặp)
 - [9. Callback](#9-callback)
 - [10. HTML DOM](#10-html-dom)
+  - [A. Element Node & Attribute Node & Text Node](#a-element-node-&-attribute-node-&-text-node)
+- [11. JSON, Fetch, Postman](#11-json-fetch-postman)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -601,6 +603,8 @@ myFunction(myCallback);
 ```
 
 ## 10. HTML DOM
+[:arrow_up: Mục lục](#mục-lục)
+
 DOM - Document Object Model (mô hình tài liệu)
 
 HTML DOM có 3 thành phần:
@@ -609,7 +613,7 @@ HTML DOM có 3 thành phần:
 2. Attribute
 3. Text
 
-- **1. Element Node & Attribute Node & Text Node**
+### A. Element Node & Attribute Node & Text Node
 
 ```js
 <h1 id="heading" class="heading" title="heading">Heading 123</h1>
@@ -908,3 +912,234 @@ for(var i = 0; i < h1Element.length; i++){
 }
 ```
 
+**Ví dụ:**
+
+```html
+<input type="text">
+<input type="checkbox">
+<select>
+    <option value="valuel">l</option>
+    <option value="value2">2</option>
+    <option value="value3">3</option>
+</select> 
+```
+
+```js
+// 1. Input / select
+// type="text"
+var inputElement = document.querySelector('input[type="text"]');
+
+// C1: In ra trực tiếp trên console
+inputElement.onchange = function(e) { // onchange chỉ in ra sự thay đổi
+    console.log(e.target.value);
+}
+
+inputElement.oninput = function(e) { 
+    console.log(e.target.value);
+}
+
+// C2: In ra khi thực hiện câu lệnh inputValue trên console
+var inputValue
+inputElement.oninput = function(e) {
+    inputValue = e.target.value;
+}
+
+// type="checkbox"
+var inputElement = document.querySelector('input[type="checkbox"]');
+
+inputElement.onchange = function(e) { 
+    console.log(e.target.checked); // Trả về true/false
+}
+
+// select
+var inputElement = document.querySelector('select');
+inputElement.onchange = function(e) {
+    console.log(e.target.value);
+}
+
+// 2. Key up / down
+var inputElement = document.querySelector('input[type="text"]');
+inputElement.onkeydown = function(e) {
+    console.log(e.target.value);
+}
+
+// Người dùng nhập: ab
+// Console in ra:
+// 
+// a
+
+inputElement.onkeyup = function(e) {
+    console.log(e.target.value);
+}
+
+// Người dùng nhập: ab
+// Console in ra:
+// a
+// ab
+
+// Sự khác nhau giữa keyup và keydown là keydown sẽ in ra trước khi nhập
+
+// Ứng dụng tạo ra Esc(Thoát khỏi trang)
+
+inputElement.onkeyup = function(e) {
+    console.log(e.which); // Sẽ in ra mã ASCII
+    switch(e.which) {
+        case 27:
+            console.log('Exit');
+            break;
+    }
+}
+
+// Đối với cả trang web làm như sau:
+document.onkeydown = function(e) {
+    console.log(e.which); 
+    switch(e.which) {
+        case 27:
+            console.log('Exit');
+            break;
+    }
+}
+
+// onkeydown là nhấp phím xuống
+// onkeyup là nhấp phím lên
+// onkeypress là nhấp phím xuống và giữ
+```
+
+- **10. PreventDefault and StopPropagation**
+
+**1. preventDefault dùng để ngăn chặn hành vi mặc định** 
+
+*Ví dụ 1:*
+
+```html
+<a href="https://f8.edu.vn">
+    Học Lập trình
+</a>
+<br />
+<a href="https://google.com.vn">
+    Tìm kiếm
+</a>
+
+// Khi bấm vào thẻ a chứa href="https://f8.edu.vn và href="https://google.com.vn sẽ tự động chuyển sang trình duyệt của trang web đó
+// Mục tiêu: Muốn thẻ a chứa href="https://f8.edu.vn sẽ chuyển trang, còn thẻ a chứa href="https://google.com.vn sẽ không chuyển trang
+```
+
+```js
+var aElements = document.links;
+
+for(var i = 0; i < aElements.length; ++i) {
+    aElements[i].onclick = function(e) {
+        if (!e.target.href.startsWith('https://f8.edu.vn')) { // Thuộc tính href không chứa https://f8.edu.vn thì sẽ ngăn chặn hành vi mặc định của thẻ a
+            e.preventDefault();
+        }
+    }
+}
+```
+
+*Ví dụ 2:*
+
+```html
+<style>
+    ul {
+        display: none;
+    }
+
+    input:focus ~ ul {
+        display: block;
+    }
+</style>
+
+<input placeholder="Tìm kiếm"/> 
+<ul>
+    <li>Javascript</li>
+    <li>PHP</li>
+    <li>Golang</li>
+</ul>
+
+// Trình duyệt hiển thị hộp tìm kiếm, khi click vào sẽ hiện Javascript, PHP, Golang
+// Điểm yếu là không thể bấm vào Javascript, PHP, Golang do CSS display: none
+```
+
+```js
+var ulElement = document.querySelector('ul');
+
+ulElement.onmousedown = function(e) { // Lắng nghe sự kiện khi nhấp chuột xuống
+    e.preventDefault(); // Ngăn chặn hành vi mặc định
+}
+
+ulElement.onclick = function(e) {
+    console.log(e.target);
+}
+```
+
+**2. stopPropagation**
+
+```html
+<div>
+    DIV 
+    <button>CLick me!</button>
+</div>
+
+// Sự kiện nổi bọt: Khi click chuột vào Click me! nó sẽ in ra cả DIV và Click me!
+// Khắc phục: Khi click chuột vào Click me! chỉ in ra Click me!
+```
+
+```js
+document.querySelector('div').onclick = 
+    function() {
+        console.log('DIV')
+    }
+
+document.querySelector('button').onclick = 
+    function(e) {
+        e.stopPropagation();
+        console.log('Click me!')
+    }
+```
+
+- **11. Event listener**
+
+```js
+// 1. Xử lý nhiều việc khi 1 event xảy ra
+// 2. Lắng nghe / Hủy bỏ lắng nghe
+
+// DOM events
+var btn = document.getElementById('btn');
+
+btn.onclick = function() { // Lắng nghe sự kiện việc 1, việc 2, việc 3
+    // Việc 1
+    console.log('Viec 1');
+    // Việc 2
+    console.log('Viec 2');
+    // Việc 3
+    alert('Viec 3')
+}
+
+// Hủy bỏ lắng nghe bằng cách ghi đè 
+setTimeout(function () {
+    btn.onclick = function () {} // Hủy lắng nghe sự kiện việc 1, việc 2, việc 3
+}, 3000);
+
+// Event listener
+var btn = document.getElementById('btn');
+
+function viec1() {
+    console.log('Viec 1');
+}
+function viec2() {
+    console.log('Viec 2');
+}
+
+btn.addEventListener('click', viec1); // Lắng nghe sự kiện việc 1
+btn.addEventListener('click', viec2); // Lắng nghe sự kiện việc 2
+
+setTimeout(function () {
+    btn.removeEventListener('click', viec1) // Hủy bỏ lắng nghe sự kiện việc 1
+})
+
+// So sánh DOM event vs Event listener:
+// DOM event dùng để lắng nghe sự kiện đơn giản hoặc không hủy bỏ lắng nghe, DOM event giúp viết code ngắn gọn dễ hiểu
+// Event listener dùng để lắng nghe sự kiện có thể dùng để hủy bỏ lắng nghe từng sự kiện 1 cách dễ dàng
+```
+
+## 11. JSON, Fetch, Postman
