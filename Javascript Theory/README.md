@@ -21,7 +21,13 @@
   - [H. ClassList](#h-classlist)
   - [J. DOM Events](#j-dom-events)
   - [K. PreventDefault and StopPropagation](#k-preventdefault-and-stoppropagation)
-- [11. JSON, Fetch, Postman](#11-json-fetch-postman)
+  - [L. Event Listener](#l-event-listener)
+- [11. JSON, Promise, Fetch, Postman](#11-json-promise-fetch-postman)
+  - [A. JSON](#a-json)
+  - [B. Promise](#b-promise)
+  - [C. Fetch](#c-fetch)
+  - [D. Postman](#d-postman)
+- [12. ECMAScript 6+]()
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -1024,6 +1030,7 @@ document.onkeydown = function(e) {
 ```
 
 ### K. PreventDefault and StopPropagation
+[:arrow_up: Mục lục](#mục-lục)
 
 **1. preventDefault dùng để ngăn chặn hành vi mặc định** 
 
@@ -1115,7 +1122,8 @@ document.querySelector('button').onclick =
     }
 ```
 
-- **11. Event listener**
+### L. Event Listener
+[:arrow_up: Mục lục](#mục-lục)
 
 ```js
 // 1. Xử lý nhiều việc khi 1 event xảy ra
@@ -1160,4 +1168,495 @@ setTimeout(function () {
 // Event listener dùng để lắng nghe sự kiện có thể dùng để hủy bỏ lắng nghe từng sự kiện 1 cách dễ dàng
 ```
 
-## 11. JSON, Fetch, Postman
+## 11. JSON, Promise, Fetch, Postman
+[:arrow_up: Mục lục](#mục-lục)
+
+### A. JSON
+[:arrow_up: Mục lục](#mục-lục)
+
+**1. JSON là gì?**
+
+1. Là một định dạng dữ liệu (chuỗi)
+2. JavaScript Object Notation
+3. JSON: Number, Boolean, String, Null, Array, Object
+4. stringify (Từ Javascript types -> JSON) / parser (Từ JSON -> Javascript types)
+
+*Ví dụ:*
+
+```js
+var json1 = '20'
+var json2 = 'true'
+var json3 = '"abc"'
+var json4 = 'null'
+var json5 = '["Javascript", "PHP"]'
+var json6 = '{"name": "Cung Thang", "age": 20}'
+
+// Chuyển từ JSON sang Javascript
+var number = JSON.parse(json1);
+
+console.log(number);
+// 20
+
+// Chuyển từ Javascript sang JSON
+console.log(JSON.stringify({
+    name: 'Cung Thang',
+    age: 20,
+}));
+
+// {"name": "Cung Thang", "age": 20}
+```
+
+**2. JSON server**
+
+```js
+// Cách cài package.json trong 1 thư mục
+// npm init
+// npm i json-server
+
+// Tiếp theo vào file package.json thêm "start": "json-server --watch db.json" trong phần "scripts"
+// npm start
+
+// {
+//     "name": "json_server",
+//     "version": "1.0.0",
+//     "description": "",
+//     "main": "index.js",
+//     "scripts": {
+//       "start": "json-server --watch db.json",
+//       "test": "echo \"Error: no test specified\" && exit 1"
+//     },
+//     "author": "",
+//     "license": "ISC",
+//     "dependencies": {
+//       "json-server": "^0.17.3"
+//     }
+//   }
+  
+var courseApi = 'http://localhost:3000/courses';
+
+fetch(courseApi)
+    .then(function(response) {
+        return response.json();
+    })
+
+    .then(function(courses) {
+        console.log(courses);
+    });
+```
+
+### B. Promise
+[:arrow_up: Mục lục](#mục-lục)
+
+- **1. sync (đồng bộ)**
+
+```js
+// sync (đồng bộ)
+console.log(1);
+console.log(2);
+
+// 1
+// 2
+// Nghĩa là chạy theo trình tự từ trên xuống dưới
+// Hay nghĩa là console.log(1) chạy trước xong đến console.log(2)
+```
+
+**async (bất đồng bộ)**
+
+```js
+// async (bất đồng bộ)
+// setTimeout, setInterval, fetch, XMLHttpRequest, file reading, request animation frame
+// Khắc phục bằng callback
+
+setTimeout(function() { // sleep
+    console.log(1);
+}, 1000);
+
+console.log(2);
+
+// 2
+// 1
+// Nghĩa là in ra không theo trình tự, thực tế thì nó vẫn chạy theo trình tự nhưng có sự cản trở 
+```
+
+- **2. pain (nỗi đau)**
+
+```js
+// Callback hell
+setTimeout(function() {
+    console.log(1); // Việc 1
+    setTimeout(function() {
+        console.log(2); // Việc 2
+        setTimeout(function() {
+            console.log(3); // Việc 3
+            setTimeout(function() {
+                console.log(4); // Việc 4
+            }, 1000);
+        }, 1000);
+    }, 1000);
+}, 1000);
+```
+
+- **3. concept (ý tưởng)**
+
+```js
+// Trả lời phỏng vấn về promise
+// Promise được sinh ra để xử lý những thao tác bất đồng bộ
+// Trước khi có promise thì chúng ta thường sử dụng callback và callback có xảy ra 1 vấn đề là callback hell
+// Để tạo ra 1 promise thì ta sẽ sử dụng từ khóa new với Promise trong Contructor của nó, rồi truyền 1 Executor function, trong Executor function nhận được 2 tham số resolve và reject
+// Resolve gọi khi thao tác xử lý thành công
+// Reject gọi khi thao tác xử lý thất bại 
+// Chúng ta sử dụng qua các phương thức .then và .catch
+// .then được thực thi khi mà promise được resolve
+// .catch được thực thi khi mà promise được reject
+
+// Bước 1: new Promise
+// Bước 2: Executor
+
+// Tồn tại ở 3 trạng thái
+// 1. Pendding (chờ đợi thành công hay thất bại)
+// 2. Fulfilled (thành công)
+// 3. Rejected (Thất bại)
+ 
+var promise = new Promise(
+    // Executor
+    function(resolve, reject) {
+        // Logic
+        // Thành công: resolve()
+        // Thất bại: reject()
+
+        // Fake call API
+        resolve([
+            {
+                id: 1,
+                name: 'Javascript'
+            }
+        ]);
+
+        reject('Co loi!');
+    }
+);
+
+promise
+    .then(function(courses) {
+        console.log(courses);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .finally(function() {
+        console.log('Done!');
+    });
+```
+
+- **4. chain (kết nối)**
+
+```js
+// Bài toán 1:
+var promise = new Promise(
+    // Executor
+    function(resolve, reject) {
+        // Logic
+        // Thành công: resolve()
+        // Thất bại: reject()
+
+        resolve();
+    }
+);
+
+// Cách hoạt động 1: Chạy dọc từ trên xuống dưới
+promise
+    .then(function() {
+        console.log(1);
+    })
+    .then(function() {
+        console.log(2);
+    })
+    .then(function() {
+        console.log(3);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .finally(function() {
+        console.log('Done!');
+    });
+// 1
+// 2
+// 3
+// Done!
+
+// Cách hoạt động 2: Chạy dọc từ trên xuống dưới, nhận giá trị data từ thằng phía trên
+promise
+    .then(function() {
+        return 1;
+    })
+    .then(function(data) {
+        console.log(data);
+        return 2;
+    })
+    .then(function(data) {
+        console.log(data);
+        return 3;
+    })
+    .then(function(data) {
+        console.log(data);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .finally(function() {
+        console.log('Done!');
+    });
+
+// 1
+// 2
+// 3
+// Done!
+
+// Cách hoạt động 3: Nếu thằng trên không return gì cả, thì thằng dưới sẽ trả về undefined
+promise
+    .then(function() {
+      
+    })
+    .then(function(data) {
+        console.log(data);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .finally(function() {
+        console.log('Done!');
+    });
+
+// undefined
+// Done!
+
+// Cách hoạt động 4: return Promise: Thằng thứ 2 phải đợi thằng 1 thực thi promise xong
+promise
+    .then(function() {
+        return new Promise(function(resolve) {
+            setTimeout(resolve, 3000);
+        });
+    })
+    .then(function(data) {
+        console.log(data);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+    .finally(function() {
+        console.log('Done!');
+    });
+
+// undefined
+// Done!
+
+// Bài toán 2:
+function sleep(ms) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, ms);
+    });
+}
+
+sleep(1000)
+    .then(function() {
+        console.log(1);
+        return sleep(1000);
+    }) 
+    .then(function() {
+        console.log(2);
+        return sleep(1000);
+    }) 
+    .then(function() {
+        console.log(3);
+        return sleep(1000);
+    }) 
+    .then(function() {
+        console.log(4);
+        return sleep(1000);
+    }); 
+
+// 1
+// 2
+// 3
+// 4
+    
+```
+
+- **5. methods (resolve, reject, all)**
+
+```js
+// Bài toán 1: 
+function sleep(ms) {
+    return new Promise(function(resolve) {
+        setTimeout(resolve, ms);
+    });
+}
+
+sleep(1000)
+    .then(function() {
+        console.log(1);
+        return sleep(1000);
+    }) 
+    .then(function() {
+        console.log(2);
+        return new Promise(function(resolve, reject) {
+            reject('Co loi!');
+        });
+    }) 
+    .then(function() {
+        console.log(3);
+        return sleep(1000);
+    }) 
+    .then(function() {
+        console.log(4);
+        return sleep(1000);
+    }) 
+    .catch(function(error) {
+        console.log(error);
+    })
+
+// 1
+// 2
+// Co loi!
+
+// 1. Promise.resolve
+// 2. Promise.reject
+// 3. Promise.all
+
+var promise = Promise.resolve('Success!'); // Luôn luôn thành công
+
+promise 
+    .then(function (result) {
+        console.log('result: ', result);
+    })
+    .catch(function(err) {
+        console.log('err: ', err);
+    })
+
+// result: Success!
+
+var promise = Promise.reject('Error!'); // Luôn luôn thất bại
+
+promise 
+    .then(function (result) {
+        console.log('result: ', result);
+    })
+    .catch(function(err) {
+        console.log('err: ', err);
+    })
+
+// err: Error!
+
+// Bài toán 2:
+var promise1 =  new Promise(
+    function(resolve) {
+        setTimeout(function() {
+            resolve([1]);
+        }, 2000);
+    }
+);
+
+var promise2 =  new Promise(
+    function(resolve) {
+        setTimeout(function() {
+            resolve([2, 3]);
+        }, 5000);
+    }
+);
+
+// Nếu viết như thế này thì tổng thời gian chạy 2 promise sẽ là 7s
+// Khắc phục bằng cách sử dụng all thì tổng thời gian chạy 2 promise chỉ còn là 5s
+
+Promise.all([promise1, promise2])
+    .then(function(result) {
+        var result1 = result[0];
+        var result2 = result[1];
+
+        console.log(result1.concat(result2));
+    })
+
+// [1, 2, 3]
+
+// Bài toán 3: 
+var promise1 =  new Promise(
+    function(resolve) {
+        setTimeout(function() {
+            resolve([1]);
+        }, 2000);
+    }
+);
+
+var promise2 =  Promise.reject('Co loi!');
+
+Promise.all([promise1, promise2])
+    .then(function([result1, result2]) {
+        console.log(result1.concat(result2));
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+
+// Co loi!
+```
+
+### C. Fetch
+[:arrow_up: Mục lục](#mục-lục)
+
+1. Front-end: Xây dựng giao diện người dùng
+2. Back-end: Xây dựng logic xử lý + Cơ sở dữ liệu
+
+API (URL) -> Application Programing Interface
+Cổng giao tiếp giữa các phần mềm
+
+Backend -> API (URL) -> Fetch -> JSON/XML -> JSON.parse -> Javascript types -> Render ra giao diện với HTML
+
+```js
+var postApi = 'https://jsonplaceholder.typicode.com/posts'
+
+fetch(postApi) 
+    .then(function(response) {
+        return response.json();
+        // JSON.parse: JSON -> Javascript types
+    })
+
+    .then(function(posts) {
+        var htmls = posts.map(function(post) {
+            return `<li>
+                <h2>${post.title}</h2>
+                <p>${post.body}</p>
+            </li>`;
+        });
+
+        var html = htmls.join('');
+        document.getElementById('comment-block').innerHTML = html;
+    })
+
+    .catch(function() {
+        console.log('Có lỗi!');
+    });
+```
+
+### D. Postman
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Fetch
+// - JSON server: API Server (Fake) / Mock API
+// - CRUD (Phương thức)
+//      - Create: Tạo mới -> POST
+//      - Read: Lấy dữ liệu -> GET
+//      - Update: Chỉnh sửa -> PUT / PATCH
+//      - Delete: Xóa -> DELETE
+// - Postman
+
+// Sử dụng phần mềm postman
+// Gán link vào: http://localhost:3000/courses
+// Muốn post thì vào phần x-www-form-urlencoded
+// Muốn delete/ put thì thêm id vào trước link:
+// VD: id = 2 -> http://localhost:3000/courses/2
+// Xong bấm Send
+```
+
+## 12. ECMAScript 6+
+[:arrow_up: Mục lục](#mục-lục)
