@@ -182,7 +182,7 @@ body {
 
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-    top: -5px;;
+    top: -5px;
 }
 
 .input-box input {
@@ -212,6 +212,7 @@ body {
     margin: -15px 0 15px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .remember-forgot label input {
