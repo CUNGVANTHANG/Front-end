@@ -27,7 +27,7 @@
   - [B. Promise](#b-promise)
   - [C. Fetch](#c-fetch)
   - [D. Postman](#d-postman)
-- [12. ECMAScript 6+]()
+- [12. ECMAScript 6+](#12-ecmascript-6)
   - [A. Let, const](#a-let-const)
   - [B. Template Literals](#b-template-literals)
   - [C. Multi-line String](#c-multi-line-string)
@@ -41,6 +41,19 @@
   - [L. Tagged template literal](#l-tagged-template-literal)
   - [M. Modules](#m-modules)
   - [N. Optional chaining](#n-optional-chaining)
+- [13. IIFE, Scope, Closure](#13-iife-scope-closure)
+  - [A. IIFE](#a-iife)
+  - [B. Scope](#b-scope)
+  - [C. Closure](#c-closure)
+- [14. Hoisting, Strict Mode, Data Types](#14-hoisting-strict-mode-data-types)
+  - [A. Hoisting](#a-hoisting)
+  - [B. Strict Mode](#b-strict-mode)
+  - [C. Data Types](#c-data-types)
+- [15. This, Bind, Call, Apply](#15-this-bind-call-apply)
+  - [A. This](#a-this)
+  - [B. Bind](#b-bind)
+  - [C. Call](#c-call)
+  - [D. Apply](#d-apply)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -2095,4 +2108,768 @@ const obj2 = {
 }
 
 obj2.getName?.(123);
+```
+
+## 13. IIFE, Scope, Closure
+### A. IIFE
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// IIFE - Immediately Invoked Function Expression
+
+// 1. IIFE trông như nào?
+// 2. Dùng dấu ; trước IIFE
+// 3. IIFE là hàm "private"
+// 4. Sử dụng IIFE khi nào?
+// 5. Các cách tạo ra một IIFE
+// 6. Ví dụ sử dụng IIFE
+
+// 1. IIFE trông như nào?
+(function () { // IIFE - Tạo ra function xong đó gọi ngay function đó
+    console.log('NOW NOW') // NOW NOW
+})()
+
+(function(message) {
+    console.log('Message: ', message) // Chao ban
+})('Chao ban')
+
+// 2. Dùng dấu ; trước IIFE
+// 3. IIFE là hàm "private"
+;(function myFunc() {
+    i++
+    console.log(i)
+
+    if (i < 10)
+        myFunc()
+})()
+// Chạy bình thường in ra 1 2 3 4 5 6 7 8 9 10
+
+;(function myFunc() {
+    console.log('NOW')
+})()
+
+myFunc()
+// Lỗi vì IIFE là hàm "private" không gọi ở ngoài được
+
+// 4. Sử dụng IIFE khi nào?
+// Sử dụng IIFE khi mà viết với khối lượng code lớn, rất nhiều biến, hàm có thể bị trùng lặp dẫn đến ghi đè hoặc bị lỗi
+// Ta sẽ dùng IIFE để sử dụng trong hàm mà không ảnh hưởng đến biến, hàm xung quanh
+
+// 5. Các cách tạo ra một IIFE
+// C1:
+;(function () {
+    let fullName = 'Cung Thang'
+    console.log(fullName)
+})()
+
+// C2:
+;(function () {
+    let fullName = 'Cung Thang'
+    console.log(fullName)
+}())
+
+// C3: Dùng toán tử +, -, !... vào trước
++function () {
+    let fullName = 'Cung Thang'
+    console.log(fullName)
+}()
+
+// 6. Ví dụ sử dụng IIFE
+const app = {
+    cars: [],
+    add(car) {
+        this.cars.push(car)
+    },
+    edit(index, car) {
+        this.cars[index] = car
+    },
+    delete(index) {
+        this.cars.splice(index, 1)
+    }
+}
+// Xảy ra trường hợp khi ta add.cars = null xong đó all.cart = 'Mazda' xảy ra lỗi
+// Dẫn đến có thể hỏng ứng dụng
+
+// Khắc phục sử dụng IIFE để bảo toàn tính toàn vẹn
+const app1 = (function() {
+    // Private 
+    const cars = []  
+
+    // Public 
+    return {
+        get(index) {
+
+        },
+        add(car) {
+            cars.push(car)
+        },
+        edit(index, car) {
+            cars[index] = car
+        },
+        delete(index) {
+            cars.splice(index, 1)
+        }
+    }  
+})()
+```
+
+### B. Scope
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Scope - Phạm vi
+
+// - Các loại phạm vi:
+//     + Global: Toàn cầu
+//     + Code block - Khối mã: let, const
+//     + Local scope - Hàm: var, function
+// - Khi gọi mỗi hàm luôn có 1 phạm vi mới được tạo
+// - Các hàm có thể truy cập các biến được khai báo trong phạm vi của nó và bên ngoài nó
+// - Cách thức một biến được truy cập
+// - Khi nào một biến bị xóa khỏi bộ nhớ?
+//     - Biến toàn cầu?
+//     - Biến trong code block & trong hàm?
+//     - Biến trong hàm được tham chiếu bởi 1 hàm
+
+// + Global: Toàn cầu
+var message = 'Học về scope'
+
+function logger() {
+    console.log(message)
+}
+
+logger()
+
+// + Code block - Khối mã: Chỉ có khai báo let, const
+{
+    // code
+    const age = 20
+    console.log(age) // 20
+}
+console.log(age) // Lỗi
+
+// + Local scope - Hàm: var, function
+function logger1() {
+    var fullName = 'Cung Thang'
+    console.log(fullName) // Cung Thang
+}
+
+logger1()
+console.log(fullName) // Lỗi
+```
+
+### C. Closure
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Closure là một hàm có thể ghi nhớ nơi nó được tạo và truy cập được biến ở bên ngoài phạm vi của nó
+// Biến được tham chiếu (refer) trong closure sẽ không được xóa khỏi bộ nhớ khi hàm cha thực thi xong
+// VD1:
+function createCounter() {
+    let counter = 0
+
+    function increase() {
+        return ++counter
+    }
+
+    return increase
+}
+
+const counter1 = createCounter()
+
+console.log(counter1())
+console.log(counter1())
+console.log(counter1())
+// 1
+// 2
+// 3
+
+// VD2:
+function createLogger(namespace) {
+    function logger(message) {
+        console.log(`[${namespace}] ${message}`)
+    }
+
+    return logger
+}
+
+// ================ App ================
+
+// Register.js
+
+const infoLogger = createLogger('Info')
+
+infoLogger('Bắt đầu gửi mail')
+infoLogger('Gửi mail lỗi lần 1, thử gửi lại...')
+infoLogger('Gửi mail thành công cho user xxx')
+
+// VD3:
+function createStorage(key) {
+    const store = JSON.parse(localStorage.getItem(key)) ?? {}
+
+    const save = () => {
+        localStorage.setItem(key, JSON.stringify(store))
+    }
+
+    const storage = {
+        get(key) {
+            return store[key]
+        },
+        set(key, value) {
+            store[key] = value
+            save()
+        },
+        remove(key) {
+            delete store[key]
+            save()
+        }
+    }
+
+    return storage
+}
+
+// Profile.js
+const profileSetting = createStorage('profile_setting')
+
+console.log(profileSetting.get('fullName'))
+
+profileSetting.set('fullName', 'Nguyễn Văn')
+
+// VD4:
+function createApp() {
+    const cars = []
+
+    return {
+        add(car) {
+            cars.push(car)
+        },
+        show() {
+            console.log(cars)
+        }
+    }
+}
+
+const app = createApp()
+
+app.show()
+app.add('BMW')
+app.show() 
+```
+
+## 14. Hoisting, Strict Mode, Data Types
+### A. Hoisting
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Hoisting với "var"
+console.log(age) // undefined
+console.log(fullName) // Lỗi
+var age = 16
+
+// Hoisting với "function"
+console.log(sum(6, 9)) // 15
+
+function sum(a, b) {
+    return a + b
+}
+
+// Hoisting với "let" và "const"
+{
+    console.log(fullName) // Lỗi
+    let fullName = "Nguyen Van A"
+}
+
+// Bonus
+const counter1 = makeCounter()
+
+console.log(counter1()) //1
+
+function makeCounter() {
+    let count = 0
+    return increase
+
+    function increase() {
+        return ++count
+    }
+}
+```
+
+### B. Strict Mode
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Strict mode (Chế độ nghiêm ngặt) 
+// Cách dùng khai báo "use strict" trên đầu trang code hoặc đầu hàm mong muốn
+// VD1:
+fullName = 'Nguyen Van A'
+
+function testFunc() {
+    age = 18
+}
+
+testFunc()
+console.log(fullName) 
+console.log(age)
+// Nguyen Van A
+// 18
+
+// Khắc phục
+"use strict" // Sẽ báo lỗi nếu đoạn code bị sai hoặc thừa
+
+var fullName = 'Nguyen Van A'
+
+function testFunc() {
+    var age = 18
+}
+
+testFunc()
+console.log(fullName) 
+// console.log(age)
+
+// VD2:
+const student = Object.freeze({
+    fullName: 'Nguyen Van A'
+})
+
+student.fullName = 'Nguyen Van B'
+
+console.log(student)
+
+// Khắc phục
+"use strict"
+
+const student = Object.freeze({
+    fullName: 'Nguyen Van A'
+})
+
+// student.fullName = 'Nguyen Van B'
+
+console.log(student)
+```
+
+### C. Data Types
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// 1. Value type (Primitive data types) 
+// Kiểu dữ liệu nguyên thủy - Kiểu tham trị
+// - String
+// - Number
+// - Boolean
+// - BigInt
+// - Symbol
+// - undefined
+// - null
+
+// 2. Reference types (None-primitive data types)
+// Kiểu dữ liệu không nguyên thủy - Kiểu tham chiếu
+// - Object
+// - Array
+// - Function
+
+// Ví dụ điển hình của việc sử dụng tham chiếu và tham trị
+function createCar(obj) {
+    obj.name = 'Mercedes'
+    return obj
+}
+
+const car = {
+    name: 'BMW'
+}
+
+const newCar = createCar(car) 
+
+console.log(car)
+console.log(newCar)
+// { name: 'Mercedes' }
+// { name: 'Mercedes' }
+
+// Khắc phục
+function createCar1(obj) {
+    obj = JSON.parse(JSON.stringify(obj))
+    obj.name = 'Mercedes'
+    return obj
+}
+
+const car1 = {
+    name: 'BMW'
+}
+
+const newCar1 = createCar(car) 
+
+console.log(car1)
+console.log(newCar1)
+// { name: 'BMW' }
+// { name: 'Mercedes' }
+
+// VD2:
+const a = {
+    name: 'BMW'
+}
+
+const b = {
+    name: 'BMW'
+}
+
+console.log(a === b) // Do a và b không cùng địa chỉ ô nhớ
+
+const c = {
+    name: 'BMW'
+}
+
+const d = c
+
+console.log(c === d) // Do c và d cùng địa chỉ ô nhớ 
+```
+
+## 15. This, Bind, Call, Apply
+### A. This
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// This trả về đối tượng mà nó thuộc về
+// Đặc tính 1: Trong 1 phương thức, this tham chiếu tới đối tượng truy cập phương thức (đối tượng trước dấu .)
+// Đặc tính 2: Đứng ngoài phương thức, this tham chiếu tới đối tượng global
+
+// VD1:
+const iPhone7 = {
+    // Thuộc tính - Property
+    name: 'Iphone 7',
+    color: 'Pink',
+    weight: 300,
+
+    // Phương thức - Method
+    takePhoto() {
+        console.log(this)
+    },
+    objChild: {
+        name: 'Child Object',
+        methodChild() {
+            console.log(this)
+        }
+    }
+}
+
+console.log(iPhone7.takePhoto()) // this là iPhone7
+
+iPhone7.objChild.methodChild() // this là objChild
+
+// VD2:
+console.log(this) // Đối tượng global (windows)
+
+// Lưu ý:
+// this trong hàm tạo là đại diện cho đối tượng sẽ được tạo
+// this trong một hàm là undefined khi ở strict mode
+// Các phương thức bind(), call(), apply() có thể tham chiếu this tới đối tượng khác 
+// Arrow function không có context
+```
+
+### B. Bind
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// bind (ràng buộc)
+// Phương thức bind() sẽ trả về một hàm mới
+// Có thể nhận các đối số như hàm ban đầu
+// Tóm tắt:
+// - Phương thức bind() cho phép ràng buộc this cho một phương thức (function)
+// - Phương thức bind() sẽ trả về một hàm mới với context được bind
+// - Hàm được trả về từ bind() vẫn có thể nhận các đối số của hàm gốc
+// VD1:
+this.firstName = 'Minh'
+this.lastName = 'Thu'
+
+const teacher = {
+    firstName: 'Minh',
+    lastName: 'Thảo',
+    getFullName() {
+        return `${this.firstName} ${this.lastName}`
+    }
+}
+
+const student = {
+    firstName: 'Thang',
+    lastName: 'Cung',
+}
+
+// Case 1:
+console.log(teacher.getFullName()) // Minh Thảo
+
+// Case 2:
+const getTeacherName = teacher.getFullName // Khi gán cho biến khác đối tượng bị thay đổi 
+
+console.log(getTeacherName()) // Minh Thu
+
+// Giải thích: Khi mà ta gọi hàm getTeacherName() mà không có dấu chấm . ở đằng trước, this sẽ chọc ra phạm vi global (window)
+
+// Case 3:
+const getStudentName = teacher.getFullName.bind(student); // Đối tượng ràng buộc là student
+// Thang Cung
+
+// VD2:
+const teacher1 = {
+    firstName: 'Minh',
+    lastName: 'Thảo',
+    getFullName() {
+        console.log(`${this.firstName} ${this.lastName}`)
+    }
+}
+
+const button = document.querySelector('button')
+
+button.onclick = teacher1.getFullName // undefined undefined
+// Lúc này this trỏ tới button, đối tượng bị thay đổi
+
+// Khắc phục: ràng buộc tới teacher1
+button.onclick = teacher1.getFullName.bind(teacher1) // Minh Thảo
+```
+
+```js
+// VD3:
+console.log('Bài 3:')
+const $1 = document.querySelector
+const $$1 = document.querySelectorAll
+
+// console.log(document.querySelector('#heading').innerText) // Hello bind() method
+// console.log($1('#heading').innerText) // Lỗi
+
+// Khắc phục
+const $2 = document.querySelector.bind(document)
+const $$2 = document.querySelectorAll.bind(document)
+
+// console.log($2('#heading').innerText) // Hello bind() method
+
+// VD4:
+console.log('Bài 4:')
+
+const $ = document.querySelector.bind(document)
+const $$ = document.querySelectorAll.bind(document)
+
+const app = (() => {
+    const cars = ['BMW']
+    const root = $('#root')
+    const input = $('#input')
+    const submit = $('#submit')
+
+    return {
+        add(car) {
+            cars.push(car)
+        },
+        delete(index) {
+            cars.splice(index, 1)
+        },
+        render() {
+            const html = cars.map((car, index) => `
+                <li>
+                    ${car}
+                    <span class="delete" data-index="${index}">&times</span>
+                </li>
+            `)
+            .join('')
+            
+            root.innerHTML = html
+        },
+        handleDelete(e) {
+            const deleteBtn = e.target.closest('.delete') // closest giúp kiểm tra element đó hoặc cha của nó có chứa class delete hay không ?
+            if (deleteBtn) {
+                const index = deleteBtn.dataset.index // data- này sẽ tạo ra dataset
+                console.log(this) // Kiểm tra this là cái nào
+                this.delete(index)
+                this.render()
+            }
+        },
+        init() {
+
+            // Handle DOM events
+            submit.onclick = () => { // Arrow function không có context nên không có this
+                const car = input.value
+                this.add(car)
+                this.render()
+
+                input.value = null
+                input.focus()
+            }
+            root.onclick = this.handleDelete.bind(this) // Ràng buộc this là app
+
+            this.render()
+        }
+    }
+})();
+
+app.init()
+```
+
+### C. Call
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Call method
+// Là phương thức trong prototype của Function constructor, phương thức này được đùng để gọi hàm và cũng có thể bind, this cho hàm
+
+// Ví dụ:
+// - Gọi hàm với call method
+// - Gọi hàm và bind this, lưu ý trong strict mode vẫn có this nếu được bind
+// - Thể hiện tính kế thừa (extends) trong OOP
+// - Mượn hàm (function borrowing), thêm ví dụ với arguments
+
+// Ví dụ đơn giản: 
+function random() {
+    console.log(Math.random())
+}
+
+random()
+random.call()
+// Bản chất random() giống random.call()
+
+// Ví dụ 2:
+const teacher = {
+    firstName: 'Minh',
+    lastName: 'Thu',
+}
+
+const me = {
+    firstName: 'Thắng',
+    lastName: 'Cung',
+    showFullName() {
+        // console.log(this) // this là đối tượng window
+        console.log(`${this.firstName} ${this.lastName}`)
+    }
+}
+
+me.showFullName.call(teacher) // call(bind) -> call bao gồm call và bind (gọi hàm và ràng buộc)
+// Minh Thu
+
+// Ví dụ 3: Gọi hàm và bind this, lưu ý trong strict mode vẫn có this nếu được bind
+'use strict'
+
+this.firstName = "Thắng"
+this.lastName = "Cung"
+
+function showFullName() {
+    console.log(`${this.firstName} ${this.lastName}`)
+}
+
+showFullName() // Lỗi
+showFullName.call(this) // Thắng Cung
+
+// Ví dụ 4: Tính kế thừa
+function Animal(name, weight) {
+    this.name = name;
+    this.weight = weight;
+}
+
+function Chicken(name, weight, legs) {
+    Animal.call(this, name, weight) // Tính kế thừa
+    this.legs = legs
+}
+
+const conGa = new Chicken('Con gà', 10, 2)
+
+console.log(conGa)
+
+// Ví dụ 5: Thiết lập hàm log
+function logger() {
+    console.log(...arguments)
+}
+
+logger(1, 2, 3, 4, 5) 
+// 1 2 3 4 5
+
+function looger1() {
+    const arr = Array.from(arguments)
+    console.log(arr)
+}
+
+looger1(1, 2, 3, 4, 5)
+```
+
+### D. Apply
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Apply method
+// Phương thức này cho phép gọi một hàm với một this (bind) và truyền đối số cho hàm gốc dưới dạng mảng
+
+// Ví dụ 1:
+const teacher = {
+    firstName: 'Minh',
+    lastName: 'Thu'
+}
+
+function greet(greeting, message) {
+    return `${greeting} ${this.firstName} ${this.lastName}. ${message}`;
+}
+
+let result = greet.apply(teacher, ['Em chào cô', 'Cô dạy môn gì thế']);
+
+console.log(result)
+
+// So sánh với call() method
+result = greet.call(teacher, 'Em chào cô', 'Cô dạy môn gì thế')
+
+console.log(result)
+
+// Ví dụ 2: Function borrowing (mượn hàm)
+const teacher1 = {
+    firstName: 'Minh',
+    lastName: 'Thảo',
+    isOnline: false,
+    goOnline() {
+        this.isOnline = true
+        console.log(`${this.firstName} ${this.lastName} is Online`)
+    },
+    goOffline() {
+        this.isOnline = false
+        console.log(`${this.firstName} ${this.lastName} is Offline`)
+    }
+}
+
+const me = {
+    firstName: 'Thắng',
+    lastName: 'Cung',
+    isOnline: false,
+}
+
+console.log('Student: ', me.isOnline) // False
+teacher1.goOnline.apply(me) // Thắng Cung is Online
+console.log('Student: ', me.isOnline) // True
+
+// Ví dụ 3:
+function Animal(name, weight) {
+    this.name = name
+    this.weight = weight
+}
+
+function Parrot() {
+    Animal.apply(this, arguments) // Tính kế thừa
+    this.speak = function() {
+        console.log('Nhà có khách!')
+    }
+}
+
+const conVet = new Parrot('Vẹt', 300)
+
+console.log(conVet)
+
+// Sự giống nhau và khác nhau giữa các phương thức bind(), call(), apply()
+// Giống: Là các methods được thừa kế từ Function.prototype
+// Khác:
+function fn() {
+    // bind
+    // - Trả về hàm mới với `this` tham chiếu tới `thisArg`
+    // - Không thực hiện gọi hàm
+    // - Nếu được bind kèm `arg1, arg2, ...` thì các đối số này sẽ được ưu tiên hơn
+    const newFn = fn.bind(thisArg, arg1, arg2)
+    newFn(arg1, arg2)
+
+    // call
+    // - Thực hiện bind `this` với `thisArg` và thực hiện gọi hàm
+    // - Nhận các đối số cho hàm gốc từ `arg1, arg2, ...`
+    fn.call(thisArg, arg1, arg2)
+
+    // apply
+    // - Thực hiện bind `this` với `thisArg` và thực hiện gọi hàm
+    // - Nhận các đối số cho hàm gốc bằng đối số thứ 2 dưới dạng mảng `[arg1, arg2, ...]`
+    fn.apply(thisArg, [arg1, arg2])
+}
 ```
