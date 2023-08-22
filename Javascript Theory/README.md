@@ -28,6 +28,19 @@
   - [C. Fetch](#c-fetch)
   - [D. Postman](#d-postman)
 - [12. ECMAScript 6+]()
+  - [A. Let, const](#a-let-const)
+  - [B. Template Literals](#b-template-literals)
+  - [C. Multi-line String](#c-multi-line-string)
+  - [D. Arrow function](#d-arrow-function)
+  - [E. Classes](#e-classes)
+  - [F. Default parameter values](#f-default-parameter-values)
+  - [G. Destructuring](#g-destructuring)
+  - [H. Rest parameters](#h-rest-parameters)
+  - [J. Spread](#j-spread)
+  - [K. Enhanced object literals](#k-enhanced-object-literals)
+  - [L. Tagged template literal](#l-tagged-template-literal)
+  - [M. Modules](#m-modules)
+  - [N. Optional chaining](#n-optional-chaining)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -1660,3 +1673,426 @@ fetch(postApi)
 
 ## 12. ECMAScript 6+
 [:arrow_up: Mục lục](#mục-lục)
+
+- **ECMAScript 6+ là gì?**
+
+### A. Let, const
+[:arrow_up: Mục lục](#mục-lục)
+
+1. Scope(phạm vi truy cập)
+
+- Code block: `if` `else`, loop, `{}`, ...
+- `var` có thể truy cập trong hoặc ngoài code block
+- `let` và `const` chỉ có thể truy cập gần nhất trong code block
+
+2. Hosting
+
+Nghĩa là `var` có thể khai báo sau khi sử dụng, còn `let` và `const` chỉ có thể khai báo trước khi sử dụng
+
+3. Assignment
+
+`const` chỉ có thể gán (toán tử =) 1 lần, không thể gán lần thứ 2
+
+### B. Template Literals
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Viết bình thường
+const course = 'Javascript';
+const course2 = 'PHP ' + course;
+console.log(course2);
+
+// Viết kiểu Template string
+const courseName = 'Javascript';
+const courseName2 = 'PHP';
+const courseName3 = `${courseName} ${courseName2}`
+console.log(courseName3);
+// Javascript PHP
+```
+
+### C. Multi-line String
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Viết bình thường
+const lines = 'line 1\n'
+    + 'line 2\n'
+    + 'line 3\n'
+    + 'line 4\n'
+    + 'line 5\n'
+
+console.log(lines);
+// line 1
+// line 2
+// line 3
+// line 4
+// line 5
+
+// Viết kiểu template string
+const line = `line 1
+line 2
+line 3`
+
+console.log(line);
+// line 1
+// line 2
+// line 3
+```
+
+### D. Arrow function
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Arrows function không viết được cho trường hợp có context, function contructor...
+// Viết bình thường
+const logger = function(log) {
+    console.log(log);
+}
+
+logger('Message...');
+
+// Viết kiểu arrow function: bỏ từ function đi, thêm => vào sau đối số
+const logger1 = log => {
+    console.log(log);
+}
+
+logger1('Message...');
+
+// Phân biệt => {}, =>, => ({})
+const sum = (a, b) => a + b; // => không phải return 
+
+const sum1 = (a, b) => { // => {} phải return 
+    return a + b;
+}
+
+const sum2 = (a, b) => ({a: a, b:b}); // => ({}) không phải return 
+```
+
+### E. Classes
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// function constructor
+function Course(name, price) {
+    this.name = name;
+    this.price = price;
+
+    this.getName = function() {
+        return this.name;
+    };
+}
+
+// classes (sẽ viết gọn gàng hơn function construct)
+class Course {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
+    getName() {
+        return this.name;
+    }
+}
+```
+
+### F. Default parameter values
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Viết bình thường
+function logger(log) {
+    if(typeof log === 'undefined') {
+        log = 'Gia tri mac dinh!';
+    }
+    console.log(log);
+}
+
+logger();
+// Gia tri mac dinh!
+
+// Nên viết thành
+function logger1(log = 'Gia tri mac dinh') {
+    console.log(log);
+}
+
+logger1();
+// Gia tri mac dinh!
+```
+
+### G. Destructuring
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Bình thường viết
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+var a = array[0];
+var b = array[1];
+var c = array[2];
+
+console.log(a, b, c);
+// Javascript, PHP, Ruby
+
+// 1. Destructuring (phân rã) sẽ viết
+// VD1:
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+var [a, b, c] = array;
+
+console.log(a, b, c);
+// Javascript, PHP, Ruby
+// VD2:
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+var [a, , c] = array;
+
+console.log(a, c);
+// Javascript, Ruby
+```
+### H. Rest parameters
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// 1. Toán tử Rest ... lấy ra những phần còn lại
+// VD1:
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+var [a, ...rest] = array;
+
+console.log(a); // Javascript
+console.log(rest); // ["PHP", "Ruby"]
+
+// VD2:
+var course = {
+    name: 'Javascript',
+    price: 1000,
+    image: 'image-address',
+    children: {
+        name: 'ReactJS',
+    }
+};
+
+// Đổi tên name: parentName, name: childName do 2 name trùng tên nhau
+var { name: parentName, children: { name: childrenName } } = course;
+
+console.log(parentName);
+console.log(childrenName);
+
+// 2. Toán tử Rest ... trở thành mảng gần giống Arguments
+// VD1:
+function logger(...params) {
+    console.log(params);
+}
+
+console.log(logger(1,2,3,4,5,6,7,8));
+// [1,2,3,4,5,6,7,8]
+
+// VD2:
+function logger([a, b, ...rest]) {
+    console.log(a);
+    console.log(b);
+    console.log(rest);
+}
+
+logger([2, 6, 12, 3, 4, 4])
+// 2
+// 6
+// [12, 3, 4, 4]
+```
+
+### J. Spread
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Toán tử Spread ... có tác dụng bỏ đi dấu [], {}
+// VD1:
+var array1 = ['Javascript', 'Ruby', 'PHP'];
+
+var array2 = ['ReactJS', 'Dart'];
+
+var array3 = [...array2, ...array1];
+
+console.log(array3);
+// ['ReactJS', 'Dart', 'Javascript', 'Ruby', 'PHP']
+
+// VD2:
+var object1 = {
+    name: 'Javascript',
+};
+
+var object2 = {
+    price: 1000,
+};
+
+var object3 = {
+    ...object1,
+    ...object2
+};
+
+console.log(object3);
+// {name: 'Javascript', price: 1000}
+
+// VD3:
+var array = ['Javascript', 'PHP', 'Ruby'];
+
+function logger(...rest){
+    for(var i = 0; i < rest.length; i++) {
+        console.log(rest[i]);
+    }
+}
+
+logger(...array);
+// Javascript
+// PHP
+// Ruby
+```
+
+### K. Enhanced object literals
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// 1. Định nghĩa key: value cho object
+// 2. Định nghĩa method cho object
+// 3. Định nghĩa key cho object dưới dạng biến
+
+// VD1:
+// Viết bình thường
+var name = 'Javascript';
+var price = '1000';
+
+var course = {
+    name: name,
+    price: price,
+    getName: function() {
+        return name;
+    }
+};
+
+// Nên viết thành
+var name = 'Javascript';
+var price = '1000';
+
+var course = {
+    name,
+    price,
+    getName(){
+        return name;
+    }
+};
+
+// VD2:
+// Viết bình thường
+const course = {
+    name: 'Javascript',
+    price: 1000
+};
+
+
+// Viết thành
+var fieldName = 'name';
+var fieldPrice = 'price';
+
+const course = {
+    [fieldName]: 'Javascript',
+    [fieldPrice]: 1000
+};
+```
+
+### L. Tagged template literal
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+function hightlight([first, ...strings], ...values) {
+    return values.reduce(
+        (acc, curr) => [...acc, `<span>${curr}</span>`, strings.shift()],
+        [first]
+    )
+    .join('');
+}
+
+var brand = 'F8';
+var course = 'Javascript';
+
+const html = hightlight`Học lập trình ${course} tại ${brand}!`;  // Tagged template literal
+
+console.log(html);
+```
+
+### M. Modules
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Modules: Import / Export
+// VD1: Trực tiếp
+import logger from './logger.js'; // export default
+
+import {
+    TYPE_LOG,
+    TYPE_WARN,
+    TYPE_ERROR
+} from './constants.js'
+
+// Nếu không:
+// import {
+//     TYPE_LOG,
+//     TYPE_WARN,
+//     TYPE_ERROR
+// } from './constants.js'
+// mà:
+// import constants from './constants.js sẽ sinh ra lỗi bởi vì không export default
+// Cách khắc phục:
+
+import * as constants from './constants.js'
+console.log(constants); // object
+
+logger('Test message...', TYPE_ERROR)
+
+// VD2: Trung gian
+import { logger2 } from './logger/index.js';
+import * as constants from './constants.js'
+
+console.log(constants); // object
+logger2('Test message...', constants.TYPE_WARN)
+```
+
+### N. Optional chaining
+[:arrow_up: Mục lục](#mục-lục)
+
+```js
+// Optional chaining (?.)
+
+const obj = {
+    name: 'Alice',
+    cat: {
+        name: 'Dinah',
+        cat2: {
+            name: 'Dinah 2',
+            cat3: {
+                name: 'Dinah 3'
+            }
+        }
+    }
+}
+
+// Bình thường sẽ viết
+if(
+    obj.cat &&
+    obj.cat.cat2 &&
+    obj.cat.cat2.cat3
+) {
+    console.log(obj.cat.cat2.cat3.name)
+}
+
+// Optional chaining cú pháp viết
+if(obj?.cat?.cat2?.cat3) {  // Optional chaining (?.) được sử dụng khi không thực sự chắc chắn key tồn tại
+    console.log(obj.cat.cat2.cat3.name)
+}
+
+// VD2:
+const obj2 = {
+    getNam(value) {
+        console.log(value);
+    }
+}
+
+obj2.getName?.(123);
+```
