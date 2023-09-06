@@ -19,10 +19,14 @@
     justify-content: space-between;
 }
 
+.search,
+.search-result {
+    width: 361px;
+}
+
 .search {
     display: flex;
     position: relative;
-    width: 361px;
     height: var(--search-height);
     padding-left: 16px;
     background-color: rgba(22, 24, 35, 0.06);
