@@ -8,12 +8,16 @@ const cx = classNames.bind(styles)
 function AccountItem() {
     return ( 
         <div className={cx('wrapper')}>
-            <img className={cx('avatar')} src="" alt="Hoa" />
+            <img 
+                className={cx('avatar')} 
+                src="https://i.9mobi.vn/cf/Images/di/2023/4/24/avatar-facebook-2.jpg" 
+                alt="Hoa" 
+            />
             <div className={cx('info')}>
-                <p className={cx('name')}>
+                <h4 className={cx('name')}>
                     <span>Nguyễn Văn A</span>
-                    <FontAwesomeIcon icon={faCheckCircle} />
-                </p>
+                    <FontAwesomeIcon className={cx('check')} icon={faCheckCircle} />
+                </h4>
                 <span className={cx('username')}>nguyenvana</span>
             </div>
         </div>
