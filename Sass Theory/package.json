@@ -1,0 +1,12 @@
+{
+  "name": "sass-theory",
+  "version": "1.0.0",
+  "description": "Sass là ngôn ngữ tiền xử lý của CSS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "sass scss:assets/css -w"
+  },
+  "author": "",
+  "license": "ISC"
+}
