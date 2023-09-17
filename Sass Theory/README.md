@@ -292,3 +292,59 @@ Lúc này ta thấy không xuất hiện `.toast-share` trong kết quả sau bi
   {
 }
 ```
+
+## 5. Import
+
+**Đặt tên file base, components:**
+
+> _Tên.scss
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/49139d0d-77a0-4d44-bdbc-5e6163e1a86e" alt="" height=300px>
+
+**Cú pháp:**
+
+```scss
+@import "base/variables";
+```
+
+Ưu điểm: Khai báo 1 lần có thể sử dụng toàn cục
+
+Nhược điểm: Dễ bị ghi đè
+
+Thường được sử dụng trong các dự án nhỏ, nên sử dụng use, forward
+
+## 6. Use, forward
+
+**Đặt tên file base, components:**
+
+> _Tên.scss
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/559b36a7-8908-4452-95cc-a0ce0dbccd6b" alt="" height=300px>
+
+**Cú pháp `use`:**
+
+```scss
+@use "base/variables as var"; // Đổi tên namespace là var
+@use "base/mixins";
+
+h1 {
+    color: var.$primary-color; // namespace.variables
+    @include mixins.flexCenter; // namespace.mixins
+}
+```
+
+**Cú pháp `forward`:**
+
+```scss
+// Tạo file `_index.scss` với chức năng chuyển tiếp variables, mixins ra ngoài 
+
+@forward "variables";
+@forward "mixins";
+```
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/440517bf-9e25-48ef-a649-04c189b12283)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/2a8e78c2-bc32-4e2b-98b2-667dc5cfa7dd)
+
+Trong file `_header.scss` ở thư mục components ta chỉ cần sử dụng `@use "../base";`. `base` sẽ đóng vai trò là namespace
+
