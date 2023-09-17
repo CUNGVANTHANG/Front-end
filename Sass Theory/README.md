@@ -8,6 +8,8 @@
 - [6. Use, forward](#6-use-forward)
 - [7. Cấu trúc 7-1 pattern](#7-cấu-trúc-7-1-pattern)
 - [8. Các loại giá trị](#8-các-loại-giá-trị)
+- [9. Toán tử và nội suy](#9-toán-tử-và-nội-suy)
+- [10. If, else, each, for](#10-if-else-each-for)
 
 ## 1. Tổng quan về ngôn ngữ Sass
 [:arrow_up: Mục lục](#mục-lục)
@@ -463,4 +465,150 @@ $color: null;
 //     display: flex;
 //     justify-content: center;
 // }
+```
+
+## 9. Toán tử và nội suy
+[:arrow_up: Mục lục](#mục-lục)
+
+```scss
+// 1. Equality (==, !=)
+
+@debug 10 == 10; // True
+@debug 10 != 20; // True
+@debug 10px == 10px; // True
+@debug 10px == 10; // False
+@debug 16px == 1em; // False
+@debug 1000ms = 1s; // True
+@debug red = #ff0000; // True
+@debug 1 2 3 == 1 2 3; // 1 2 false 2 3
+@debug (1 2 3) == (1 2 3); // True
+@debug (1 3 2) == (1 2 3); // False
+
+// 2. Relation (>, <, >=, <=)
+
+@debug 20 >= 10; // True
+@debug 10 >= 10px; // True
+@debug 9 >= 10px; // False
+
+// 3. Numeric (+, -, *, /, %)
+
+@debug 10px + 10; // 20px
+@debug 10px + 10px; // 20px
+@debug 10px + 10rem; // Lỗi
+@debug 1s + 1000ms; // 2s
+@debug 1000ms + 1; // 1001s
+@debug 10px * 10; // 100px
+@debug 10px * 10px; // 100px*px 
+@debug 10px / 2; // 10px / 2
+
+$number: 10px / 2;
+@debug $number; // 5px
+
+@use "sass:math"; // Sử dụng thư viện math trong sass
+
+@debug math.div(12px, 3);
+
+// 4. Logic (not, and, or)
+
+// Truthy: tất cả
+// Falsy: false, null
+@debug not 1; // False
+@debug not 0; // False
+@debug not null; // True
+
+@if 1 == 1 and 2 > 1 {
+    .box {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+$condition: 1 > 1 or 2 == 1;
+
+// 5. Interpolation (Nội suy) - tác dụng lấy giá chị của biến đưa vào 1 chuỗi
+
+$name: "Nguyen Van A";
+@debug "Xin chao: #{$name}";
+
+$selector: ".container";
+#{$selector} {
+    width: 100px;
+}
+```
+
+## 10. If, else, each, for
+[:arrow_up: Mục lục](#mục-lục)
+
+```scss
+// 1. if else
+$condition: 10 > 10;
+
+// Cách 1:
+@if $condition {
+    h1 {
+        color: green;
+    }
+} @else {
+    h1 {
+        color: red;
+    }
+}
+
+// Cách 2:
+h1 {
+    @if $condition {
+        color: green;
+    } @else {
+        color: red;
+    }
+}
+
+// Cách 3:
+
+h1 {
+    color: if($condition, green, red);
+}
+
+// 2. each
+$break-points: 575px 768px 991px 1140px 1320px;
+
+@each $break-point in $break-points {
+    @debug $break-point; // 575px 768px 991px 1140px 1320px
+    @media (min-width: #{$break-point}) {
+        .test {
+            color: red;
+        }
+    }
+}
+
+$break-points: (
+    "sm": 575px,
+    "md": 768px,
+    "lg": 991px,
+    "xl": 1140px,
+    "xxl": 1320px
+);
+
+@each $infix, $break-point in $break-points {  // infix là key
+    @media (min-width: #{$break-point}) {
+        .col-#{$infix} {
+            width: 100px;
+        }
+    }
+}
+
+// 3. for
+@for $i from 1 to 10 {
+    @debug $i; // 1 2 3 4 5 6 7 8 9 (Chí chạy tới 9)
+}
+
+@for $i from 1 through 10 {
+    @debug $i; // 1 2 3 4 5 6 7 8 9 10
+}
+
+@for $i from 1 through 12 {
+    .col-#{$i} {
+        --column-number: #{$i};
+    }
+}
 ```
