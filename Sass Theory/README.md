@@ -1,8 +1,17 @@
 # Sass Theory
 ## Mục lục
-
+- [1. Tổng quan về ngôn ngữ Sass](#1-tổng-quan-về-ngôn-ngữ-sass)
+- [2. Nested rules và Variables](#2-nested-rules-và-variables)
+- [3. Extend và Placeholder](#3-extend-và-placeholder)
+- [4. Mixins](#4-mixins)
+- [5. Import](#5-import)
+- [6. Use, forward](#6-use-forward)
+- [7. Cấu trúc 7-1 pattern](#7-cấu-trúc-7-1-pattern)
+- [8. Các loại giá trị](#8-các-loại-giá-trị)
 
 ## 1. Tổng quan về ngôn ngữ Sass
+[:arrow_up: Mục lục](#mục-lục)
+
 Sass (Syntactically Awesome StyleSheets) là ngôn ngữ tiền xử lý của CSS
 
 **Tên file sass:**
@@ -78,6 +87,7 @@ npm start
 ```
 
 ## 2. Nested rules và Variables
+[:arrow_up: Mục lục](#mục-lục)
 
 **1. Nested rules**
 
@@ -157,6 +167,8 @@ Nếu là thuộc tính của CSS có thể truyền trực tiếp biến vào, 
 ```
 
 ## 3. Extend và Placeholder
+[:arrow_up: Mục lục](#mục-lục)
+
 **1. Extend (Kế thừa)**
 
 ```scss
@@ -227,6 +239,8 @@ Sử dụng `%` để tạo placeholder
 Lúc này ta thấy không xuất hiện `.toast-share` trong kết quả sau biên dịch nữa. Điều này giúp ta cải thiện được lượng code không cần thiết trong file CSS
 
 ## 4. Mixins
+[:arrow_up: Mục lục](#mục-lục)
+
 **1. Mixins không truyền tham số**
 
 ```scss
@@ -294,6 +308,7 @@ Lúc này ta thấy không xuất hiện `.toast-share` trong kết quả sau bi
 ```
 
 ## 5. Import
+[:arrow_up: Mục lục](#mục-lục)
 
 **Đặt tên file base, components:**
 
@@ -314,6 +329,7 @@ Nhược điểm: Dễ bị ghi đè
 Thường được sử dụng trong các dự án nhỏ, nên sử dụng use, forward
 
 ## 6. Use, forward
+[:arrow_up: Mục lục](#mục-lục)
 
 **Đặt tên file base, components:**
 
@@ -348,3 +364,103 @@ h1 {
 
 Trong file `_header.scss` ở thư mục components ta chỉ cần sử dụng `@use "../base";`. `base` sẽ đóng vai trò là namespace
 
+## 7. Cấu trúc 7-1 pattern
+[:arrow_up: Mục lục](#mục-lục)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/5e55f2f8-f357-49a3-bde4-d25ea69b3766)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/e060ee13-81e7-4e85-a166-945a1f28ee63)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/24d8514a-aacb-466e-9cff-9890128d83bb)
+
+
+## 8. Các loại giá trị
+[:arrow_up: Mục lục](#mục-lục)
+
+Các loại giá trị trong Sass: Numbers, Strings, Colors, List, Maps, Boolean, Null
+
+```scss
+// 1. Numbers
+$font-size: 20px;
+$padding: 2rem;
+$border: 2;
+$z-index: 99;
+
+// 2. Strings
+$device: "mobile";
+$font-code: "monospace";
+$my-name: "Nguyen Van A";
+
+// 3. Colors
+$color1: green;
+$color2: #ff0000;
+
+$primary: orange;
+$secondary: rgba(
+    $color: $primary,
+    $alpha: 0.5,
+);
+
+@debug $secondary;
+
+// 4. Lists - Nên đặt sau tên có 's'
+$colors: red green blue orange;
+$break-points: 575px 768px 991px;
+$font-weights: 400 500 600;
+
+// 5. Maps (key: value)
+$break-points: (
+    "mobile": 575px,
+    "tablet": 768px,
+    "desktop": 991px,
+);
+
+$font-weights: (
+    "regular": 400,
+    "medium": 500,
+    "bold": 700,
+);
+
+// 6. Boolean (true or false)
+$success: true;
+$error: false;
+
+@mixin avatar($w, $h, $circle: false) {
+    width: $w;
+    height: $h;
+
+    @if $circle == true {
+        border-radius: 50%;
+    }
+}
+
+img.avatar {
+    @include avatar(100px, 100px, $circle: true);
+}
+
+// CSS
+// img.avatar {
+//     width: 100px;
+//     height: 100px;
+//     border-radius: 50%;
+// }
+
+// 7. Null
+$color: null;
+
+@mixin flexCenter($horizontal: center, $vertical: center) {
+    display: flex;
+    align-items: $vertical;
+    justify-content: $horizontal;
+}
+
+.box {
+    @include flexCenter($vertical: null)
+}
+
+// CSS
+// .box {
+//     display: flex;
+//     justify-content: center;
+// }
+```
