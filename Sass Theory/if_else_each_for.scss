@@ -1,0 +1,71 @@
+// 1. if else
+$condition: 10 > 10;
+
+// Cách 1:
+@if $condition {
+    h1 {
+        color: green;
+    }
+} @else {
+    h1 {
+        color: red;
+    }
+}
+
+// Cách 2:
+h1 {
+    @if $condition {
+        color: green;
+    } @else {
+        color: red;
+    }
+}
+
+// Cách 3:
+
+h1 {
+    color: if($condition, green, red);
+}
+
+// 2. each
+$break-points: 575px 768px 991px 1140px 1320px;
+
+@each $break-point in $break-points {
+    @debug $break-point; // 575px 768px 991px 1140px 1320px
+    @media (min-width: #{$break-point}) {
+        .test {
+            color: red;
+        }
+    }
+}
+
+$break-points: (
+    "sm": 575px,
+    "md": 768px,
+    "lg": 991px,
+    "xl": 1140px,
+    "xxl": 1320px
+);
+
+@each $infix, $break-point in $break-points {  // infix là key
+    @media (min-width: #{$break-point}) {
+        .col-#{$infix} {
+            width: 100px;
+        }
+    }
+}
+
+// 3. for
+@for $i from 1 to 10 {
+    @debug $i; // 1 2 3 4 5 6 7 8 9 (Chí chạy tới 9)
+}
+
+@for $i from 1 through 10 {
+    @debug $i; // 1 2 3 4 5 6 7 8 9 10
+}
+
+@for $i from 1 through 12 {
+    .col-#{$i} {
+        --column-number: #{$i};
+    }
+}

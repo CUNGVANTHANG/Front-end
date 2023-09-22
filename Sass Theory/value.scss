@@ -1,0 +1,83 @@
+// Numbers
+$font-size: 20px;
+$padding: 2rem;
+$border: 2;
+$z-index: 99;
+
+// Strings
+$device: "mobile";
+$font-code: "monospace";
+$my-name: "Nguyen Van A";
+
+// Colors
+$color1: green;
+$color2: #ff0000;
+
+$primary: orange;
+$secondary: rgba(
+    $color: $primary,
+    $alpha: 0.5,
+);
+
+@debug $secondary;
+
+// Lists - Nên đặt sau tên có 's'
+$colors: red green blue orange;
+$break-points: 575px 768px 991px;
+$font-weights: 400 500 600;
+
+// Maps (key: value)
+$break-points: (
+    "mobile": 575px,
+    "tablet": 768px,
+    "desktop": 991px,
+);
+
+$font-weights: (
+    "regular": 400,
+    "medium": 500,
+    "bold": 700,
+);
+
+// Boolean (true or false)
+$success: true;
+$error: false;
+
+@mixin avatar($w, $h, $circle: false) {
+    width: $w;
+    height: $h;
+
+    @if $circle == true {
+        border-radius: 50%;
+    }
+}
+
+img.avatar {
+    @include avatar(100px, 100px, $circle: true);
+}
+
+// CSS
+// img.avatar {
+//     width: 100px;
+//     height: 100px;
+//     border-radius: 50%;
+// }
+
+// Null
+$color: null;
+
+@mixin flexCenter($horizontal: center, $vertical: center) {
+    display: flex;
+    align-items: $vertical;
+    justify-content: $horizontal;
+}
+
+.box {
+    @include flexCenter($vertical: null)
+}
+
+// CSS
+// .box {
+//     display: flex;
+//     justify-content: center;
+// }
