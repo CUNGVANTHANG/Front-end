@@ -10,6 +10,7 @@
 - [8. Các loại giá trị](#8-các-loại-giá-trị)
 - [9. Toán tử và nội suy](#9-toán-tử-và-nội-suy)
 - [10. If, else, each, for](#10-if-else-each-for)
+- [11. Minify Sass output](#11-minify-sass-output)
 
 ## 1. Tổng quan về ngôn ngữ Sass
 [:arrow_up: Mục lục](#mục-lục)
@@ -612,3 +613,18 @@ $break-points: (
     }
 }
 ```
+
+## 11. Minify Sass output
+[:arrow_up: Mục lục](#mục-lục)
+
+Gõ câu lệnh `sass scss:assets/css -s compressed` hoặc vào file package.json thêm `"minify": "sass scss:assets/css -s compressed"`
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/921a8109-07ec-422a-b2eb-2544fc95d94e" height=300px>
+
+Gõ câu lệnh `npm run minify` để tạo minify
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/135b4337-a9c2-4aa8-8982-0fa70dcf1e80)
+
+Kết quả sinh ra file có các câu lệnh nằm trên 1 dòng, giúp giảm dung lượng file
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/3a64fb75-598e-43e4-b183-fd1c015b9bff)
