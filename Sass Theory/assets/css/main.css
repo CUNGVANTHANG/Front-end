@@ -1,16 +1,1 @@
-.header {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  height: 160px;
-  background-color: orange;
-}
-
-h1 {
-  color: orange;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
-
-/*# sourceMappingURL=main.css.map */
+.header{display:flex;justify-content:center;text-align:center;height:160px;background-color:orange}h1{color:orange;display:flex;justify-content:center;text-align:center}/*# sourceMappingURL=main.css.map */
