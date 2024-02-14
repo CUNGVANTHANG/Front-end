@@ -11,6 +11,7 @@
 - [VII. Thư viện clsx và classnames]()
 
 ## I. SPA/MPA là gì?
+[:arrow_up: Mục lục](#mục-lục)
 
 **1. SPA - Single-Page Application**
 - ReactJS là 1 trong những thư viện tạo SPA
@@ -59,6 +60,7 @@
     - Phát triển thêm mobile app dễ dàng
 
 ## II. Ôn lại ES6+ 
+[:arrow_up: Mục lục](#mục-lục)
 ### 1. Arrow function
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -322,7 +324,17 @@ console.log(constants); // object
 logger2('Test message...', constants.TYPE_WARN)
 ```
 
-## III. Hooks
+## III. React, ReactDOM
+[:arrow_up: Mục lục](#mục-lục)
+
+### IV. JSX, Components, Props
+[:arrow_up: Mục lục](#mục-lục)
+
+### V. Create React App
+[:arrow_up: Mục lục](#mục-lục)
+
+## VI. Hooks
+[:arrow_up: Mục lục](#mục-lục)
 ### 1. useState
 [:arrow_up: Mục lục](#mục-lục)
 
