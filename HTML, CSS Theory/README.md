@@ -10,8 +10,11 @@
   <summary>B. CSS</summary>
 
   - [I. CSS mặc định của các thẻ HTML](#i-css-mặc-định-của-các-thẻ-html)
-  - [II. Các cách chèn CSS](#ii-các-cách-chèn-css)
-  - [III. 
+  - [II. Các cách chèn CSS và đặt tên class](#ii-các-cách-chèn-css-và-đặt-tên-class)
+  - [III. CSS Selectors và mức độ ưu tiên](#iii-css-selectors-và-mức-độ-ưu-tiên)
+  - [IV. CSS display](#iv-css-display)
+  - [V. CSS position](#v-css-position)
+  - [VI. CSS pseudo classes, pseudo elements](#vi-css-pseudo-classes-pseudo-elements)
 </details>
 
 ## B. CSS
@@ -138,15 +141,18 @@ i {
 }
 ```
 
-## II. Các cách chèn CSS
+## II. Các cách chèn CSS và đặt tên class
 [:arrow_up: Mục lục](#mục-lục)
 
 3 cách chèn CSS:
+
 1. Internal (Tạo thẻ <style>)
+
 2. External (Sử dụng thẻ link tham chiếu đến file .css)
+
 3. Inline (Tạo thuộc tính style trong thẻ HTML)
 
-## III. CSS Selectors
+## III. CSS Selectors và mức độ ưu tiên
 [:arrow_up: Mục lục](#mục-lục)
 
 | **Selector** | **Ví dụ** | **Mô tả** |
@@ -167,31 +173,33 @@ i {
 | Giá trị | Mô tả |
 | :--- | :--- |
 | [`block`](#1-display-block) | Hiển thị phần tử dưới dạng phần tử khối (như `<p>`). Nó bắt đầu trên một dòng mới và chiếm toàn bộ chiều rộng |
-| `inline-block` | Hiển thị một phần tử dưới dạng bộ chứa khối cấp độ nội tuyến. Bản thân phần tử được định dạng là phần tử nội tuyến, nhưng bạn có thể áp dụng các giá trị chiều cao và chiều rộng |
-| `flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp khối |
-| `inline-flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp nội tuyến |
-| `grid` | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp khối |
-| `inline-grid` | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp độ nội tuyến |
+| [`inline-block`](#2-display-inline-block) | Hiển thị một phần tử dưới dạng bộ chứa khối cấp độ nội tuyến. Bản thân phần tử được định dạng là phần tử nội tuyến, nhưng bạn có thể áp dụng các giá trị chiều cao và chiều rộng |
+| [`flex`](#3-display-flex) | Hiển thị một phần tử dưới dạng bộ chứa flex cấp khối |
+| [`inline-flex`](#4-display-inline-flex) | Hiển thị một phần tử dưới dạng bộ chứa flex cấp nội tuyến |
+| [`grid`](#5-display-grid) | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp khối |
+| [`inline-grid`](#6-display-inline-grid) | Hiển thị một phần tử dưới dạng bộ chứa lưới cấp độ nội tuyến |
 
 Trang web tham khảo flexbox: https://codepen.io/enxaneta/full/adLPwv/
 
 ### 1. `display: block;`
 [:arrow_up: Mục lục](#mục-lục)
 
+`display: block;` là để tạo ra các khối chiếm toàn bộ chiều rộng và **bắt đầu trên một dòng mới.**
+
 _HTML:_
 
 ```html
 <div class="container">
-  <div class="element1"></div>
-  <div class="element2"></div>
+    <div class="element1"></div>
+    <div class="element2"></div>
 </div>
 ```
 
 _CSS:_
 
-```CSS
+```css
 .container {
-  display: block;
+    display: block;
 }
 ```
 
@@ -201,10 +209,10 @@ _CSS:_
 
 _CSS:_
 
-```CSS
+```css
 .container {
-  display: block;
-  text-align: center;
+    display: block;
+    text-align: center;
 }
 ```
 
@@ -214,10 +222,10 @@ _CSS:_
 
 _CSS:_
 
-```CSS
+```css
 .container {
-  display: block;
-  float: right;
+    display: block;
+    float: right;
 }
 ```
 <img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/7ccadf55-27b8-48ad-8ac6-dfb0452f9f41" style="height: 200px;">
@@ -226,23 +234,70 @@ _CSS:_
 
 _CSS:_
 
-```CSS
+```css
 .container {
-  display: block;
-  line-height: 100px; /* line-height bằng chiều cao thì sẽ căn giữa */
+    display: block;
+    line-height: 100px; /* line-height bằng chiều cao thì sẽ căn giữa */
 }
 ```
 
 <img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/1529a489-5308-40e2-ac37-c9d316866162" style="height: 200px;">
 
+**d. Sử dụng `overflow` để xác định cách xử lý nội dung vượt quá kích thước của phần tử.**
+
+_CSS:_
+
+```css
+html {
+    width: 80px; /* Đặt width là 80px */
+}
+
+.container {
+    display: block;
+    overflow: hidden;
+}
+```
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/ce585fb8-d92b-4b14-bcb4-7855618b2f1d" style="height: 200px;">
+
 ### 2. `display: inline-block;`
 [:arrow_up: Mục lục](#mục-lục)
+
+`display: inline-block;` là để tạo ra các phần tử có thể **hiển thị trên cùng một dòng với các phần tử khác** nhưng vẫn giữ được **các thuộc tính của block-level elements**.
+
+_HTML:_
+
+```html
+<div class="container">
+    <div class="element1"></div>
+    <div class="element2"></div>
+</div>
+```
+
+_CSS:_
+
+```css
+.container {
+    font-size: 0; /* Loại bỏ khoảng trống dư thừa */
+}
+
+.element1, .element2 {
+    display: inline-block;
+    font-size: 12px; /* Thiết lập lại kích thước font */
+}
+```
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/5151e29b-4cf7-4cf4-9a52-cf123ab5e652" style="height: 200px;">
 
 ### 3. `display: flex;`
 [:arrow_up: Mục lục](#mục-lục)
 
+
+
 ### 4. `display: inline-flex;`
 [:arrow_up: Mục lục](#mục-lục)
+
+
 
 ### 5. `display: grid;`
 [:arrow_up: Mục lục](#mục-lục)
@@ -264,5 +319,7 @@ _CSS:_
 ### 3. `postion: fixes;`
 [:arrow_up: Mục lục](#mục-lục)
 
+## VI. CSS pseudo classes, pseudo elements 
+[:arrow_up: Mục lục](#mục-lục)
 
-## VI. 
+
