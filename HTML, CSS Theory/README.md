@@ -178,6 +178,63 @@ Trang web tham khảo flexbox: https://codepen.io/enxaneta/full/adLPwv/
 ### 1. `display: block;`
 [:arrow_up: Mục lục](#mục-lục)
 
+_HTML:_
+
+```html
+<div class="container">
+  <div class="element1"></div>
+  <div class="element2"></div>
+</div>
+```
+
+_CSS:_
+
+```CSS
+.container {
+  display: block;
+}
+```
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/1f8468c6-f3ed-47eb-93e2-8892721fc08f" style="height: 200px;">
+
+**a. Sử dụng `text-align` để đặt vị trí của văn bản bên trong phần tử (left, right, center).**
+
+_CSS:_
+
+```CSS
+.container {
+  display: block;
+  text-align: center;
+}
+```
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/71289b00-a0d8-4ac3-8162-8356cab78caf" style="height: 200px;">
+
+**b. Sử dụng `float` để thực hiện việc đẩy phần tử sang trái (left) hoặc phải (right) và cho phép các phần tử khác lấp đầy không gian trống.**
+
+_CSS:_
+
+```CSS
+.container {
+  display: block;
+  float: right;
+}
+```
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/7ccadf55-27b8-48ad-8ac6-dfb0452f9f41" style="height: 200px;">
+
+**c. Sử dụng `line-height` để đặt chiều cao của dòng văn bản bên trong phần tử**
+
+_CSS:_
+
+```CSS
+.container {
+  display: block;
+  line-height: 100px; /* line-height bằng chiều cao thì sẽ căn giữa */
+}
+```
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/1529a489-5308-40e2-ac37-c9d316866162" style="height: 200px;">
+
 ### 2. `display: inline-block;`
 [:arrow_up: Mục lục](#mục-lục)
 
