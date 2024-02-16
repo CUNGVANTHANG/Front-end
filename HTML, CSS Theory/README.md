@@ -1,7 +1,22 @@
 # HTML, CSS Theory
 ## Mục lục
 
+<details>
+  <summary>A. HTML</summary>
+  
+</details>
+
+<details>
+  <summary>B. CSS</summary>
+
+  - [I. CSS mặc định của các thẻ HTML](#i-css-mặc-định-của-các-thẻ-html)
+  - [II. Các cách chèn CSS](#ii-các-cách-chèn-css)
+  - [III. 
+</details>
+
+## B. CSS
 ## I. CSS mặc định của các thẻ HTML
+[:arrow_up: Mục lục](#mục-lục)
 - **Thẻ html**
 ```css
   display: block;
@@ -123,13 +138,17 @@ i {
 }
 ```
 
-## II. CSS
+## II. Các cách chèn CSS
+[:arrow_up: Mục lục](#mục-lục)
+
 3 cách chèn CSS:
 1. Internal (Tạo thẻ <style>)
 2. External (Sử dụng thẻ link tham chiếu đến file .css)
 3. Inline (Tạo thuộc tính style trong thẻ HTML)
 
-### 1. CSS Selectors
+## III. CSS Selectors
+[:arrow_up: Mục lục](#mục-lục)
+
 | **Selector** | **Ví dụ** | **Mô tả** |
 | :--- | :--- | :--- |
 | `.class` | `.intro` |	Chọn tất cả các thẻ có class="intro" |
@@ -144,10 +163,10 @@ i {
 | `element + element` | `div + p`	| Chọn thẻ p đứng liền kề sau thẻ div |
 | `element ~ element` |	`div ~ p`	| Chọn tất cả thẻ p đứng sau thẻ div |
 
-### 2. CSS display
+## IV. CSS display
 | Giá trị | Mô tả |
 | :--- | :--- |
-| `block` | Hiển thị phần tử dưới dạng phần tử khối (như `<p>`). Nó bắt đầu trên một dòng mới và chiếm toàn bộ chiều rộng |
+| [`block`](#1-display-block) | Hiển thị phần tử dưới dạng phần tử khối (như `<p>`). Nó bắt đầu trên một dòng mới và chiếm toàn bộ chiều rộng |
 | `inline-block` | Hiển thị một phần tử dưới dạng bộ chứa khối cấp độ nội tuyến. Bản thân phần tử được định dạng là phần tử nội tuyến, nhưng bạn có thể áp dụng các giá trị chiều cao và chiều rộng |
 | `flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp khối |
 | `inline-flex` | Hiển thị một phần tử dưới dạng bộ chứa flex cấp nội tuyến |
@@ -156,6 +175,37 @@ i {
 
 Trang web tham khảo flexbox: https://codepen.io/enxaneta/full/adLPwv/
 
-### 3. CSS position
+### 1. `display: block;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 2. `display: inline-block;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 3. `display: flex;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 4. `display: inline-flex;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 5. `display: grid;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 6. `display: inline-grid;`
+[:arrow_up: Mục lục](#mục-lục)
+
+## V. CSS position
+[:arrow_up: Mục lục](#mục-lục)
 
 ![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/e6d45506-ca6c-43fd-a36d-e131c02e1aa8)
+
+### 1. `position: relative;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 2. `position: absolute;`
+[:arrow_up: Mục lục](#mục-lục)
+
+### 3. `postion: fixes;`
+[:arrow_up: Mục lục](#mục-lục)
+
+
+## VI. 
