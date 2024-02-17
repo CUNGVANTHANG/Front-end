@@ -17,6 +17,132 @@
   - [VI. CSS pseudo classes, pseudo elements](#vi-css-pseudo-classes-pseudo-elements)
 </details>
 
+## A. HTML
+## I. Các thẻ trong HTML
+[:arrow_up: Mục lục](#mục-lục)
+### 1. Các thẻ chuẩn trong HTML
+[:arrow_up: Mục lục](#mục-lục)
+
+```html
+<!DOCTYPE html>
+<html lang="en"> <!-- Xác định một tài liệu HTML và bao gồm tất cả các phần khác nhau của trang web. -->
+<head>  <!-- Chứa thông tin về tài liệu như tiêu đề, liên kết đến các tệp CSS hoặc JavaScript. -->
+    <meta charset="UTF-8"> <!-- Xác định bộ mã ký tự được sử dụng trên trang web -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Cung cấp thông tin về cách trình duyệt nên hiển thị nội dung trên các thiết bị di động -->
+    <title>Document</title> <!-- Xác định tiêu đề của tài liệu, hiển thị trên thanh tiêu đề của trình duyệt. -->
+    <link rel="stylesheet" href="./styles.css"> <!-- Sử dụng để liên kết với các tài nguyên bên ngoài -->
+</head>
+<body> <!-- Chứa toàn bộ nội dung hiển thị trên trang web. -->
+    
+    <div></div> <!-- Xác định một khu vực hoặc một nhóm các phần tử trong tài liệu, giúp quản lý bố cục và kiểu dáng. -->
+
+    <span></span> <!-- Được sử dụng để chứa một phần nhỏ của văn bản hoặc các phần tử khác mà bạn muốn tạo kiểu cho chúng mà không làm thay đổi cấu trúc của tài liệu. -->
+
+    <img src="" alt=""> <!-- Được sử dụng để chèn hình ảnh vào trang web. -->
+
+    <!-- Xác định các tiêu đề có kích thước khác nhau từ lớn nhất đến nhỏ nhất. -->
+    <h1>Header 1</h1>
+    <h2>Header 2</h2>
+    <h3>Header 3</h3>
+    <h4>Header 4</h4>
+    <h5>Header 5</h5>
+    <h6>Header 6</h6>
+
+    <ul> <!-- Thẻ này đại diện cho danh sách không có thứ tự (unordered list) -->
+        <li>Item 1</li> <!-- Thẻ này đại diện cho mỗi mục trong danh sách (<ul> hoặc <ol>) -->
+        <li>Item 2</li>
+        <li>Item 3</li>
+    </ul>
+
+    <ol> <!-- Thẻ này đại diện cho danh sách có thứ tự (ordered list). -->
+        <li>First item</li> <!-- Thẻ này đại diện cho mỗi mục trong danh sách (<ul> hoặc <ol>) -->
+        <li>Second item</li>
+        <li>Third item</li>
+    </ol>
+
+    <p>Đoạn văn bản</p> <!-- Được sử dụng để định nghĩa đoạn văn bản. -->
+
+    <a href=""></a> <!-- Định nghĩa một liên kết đến một tài nguyên khác -->
+
+    <input type="text" name="username" placeholder="Enter your username"> <!-- Tạo ra một trường nhập liệu trong biểu mẫu (form) -->
+
+    <button type="submit">Submit</button> <!-- Thẻ này được sử dụng để tạo ra một nút trong biểu mẫu hoặc trên trang web để thực hiện một hành động cụ thể khi được nhấn. -->
+
+    <br> <!-- Sử dụng để tạo ra một dòng xuống (line break) -->
+
+    <table border="1"> <!-- Thẻ cha của tất cả các thẻ trong bảng. -->
+        <tr> <!-- Thẻ dùng để tạo các hàng trong bảng. -->
+            <th>Họ và tên</th> <!-- Thẻ dùng để tạo tiêu đề cho cột hoặc hàng trong bảng. -->
+            <th>Tuổi</th>
+            <th>Địa chỉ</th>
+        </tr>
+        <tr>
+            <td>Nguyễn Văn A</td> <!-- Thẻ dùng để tạo các ô dữ liệu trong bảng. -->
+            <td>25</td>
+            <td>Hà Nội</td>
+        </tr>
+    </table>
+
+    <script></script>  <!-- Sử dụng để nhúng mã JavaScript vào trong tài liệu HTML -->
+</body>
+</html>
+```
+
+### 2. Các thẻ Semantic trong HTML (SEM)
+[:arrow_up: Mục lục](#mục-lục)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/70eab7fb-157a-4bab-80d8-3372a2571670)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic HTML Structure</title>
+</head>
+<body>
+
+    <header> <!-- Chứa tiêu đề trang web và menu điều hướng. -->
+        <h1>Website Header</h1>
+        <nav> <!-- Chứa các liên kết điều hướng. -->
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <aside> <!-- Chứa thông tin phụ hoặc liên quan. -->
+        <h2>Aside Section</h2>
+        <p>This is some additional information or related content.</p>
+    </aside>
+
+    <section> <!-- Chứa các phần của trang liên quan nhưng không chứa thông tin tổ chức nội dung lớn hơn. -->
+        <h2>Main Section</h2>
+        
+        <article> <!-- Chứa các phần nội dung độc lập và tự đủ, như bài viết hoặc bài blog. -->
+            <h3>Article 1</h3>
+            <p>This is the content of article 1.</p>
+        </article>
+
+        <article>
+            <h3>Article 2</h3>
+            <p>This is the content of article 2.</p>
+        </article>
+    </section>
+
+    <footer> <!-- Chứa thông tin cuối trang. -->
+        <p>&copy; 2024 Website Footer</p>
+    </footer>
+
+</body>
+</html>
+
+```
+
 ## B. CSS
 ## I. CSS mặc định của các thẻ HTML
 [:arrow_up: Mục lục](#mục-lục)
@@ -144,13 +270,31 @@ i {
 ## II. Các cách chèn CSS và đặt tên class
 [:arrow_up: Mục lục](#mục-lục)
 
+### 1. Các cách chèn CSS
+
 3 cách chèn CSS:
 
-1. Internal (Tạo thẻ <style>)
+- **1. Internal** (Tạo thẻ <style>)
 
-2. External (Sử dụng thẻ link tham chiếu đến file .css)
+- **2. External** (Sử dụng thẻ link tham chiếu đến file .css)
 
-3. Inline (Tạo thuộc tính style trong thẻ HTML)
+- **3. Inline** (Tạo thuộc tính style trong thẻ HTML)
+
+### 2. Cách đặt tên class (BEM)
+
+```css
+.block {}   /* Block */
+.block__element {}  /* Element */
+.block--modifier {}  /* Modifier */
+```
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/60928c01-26f8-473e-a671-a6846d3b8c42)
+
+- **1. Block:** Là một thành phần của trang web hay ứng dụng đó, các thành phần của DOM cũng có thể là các block. Block ở đây thường là các thành phần header, body, content, footer.
+
+- **2. Elements:** Là một thành phần của một block và sẽ không tồn tại độc lập mà không có block vì được đặt bên trong nó, và chúng phụ thuộc vào parent block của nó.
+
+- **3. Modifers:** Được dùng để thao tác thay đổi cách hiển thị trên block hoặc phần tử.
 
 ## III. CSS Selectors và mức độ ưu tiên
 [:arrow_up: Mục lục](#mục-lục)
