@@ -2034,6 +2034,23 @@ console.log(html); // Học lập trình <span>Javascript</span> tại <span>F8<
 [:arrow_up: Mục lục](#mục-lục)
 
 ```js
+// File logger.js
+import { TYPE_LOG } from './constants.js'
+
+function logger(log, type = TYPE_LOG) {
+    console[type](log);
+}
+
+export default logger; // Đẩy logger ra ngoài
+// 1 module chỉ export default được 1 cái
+
+// File constants.js
+export const TYPE_LOG = 'log';
+export const TYPE_WARN = 'warn';
+export const TYPE_ERROR = 'error';
+
+
+// File main.js
 // Modules: Import / Export
 // VD1: Trực tiếp
 import logger from './logger.js'; // export default
