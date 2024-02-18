@@ -2027,7 +2027,7 @@ var course = 'Javascript';
 
 const html = hightlight`Học lập trình ${course} tại ${brand}!`;  // Tagged template literal
 
-console.log(html);
+console.log(html); // Học lập trình <span>Javascript</span> tại <span>F8</span>!
 ```
 
 ### M. Modules
@@ -2092,22 +2092,22 @@ if(
     obj.cat.cat2 &&
     obj.cat.cat2.cat3
 ) {
-    console.log(obj.cat.cat2.cat3.name)
+    console.log(obj.cat.cat2.cat3.name) // Dinah 3
 }
 
 // Optional chaining cú pháp viết
 if(obj?.cat?.cat2?.cat3) {  // Optional chaining (?.) được sử dụng khi không thực sự chắc chắn key tồn tại
-    console.log(obj.cat.cat2.cat3.name)
+    console.log(obj.cat.cat2.cat3.name) // Dinah 3
 }
 
 // VD2:
 const obj2 = {
-    getNam(value) {
+    getName(value) {
         console.log(value);
     }
 }
 
-obj2.getName?.(123);
+obj2.getName?.(123); // 123
 ```
 
 ## 13. IIFE, Scope, Closure
@@ -2511,7 +2511,7 @@ const b = {
     name: 'BMW'
 }
 
-console.log(a === b) // Do a và b không cùng địa chỉ ô nhớ
+console.log(a === b) // false: Do a và b không cùng địa chỉ ô nhớ
 
 const c = {
     name: 'BMW'
@@ -2519,7 +2519,7 @@ const c = {
 
 const d = c
 
-console.log(c === d) // Do c và d cùng địa chỉ ô nhớ 
+console.log(c === d) // true: Do c và d cùng địa chỉ ô nhớ 
 ```
 
 ## 15. This, Bind, Call, Apply
@@ -2551,11 +2551,22 @@ const iPhone7 = {
 }
 
 console.log(iPhone7.takePhoto()) // this là iPhone7
+// {
+//     name: 'Iphone 7',
+//     color: 'Pink',
+//     weight: 300,
+//     takePhoto: [Function: takePhoto],
+//     objChild: { name: 'Child Object', methodChild: [Function: methodChild] }
+// }
+// undefined
 
 iPhone7.objChild.methodChild() // this là objChild
+// { name: 'Child Object', methodChild: [Function: methodChild] }
+
 
 // VD2:
 console.log(this) // Đối tượng global (windows)
+// {}
 
 // Lưu ý:
 // this trong hàm tạo là đại diện cho đối tượng sẽ được tạo
@@ -2626,6 +2637,19 @@ button.onclick = teacher1.getFullName.bind(teacher1) // Minh Thảo
 
 ```js
 // VD3:
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Document</title>
+// </head>
+// <body>
+//     <h3 id="heading">Hello bind() method</h3>
+//     <script src="./Fn.bind() method 2.js"></script>
+// </body>
+// </html>
+
 console.log('Bài 3:')
 const $1 = document.querySelector
 const $$1 = document.querySelectorAll
@@ -2640,6 +2664,21 @@ const $$2 = document.querySelectorAll.bind(document)
 // console.log($2('#heading').innerText) // Hello bind() method
 
 // VD4:
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Document</title>
+// </head>
+// <body>
+//     <input type="text" placeholder="Enter car name..." id="input">
+//     <button id="submit">Add</button>
+//     <ul id="root"></ul>
+//     <script src="./Fn.bind() method 2.js"></script>
+// </body>
+// </html>
+
 console.log('Bài 4:')
 
 const $ = document.querySelector.bind(document)
