@@ -798,3 +798,46 @@ Trong ví dụ này, `props.children` là một mảng chứa 3 mục:
 <p>Another content</p>
 ```
 
+- **Destructuring props**
+
+Hãy giả sử chúng ta có đối tượng person sau:
+
+```jsx
+const person = {
+    firstName: "Sam",
+    lastName: "Doe",
+    age: 24
+}
+```
+
+và bạn muốn tạo 2 biến firstName và lastName:
+
+```jsx
+const firstName = person.firstName;
+const lastName = person.lastName;
+```
+
+Bạn có thể làm điều đó trong một dòng bằng cú pháp destructuring sau:
+
+```jsx
+const {firstName, lastName} = person;
+```
+
+Bạn cũng có thể cung cấp giá trị mặc định cho biến trong trường hợp không có giá trị tương ứng trong đối tượng. Ví dụ:
+
+```jsx
+const {firstName, lastName, status = 'single'} = person;
+```
+
+Trong trường hợp này, `status` sẽ có giá trị mặc định là `"single"` vì đối tượng `person` không có thuộc tính này.
+
+Bạn cũng có thể destructuring biến props trong đối số, thoạt nhìn thì code có vẻ khó đọc nhưng bạn sẽ thấy nó được sử dụng khá nhiều trong thực tế:
+
+```jsx
+function WelcomeUser({username, notifications}) {
+    return <div>Welcome {username}! You've got {notifications} unread notifications.</div>;
+}
+```
+
+Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
+
