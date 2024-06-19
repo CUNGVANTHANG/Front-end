@@ -1,14 +1,23 @@
 # ReactJS Theory
 ## Mục lục
 
+<details>
+  <summary>Ôn tập lại JS</summary>
+
 - [I. SPA/MPA là gì?]()
 - [II. Ôn lại ES6+]()
-- [III. React, ReactDOM]()
-- [IV. JSX, Components, Props]()
-- [V. Create React App]()
-- [VI. Hooks]()
+</details>
+
+<details>
+  <summary>ReactJS</summary>
+
+- [I. React, ReactDOM]()
+- [II. JSX, Components, Props]()
+- [III. Create React App]()
+- [IV. Hooks]()
   - [1. useState](#1-usestate)
-- [VII. Thư viện clsx và classnames]()
+- [V. Thư viện clsx và classnames]()
+</details>
 
 ## I. SPA/MPA là gì?
 [:arrow_up: Mục lục](#mục-lục)
@@ -341,16 +350,55 @@ console.log(constants); // object
 logger2('Test message...', constants.TYPE_WARN)
 ```
 
-## III. React, ReactDOM
+## I. React, ReactDOM
 [:arrow_up: Mục lục](#mục-lục)
 
-### IV. JSX, Components, Props
+### 1. Làm quen với React.createElement
+
+**React Element** là khối xây dựng nhỏ nhất đại diện cho một đơn vị nhỏ trong giao diện người dùng.
+
+`React.createElement` trả về một đối tượng đại diện cho phần tử DOM.
+
+Đối tượng có dạng như sau:
+
+```jsx
+const element = React.createElement("h1");
+//returns an object similar to this one:
+{
+  type: 'h1',
+  props: {}
+}
+```
+
+Lý do tại sao `React.createElement` trả về một đối tượng thay vì phần tử DOM là vì React hoạt động dựa trên Virtual DOM (DOM ảo). Chúng ta sẽ tìm hiểu chi tiết sau này, trước hết hãy xem phần giải thích đơn giản về Virtual DOM:
+
+Virtual DOM là một phiên bản của giao diện người dùng được lưu giữ trong bộ nhớ và được đồng bộ với DOM thật.
+
+Vì vậy, `React.createElement()` trả về một đối tượng thay vì phần tử DOM vì điều này cho phép React tối ưu hóa hiệu suất (như Virtual DOM).
+
+**Thay đổi lớp/kiểu dáng**
+
+Cú pháp của hai phương thức tương tự nhau khi thiết lập các thuộc tính này:
+
+```jsx
+React.createElement("h1", {className: "center", style: "color: red"})
+```
+
+**Viết văn bản**
+
+Để viết văn bản bên trong phần tử, bạn phải **cung cấp tham số thứ ba** cho `React.createElement`, được gọi là children (có thể truyền các phần tử React khác làm children).
+
+```jsx
+React.createElement("h1", {}, "Hello World")
+```
+
+## II. JSX, Components, Props
 [:arrow_up: Mục lục](#mục-lục)
 
-### V. Create React App
+## III. Create React App
 [:arrow_up: Mục lục](#mục-lục)
 
-## VI. Hooks
+## IV. Hooks
 [:arrow_up: Mục lục](#mục-lục)
 ### 1. useState
 [:arrow_up: Mục lục](#mục-lục)
