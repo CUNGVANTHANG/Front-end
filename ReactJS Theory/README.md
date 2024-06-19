@@ -6,6 +6,11 @@
 
 - [I. SPA/MPA là gì?](#i-spampa-là-gì)
 - [II. Ôn lại ES6+](#ii-ôn-lại-es6)
+  - [1. Arrow function](#1-arrow function)
+  - [2. Enhanced object literals](#2-enhanced-object-literals)
+  - [3. Destructuring, Rest](#3-destructuring-rest)
+  - [4. Spread operator](#4-spread-operator)
+  - [5. Modules](#5-modules)
 </details>
 
 <details>
@@ -13,6 +18,9 @@
 
 - [I. React, ReactDOM](#i-react-reactdom)
 - [II. JSX](#ii-jsx)
+  - [1. JSX](#1-jsx)
+  - [2. Component](#2-component)
+  - [3. Props](#3-props)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -439,6 +447,9 @@ createRoot(root).render(React.createElement("p", {}, "Hello World"));
 ## II. JSX
 [:arrow_up: Mục lục](#mục-lục)
 
+### 1. JSX
+[:arrow_up: Mục lục](#mục-lục)
+
 - **JSX là cú pháp rút gọn cho React.createElement**
 
 Khi làm việc với React, bạn cần sử dụng `React.createElement` để biểu diễn giao diện người dùng. Tuy nhiên, **cú pháp của nó khá dài**. Cú pháp sẽ **trở nên càng dài và nhàm chán hơn** khi bạn bắt đầu phát triển giao diện người dùng phức tạp hơn.
@@ -591,7 +602,7 @@ function getHeroBanner() {
 }
 ```
 
-## III. Component
+### 2. Component
 [:arrow_up: Mục lục](#mục-lục)
 
 Component React là một mẫu hoặc bản thiết kế cho phép bạn mô tả một phần của giao diện người dùng; ví dụ: `<Footer></Footer>` là component mô tả phần chân trang.
@@ -705,7 +716,7 @@ createRoot(root).render(<App />);
 
 Ngoài ra, đoạn code hiển thị Footer hai lần bằng cách sử dụng component hai lần trong component App.
 
-## IV. Props
+### 3. Props
 [:arrow_up: Mục lục](#mục-lục)
 
 - **Props**
