@@ -975,3 +975,35 @@ Trong đoạn code trên, `props.loggedIn` là một giá trị boolean. Chúng 
 - khi `props.loggedIn` là **true**, clsx nhận `{"title": true}` và trả về chuỗi title.
 - Ngược lại, khi `props.loggedIn` là **false**, clsx nhận`{"title": false}` và trả về chuỗi rỗng "".
 
+### 6. Truyền thuộc tính theo cú pháp spread trong JSX
+[:arrow_up: Mục lục](#mục-lục)
+
+Việc sử dụng cú pháp này trong JSX đôi khi có khá nhiều công dụng hữu ích. Ví dụ, bạn có **một Component nhận nhiều props** và bạn muốn lấy ra **children**, sau đó **destructure tất cả các props còn lại vào một biến mới** và truyền chúng vào một phần tử:
+
+```jsx
+function Navbar(props) {
+    const {children, ...rest} = props;
+    return <h1 {...rest}>{children}</h1>;
+}
+```
+
+Chúng ta bắt đầu bằng cách `destructure children` từ props, sau đó chúng ta tạo một đối tượng mới gọi là rest chứa tất cả các props khác.
+
+Và cuối cùng, chúng ta sử dụng cú pháp `spread` để truyền đối tượng này vào <h1>, theo đó truyền toàn bộ props vào phần tử <h1>.
+
+Ví dụ, nếu bạn sử dụng Navbar như sau: `<Navbar tabIndex="2" className="navbar">Hello World</Navbar>`, bạn sẽ nhận được biến `children = "Hello World"` và biến rest với đối tượng sau:
+
+```jsx
+{
+    tabIndex: "2",
+    className: "navbar"
+}
+```
+
+và sau đó Component sẽ trả về phần tử React sau:
+
+```jsx
+<h1 tabIndex="2" className="navbar">Hello World</h1>
+```
+
+Giả sử chúng ta thêm một thuộc tính mới, ví dụ: `disabled={true}`, khi đó code vẫn hoạt động và vẫn áp dụng thuộc tính **disabled** cho h1 **mà không cần cập nhật Component**.
