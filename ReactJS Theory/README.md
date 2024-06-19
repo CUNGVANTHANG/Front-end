@@ -4,19 +4,15 @@
 <details>
   <summary>Ôn tập lại JS</summary>
 
-- [I. SPA/MPA là gì?]()
-- [II. Ôn lại ES6+]()
+- [I. SPA/MPA là gì?](#i-spampa-là-gì)
+- [II. Ôn lại ES6+](#ii-ôn-lại-es6)
 </details>
 
 <details>
   <summary>ReactJS</summary>
 
-- [I. React, ReactDOM]()
-- [II. JSX, Components, Props]()
-- [III. Create React App]()
-- [IV. Hooks]()
-  - [1. useState](#1-usestate)
-- [V. Thư viện clsx và classnames]()
+- [I. React, ReactDOM](#i-react-reactdom)
+- [II. JSX](#ii-jsx)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -353,7 +349,22 @@ logger2('Test message...', constants.TYPE_WARN)
 ## I. React, ReactDOM
 [:arrow_up: Mục lục](#mục-lục)
 
-### 1. Làm quen với React.createElement
+### 1. Làm quen với React
+[:arrow_up: Mục lục](#mục-lục)
+
+Để cài đặt gói **react** vào dự án, bạn cần cài đặt bằng trình quản lý gói (**npm** hoặc **yarn**).
+
+Chúng ta sẽ sử dụng Trình quản lý Gói Node (npm).
+
+```
+npm install react
+```
+
+Dưới đây là cách thêm React (sau khi đã cài đặt React):
+
+```jsx
+import React from "react";
+```
 
 **React Element** là khối xây dựng nhỏ nhất đại diện cho một đơn vị nhỏ trong giao diện người dùng.
 
@@ -392,103 +403,136 @@ React.createElement("h1", {className: "center", style: "color: red"})
 React.createElement("h1", {}, "Hello World")
 ```
 
-## II. JSX, Components, Props
+### 2. Làm quen với React DOM
 [:arrow_up: Mục lục](#mục-lục)
 
-## III. Create React App
+Hãy bắt đầu bằng việc cài đặt ReactDOM:
+
+```
+npm install react-dom
+```
+
+React và ReactDOM là hai phần của cùng một thư viện tên là React. Sau đó, chúng đã được tách ra thành hai thư viện độc lập là React và ReactDOM để tạo điều kiện cho việc phát triển React Native.
+
+React Native là sự kết hợp giữa React và ứng dụng native. React là thư viện cho phép bạn viết UI có thể tái sử dụng và:
+
+- ReactDOM làm cho UI đó hiển thị trên trình duyệt.
+- React Native làm cho UI đó hiển thị trên ứng dụng native.
+
+React tạo ra phiên bản ảo của UI trong bộ nhớ, sau đó ReactDOM nhận và đồng bộ hóa UI (và các thay đổi trong đó) vào DOM. Quá trình này được gọi là reconciliation.
+
+Thêm phương thức `createRoot` của ReactDOM: 
+
+```jsx
+import {createRoot} from "react-dom/client"
+```
+
+Với phần tử root trên, chúng ta có thể hiển thị phần tử React đầu tiên:
+
+```jsx
+import {createRoot} from "react-dom/client";
+
+const root = document.querySelector("#root");
+createRoot(root).render(React.createElement("p", {}, "Hello World"));
+```
+
+## II. JSX
 [:arrow_up: Mục lục](#mục-lục)
 
-## IV. Hooks
-[:arrow_up: Mục lục](#mục-lục)
-### 1. useState
-[:arrow_up: Mục lục](#mục-lục)
+- **JSX là cú pháp rút gọn cho React.createElement**
 
-useState (trạng thái của dữ liệu)
+Khi làm việc với React, bạn cần sử dụng `React.createElement` để biểu diễn giao diện người dùng. Tuy nhiên, **cú pháp của nó khá dài**. Cú pháp sẽ **trở nên càng dài và nhàm chán hơn** khi bạn bắt đầu phát triển giao diện người dùng phức tạp hơn.
 
-**Dùng khi nào?**
+React sử dụng một cú pháp đặc biệt được gọi là **JSX** **để giải quyết vấn đề đó**. Cú pháp **JSX** trông có vẻ giống **HTML**, nhưng nó KHÔNG PHẢI LÀ HTML.
 
-Khi muốn dữ liệu thay đổi thì giao diện tự động được cập nhập (render lại theo dữ liệu)
+```jsx
+import React from "react";
 
-**Cách dùng**
+const title = <h1>Hello World</h1>
+```
 
-``` jsx
-import { useState } from 'react'
+nó sẽ biên dịch thành 
 
-function Component() {
-    const [state, setState] = useState(initState)
+```jsx
+import React from "react";
 
-    ...
+const title = React.createElement("h1", {}, "Hello World");
+```
+
+- **JSX KHÔNG PHẢI là một phần của trình duyệt**
+
+Trình duyệt không hiểu được JSX vì đó là một cú pháp được tạo bởi React. Bạn sẽ cần một công cụ (như **babel**) để **chuyển đổi code JSX thành JavaScript thông thường** (sẽ chứa các cuộc gọi `React.createElement`).
+
+- **Làm việc với JSX**
+
+Vì JSX được chuyển đổi thành `React.createElement()` trả về một đối tượng, bạn có thể coi phần tử JSX như một đối tượng.
+
+Vì vậy, bạn có thể coi `<h1 className="title">Supermarket</h1>` như một đối tượng với các thuộc tính sau (được đơn giản hóa):
+
+```jsx
+{
+  type: 'h1',
+  props: {
+    className: "title",
+    children: "Supermarket"
+  }
 }
 ```
 
-**Lưu ý**
-
-- Component được re-render sau khi `setState`
-- Initial state chỉ dùng cho lần đầu
-- Set state với callback?
-- Initial state với callback?
-- Set state là thay thế state bằng giá trị mới
-
-**Ví dụ**
-
-``` jsx
-import { useState } from 'react'
-
-const orders = [100, 200, 300]
-
-function App() {
-  const [counter, setCounter] = useState(() => {
-    const total = orders.reduce((total, cur) => total + cur)
-
-    console.log(total);
-    return total
-  })
-
-  const handleIncrease = () => {
-    // setCounter(counter + 1)
-
-    setCounter(prevState => prevState + 1)
-    // setCounter(prevState => prevState + 1)
-    // setCounter(prevState => prevState + 1)
-  }
-
-  // console.log('re-render')
-
-  return (
-    <div className="App" style={{padding: 20}}>
-      <h1>{counter}</h1>
-      <button onClick={handleIncrease}>Increase</button>
-    </div>
-  );
+- **Biểu thức trong JSX**
   
-  const [info, setInfo] = useState({
-    name: 'Nguyen Van A',
-    age: 18,
-    address: 'Ha Noi, VN'
-  })
+Bạn có thể sử dụng các biểu thức trên trong JSX bằng cách đóng gói trong dấu ngoặc nhọn `{expression}`.
 
-  const handleUpdate = () => {
-    // setInfo({
-    //   bio: 'Yeu mau hong'
-    // })
+_Ví dụ cơ bản:_
 
-    setInfo(prevState => {
-        return ({
-            ...prevState,
-            bio: 'Yeu mau hong'
-        })
-           
-    })
-  }
+```jsx
+const title = <h1>You have {2 + 3} notifications</h1>;
+```
 
-  return (
-      <div className="App" style={{padding: 20}}>
-        <h1>{JSON.stringify(info)}</h1>
-        <button onClick={handleUpdate}>Update</button>
-      </div>
-  );
+Câu lệnh này sẽ tạo một phần tử h1 chứa văn bản: **You have 5 notifications**.
+
+**Gọi hàm:**
+
+Bạn cũng có thể gọi hàm trong biểu thức, ví dụ:
+
+```jsx
+function capitalise(word) {
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
 }
+const name = "brendan";
 
-export default App;
+const element = <p className="user-info">Welcome {capitalise(name)}</p>
+```
+
+Đoạn code trên sẽ tạo một đoạn văn bản chứa nội dung: **Welcome Brendan** (lưu ý chữ B viết hoa).
+
+- **Biểu thức thuộc tính**
+
+JSX cũng hỗ trợ biểu thức thuộc tính, tức là giá trị của thuộc tính được xác định dựa trên biểu thức (hoặc thường là biến), ví dụ:
+
+```jsx
+const limit = 5;
+
+const element = <input type="number" max={limit} />;
+```
+
+Khi chuyển đổi thành `React.createElement()`, code sẽ có dạng:
+
+```jsx
+const limit = 5;
+const element = React.createElement("input", {
+  type: "number",
+  max: limit
+});
+```
+
+Ví dụ này cho thấy các thuộc tính có thể có giá trị chuỗi cũng như giá trị động; ví dụ: thuộc tính max lấy giá trị của biến limit.
+
+**Số và boolean**
+
+Giá trị của các thuộc tính số và boolean nên được truyền dưới dạng biểu thức:
+
+```jsx
+<input max={2} disabled={true} className="textbox" />
 ```
 
