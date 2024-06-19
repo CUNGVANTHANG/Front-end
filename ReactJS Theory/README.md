@@ -536,3 +536,110 @@ Giá trị của các thuộc tính số và boolean nên được truyền dư�
 <input max={2} disabled={true} className="textbox" />
 ```
 
+- **Luôn đóng gói các phần tử JSX bằng `()` khi viết JSX sau một lệnh re**turn.
+
+```jsx
+const getList = () => {
+    return (
+        <ul>
+            <li>First Item</li>
+            <li>Second Item</li>
+        </ul>
+    );
+}
+```
+
+- **Trả về nhiều element bằng JSX Fragments**
+
+React giúp giải quyết vấn đề này bằng cách yêu cầu trả về một **Fragment** đóng gói các phần tử cần trả về.
+
+Vì vậy, nếu bạn muốn trả về HTML dưới đây từ một hàm:
+
+```jsx
+<h1>Grocery delivered to your door</h1>
+<h2>Free delivery</h2>
+<p>Get started now!</p>
+```
+
+Bạn sẽ phải sử dụng một Fragment đóng gói 3 phần tử này:
+
+```jsx
+function getHeroBanner() {
+    return (
+        <>
+            <h1>Grocery delivered to your door</h1>
+            <h2>Free delivery</h2>
+            <p>Get started now!</p>
+        </>
+    );
+}
+```
+
+Cú pháp ngắn gọn cho `React.Fragment` (`<>` và `</>`) vừa được đề cập ở trên.
+
+Bạn có thể thấy ở đâu đó sử dụng cú pháp gốc dài hơn với `React.Fragment`:
+
+```jsx
+function getHeroBanner() {
+    return (
+        <React.Fragment>
+            <h1>Grocery delivered to your door</h1>
+            <h2>Free delivery</h2>
+            <p>Get started now!</p>
+        </React.Fragment>
+    );
+}
+```
+
+## III. Component
+[:arrow_up: Mục lục](#mục-lục)
+
+Component React là một mẫu hoặc bản thiết kế cho phép bạn mô tả một phần của giao diện người dùng; ví dụ: `<Footer></Footer>` là component mô tả phần chân trang.
+
+_Ví dụ:_
+
+Dưới đây là một ví dụ về component React:
+
+```jsx
+function Footer() {
+    return (
+        <div>
+            <h3>Company name</h3>
+            <p>All rights reserved</p>
+        </div>
+    );
+}
+```
+
+Sau khi định nghĩa, component Footer có thể được sử dụng trong cùng một file JavaScript với JSX:
+
+```jsx
+import {createRoot} from "react-dom/client";
+
+function Footer() {
+    return (
+        <div>
+            <h3>Company name</h3>
+            <p>All rights reserved</p>
+        </div>
+    );
+}
+
+const root = document.querySelector("#root");
+
+createRoot(root).render(<Footer></Footer>);
+```
+
+Chúng ta gọi đây là **function component** vì Component được định nghĩa dưới dạng **hàm**.
+
+- **Tên component viết hoa chữ cái đầu (UpperCamelCase)**
+
+Bạn có thể nhận thấy đoạn code trên gọi hàm là **Footer** thay vì **footer**. Điều này là cần thiết. **Ký tự đầu tiên phải viết hoa** để React nhận biết rằng đó là một **Component**; lý do sẽ được giải thích trong bài học tiếp theo.
+
+Hãy luôn viết tên hàm theo kiểu UpperCamelCase; dưới đây là một số ví dụ:
+
+- Footer
+- ChatMessage
+- Button
+- ListItem
+
