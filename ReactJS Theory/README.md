@@ -6,7 +6,7 @@
 
 - [I. SPA/MPA là gì?](#i-spampa-là-gì)
 - [II. Ôn lại ES6+](#ii-ôn-lại-es6)
-  - [1. Arrow function](#1-arrow function)
+  - [1. Arrow function](#1-arrow-function)
   - [2. Enhanced object literals](#2-enhanced-object-literals)
   - [3. Destructuring, Rest](#3-destructuring-rest)
   - [4. Spread operator](#4-spread-operator)
@@ -21,6 +21,8 @@
   - [1. JSX](#1-jsx)
   - [2. Component](#2-component)
   - [3. Props](#3-props)
+  - [4. Cách viết hàm chuẩn](#4-cách-viết-hàm-chuẩn)
+
 </details>
 
 ## I. SPA/MPA là gì?
@@ -851,4 +853,125 @@ function WelcomeUser({username, notifications}) {
 ```
 
 Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
+
+### 4. Cách viết hàm chuẩn
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Hàm thuần túy (Pure function)**
+
+Tất cả các component React không bao giờ thay đổi các props của chúng.
+
+Điều này có nghĩa là **bạn không nên thay đổi giá trị của prop bên trong component**; hãy xem một ví dụ:
+
+```jsx
+function Notifications(props) {
+    // ❌ 
+    props.data.count = props.data.count - 1;
+    return <h3>You have {props.data.count} unread notifications.</h3>;
+}
+
+const notifications = {
+    count: 3
+};
+
+const element = <Notifications data={notifications} />;
+console.log(notifications); // {count: 2}
+```
+
+Để ý việc sử dụng phần tử `<Notifications  data={notifications}/>` có tác dụng phụ là thay đổi giá trị của props `(notifications.count)`.
+
+Thay vào đó, code nên được viết như sau:
+
+```jsx
+function Notifications(props) {
+    // ☑️ 
+    const value = props.data.count - 1;
+    return <h3>You have {value} unread notifications.</h3>;
+}
+
+const notifications = {
+    count: 3
+};
+
+const element = <Notifications data={notifications} />;
+console.log(notifications); // {count: 3}
+```
+
+Vì vậy, bạn nên **coi props là thuộc tính chỉ đọc.**
+
+### 5. Sử dụng thư viện clsx để viết câu lệnh if
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Để cài đặt clsx, chạy lệnh:**
+
+```
+npm install clsx
+```
+
+- **Thêm clsx vào file**
+
+Bạn có thể sử dụng clsx trong bất kỳ bài tập React nào bằng cách nhập lệnh import vì gói đã được cài đặt sẵn.
+
+Để thêm **clsx**, bạn phải thêm clsx từ tên gói:
+
+```
+import clsx from "clsx";
+```
+
+- **Các lớp có điều kiện**:
+
+Sau khi đã thêm **clsx**, hãy xem cách thư viện giúp đơn giản hóa việc sử dụng lớp có điều kiện:
+
+```jsx
+import clsx from "clsx";
+
+const result = clsx({
+    "link": true,
+    "link-primary": true
+});
+
+console.log(result); //"link link-primary"
+```
+
+Chúng ta đã truyền cho **clsx** một đối tượng chứa:
+
+- khóa link với giá trị true
+- và khóa `link-primary` với giá trị true, kết quả trả về một chuỗi chứa cả hai lớp được phân tách bằng dấu cách.
+
+Hãy xem một ví dụ khác:
+
+```jsx
+import clsx from "clsx";
+
+const result = clsx({
+    "link": true,
+    "link-primary": false
+});
+
+console.log(result); //"link"
+```
+
+Đây về cơ bản cùng một cách làm như ví dụ trước. Tuy nhiên, lần này chúng ta chỉ định rằng `link-primary` là `false`, vì vậy chuỗi kết quả sẽ **không bao gồm link-primary**.
+
+Thay vì thiết lập giá trị cố định là true hoặc false, điều gì sẽ xảy ra nếu chúng ta thay thế chúng bằng một biến hoặc kết quả của một biểu thức? Ví dụ:
+
+```jsx
+import clsx from "clsx";
+
+function MyComponent(props) {
+    const className = clsx({
+        "title": props.loggedIn
+    });
+
+    return <h1 className={className}></h1>
+}
+
+const example1 = <MyComponent loggedIn={true} />; // className="title"
+const example2 = <MyComponent loggedIn={false} />; // className=""
+```
+
+Trong đoạn code trên, `props.loggedIn` là một giá trị boolean. Chúng ta sử dụng giá trị boolean đó để thêm/xóa lớp title theo điều kiện:
+
+- khi `props.loggedIn` là **true**, clsx nhận `{"title": true}` và trả về chuỗi title.
+- Ngược lại, khi `props.loggedIn` là **false**, clsx nhận`{"title": false}` và trả về chuỗi rỗng "".
 
