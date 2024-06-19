@@ -643,3 +643,158 @@ Hãy luôn viết tên hàm theo kiểu UpperCamelCase; dưới đây là một 
 - Button
 - ListItem
 
+- **Quy tắc code: Một file chỉ chứa 1 Component**
+
+Một ứng dụng được xây dựng bằng React sẽ có **nhiều component**.
+
+Quy ước là định nghĩa **một component trong mỗi file riêng biệt** để sau này dễ dàng tìm thấy nó (có một số ngoại lệ, nhưng hiện tại bạn chưa cần để ý đến những ngoại lệ này).
+
+Tên file phải khớp với tên Component, ví dụ:
+
+- file: Footer.js cho Component Footer
+- file: AppNavbar.js cho Component AppNavbar
+
+**index.js**
+
+Ứng dụng sẽ có một file `index.js` là điểm mà quá trình chạy ứng dụng bắt đầu (đôi khi được gọi là `app.js`).
+
+Vì vậy, bạn sẽ định nghĩa các component trong những file khác và sau đó sử dụng chúng trong `index.js`.
+
+_Ví dụ:_
+
+Hãy xem một ví dụ bằng cách sử dụng hai file: **Footer.js** và **index.js**:
+
+File Footer.js định nghĩa component Footer:
+
+```jsx
+//Footer.js
+export default function Footer() {
+    return (
+        <>
+             <h3>Footer</h3>
+             <p>All rights reserved</p>
+        </>
+    );
+}
+```
+
+Để ý file này sử dụng `default export` để khai báo component Footer.
+
+Điều này là bắt buộc để có thể sử dụng component Footer trong các file khác.
+
+```
+//index.js
+import {createRoot} from "react-dom/client";
+import Footer from "./Footer.js";
+
+function App() {
+    return (<>
+         <Footer />
+         <Footer />
+    </>);
+}
+
+const root = document.querySelector("#root");
+
+createRoot(root).render(<App />);
+```
+
+Để ý component Footer đã được thêm vào file `index.js` từ `./Footer.js` để file có thể sử dụng component.
+
+Điều đó là vì `<Footer />` được chuyển đổi thành: `React.createElement(Footer, {})` vì vậy để component hoạt động, hàm Footer phải có phạm vi hoạt động trong file `index.js`, tức là nó phải được thêm vào file.
+
+Ngoài ra, đoạn code hiển thị Footer hai lần bằng cách sử dụng component hai lần trong component App.
+
+## IV. Props
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Props**
+
+Giả sử chúng ta có một component tên là **<GreetUser />** hiển thị: **Welcome Sam** hoặc **Welcome Alex**.
+
+Chúng ta cần làm cho component hiển thị **Welcome** và sau đó là tên người dùng.
+
+Hãy bắt đầu bằng phiên bản hiển thị thủ công của component này:
+
+```jsx
+//GreetUser.js
+export default function GreetUser() {
+    return <div>Welcome USER</div>;
+}
+```
+
+Component **<GreetUser />** sẽ hiển thị **Welcome USER**.
+
+Thay vì hiển thị **<GreetUser />**, chúng ta có thể hiển thị **<GreetUser user="Sam" />**.
+
+`user="Sam"` là thuộc tính user với giá trị Sam được thêm vào component **GreetUser**.
+
+Bây giờ chúng ta có thể đọc `user="Sam"` này như một đối tượng: {user: "Sam"}.
+
+Chúng ta gọi đối tượng đó là **props** (viết tắt của properties - trường thuộc tính).
+
+```jsx
+//GreetUser.js
+export default function GreetUser(props) {
+    console.log(props); // {user: "Sam"}
+    return <div>Welcome USER</div>;
+}
+```
+
+Trường thuộc tính được truyền bây giờ nằm bên trong đối tượng mà hàm **GreetUser** nhận làm đối số đầu tiên.
+
+Vì vậy, chúng ta có thể sử dụng biểu thức để hiển thị tên người dùng (có thể đọc là `props.user`):
+
+```jsx
+//GreetUser.js
+export default function GreetUser(props) {
+    return <div>Welcome {props.user}</div>;
+}
+```
+
+`<GreetUser user="Sam"/>` sẽ hiển thị `<div>Welcome Sam</div>`
+
+`<GreetUser user="Alex"/>` sẽ hiển thị `<div>Welcome Alex</div>`
+
+Điều này làm cho component linh hoạt hơn và có thể tái sử dụng!
+
+- **Props con**
+
+Có một loại props đặc biệt dành cho trường thuộc tính con. Hãy xem một ví dụ:
+
+```jsx
+const element = <HeroTile>Welcome!</HeroTitle>
+```
+
+Nội dung nằm giữa các thẻ `<HeroTitle>` và `</HeroTitle>` được gọi là trường thuộc tính con.
+
+Bạn có thể truy cập vào bằng cách sử dụng props.children, ví dụ:
+
+```jsx
+const element = <HeroTitle>Welcome!</HeroTitle>
+```
+
+Một ví dụ về `props.children` là chuỗi "Welcome!", nhưng trên thực tế, nó có thể là bất cứ kiểu dữ liệu nào.
+
+`props.children` có thể tham chiếu đến các phần tử hoặc component React khác (hoặc thậm chí là nhiều component); ví dụ:
+
+```jsx
+function Navbar(props){
+    return <div className="navbar">{props.children}</div>;
+}
+
+const element = <Navbar>
+    <HeroTitle>Welcome!</HeroTitle>
+    <div>Some content</div>
+    <p>Another content</p>
+</Navbar>;
+```
+
+Trong ví dụ này, `props.children` là một mảng chứa 3 mục:
+
+```jsx
+<HeroTitle>Welcome!</HeroTitle>
+<div>Some content</div>
+<p>Another content</p>
+```
+
