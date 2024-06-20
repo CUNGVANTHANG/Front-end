@@ -1179,3 +1179,12 @@ Giải thích đoạn code:
 Như bạn thấy, biến `name` có thể được truy cập bởi hàm `getWelcomeMessage` vì `getWelcomeMessage` được định nghĩa bên trong `getUser`.
 Vì vậy, vì `name` được định nghĩa trong `getUser`, nó có thể được truy cập bởi bất kỳ hàm nào được định nghĩa bên trong `getUser`, trong ví dụ này là `getWelcomeMessage`.
 
+### 3. Các nguyên tắc khi làm việc với Hooks
+[:arrow_up: Mục lục](#mục-lục)
+
+Để hook hoạt động chính xác, bạn phải tuân theo hai quy tắc.
+
+- Quy tắc số 1: Chỉ gọi Hook từ các hàm React
+- Quy tắc số 2: Chỉ gọi Hook ở Cấp độ trên cùng và **không bao giờ gọi hook trong vòng lặp, điều kiện if hoặc các hàm lồng nhau**.
+
+React phụ thuộc vào thứ tự các hook được gọi để hoạt động một cách chính xác.
