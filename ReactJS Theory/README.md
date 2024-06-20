@@ -1113,6 +1113,41 @@ Giá trị mới của trạng thái là `seconds + 1`, tương đương với: 
 
 Điều đó xảy ra là vì `seconds` lưu giữ giá trị hiện tại của trạng thái, vì vậy `seconds + 1` sẽ **tăng giá trị đó lên 1.**
 
+- **Thay đổi trạng thái có điều kiện: Props**
+
+Giả sử chúng ta có một **component có thể tăng giá trị của bộ đếm**. Tuy nhiên, component này **có thể được kích hoạt hoặc vô hiệu hóa**. Khi component bị vô hiệu hóa, bộ đếm sẽ không tăng giá trị.
+
+```jsx
+import {useState} from "react";
+
+function Counter(props) {
+    const [counter, setCounter] = useState(0);
+
+    function handleIncrementClick() {
+        if (props.enabled){
+            setCounter(counter + 1);
+        }
+    }
+
+    return (<>
+        <h2>{counter} times clicked</h2>
+        <button onClick={handleIncrementClick}>Add 1</button>
+    </>);
+}
+
+// Sample usages:
+const element1 = <Counter enabled={true} />;
+const element2 = <Counter enabled={false} />;
+```
+
+Chúng ta có thể kiểm tra giá trị của Prop và dựa trên đó thay đổi trạng thái như sau:
+
+```jsx
+if (props.enabled) {
+    setCounter(counter + 1);
+}
+```
+
 ### 2. Closures
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -1139,7 +1174,7 @@ Giải thích đoạn code:
 
 - Hàm getUser định nghĩa biến name có giá trị là "Sam".
 - Bên trong hàm đó, chúng ta định nghĩa hàm getWelcomeMessage trả về Hello ${name}.
-- Sau đó, chúng ta return một đối tượng chứa name và message, trong đó message là kết quả trả về bởi getWelcomeMessage().
+- Sau đó, chúng ta return một đối tượng chứa name và message, trong đó message là kết quả trả về bởi `getWelcomeMessage()`.
 
 Như bạn thấy, biến `name` có thể được truy cập bởi hàm `getWelcomeMessage` vì `getWelcomeMessage` được định nghĩa bên trong `getUser`.
 Vì vậy, vì `name` được định nghĩa trong `getUser`, nó có thể được truy cập bởi bất kỳ hàm nào được định nghĩa bên trong `getUser`, trong ví dụ này là `getWelcomeMessage`.
