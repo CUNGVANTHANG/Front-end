@@ -11,7 +11,6 @@
   - [3. Destructuring, Rest](#3-destructuring-rest)
   - [4. Spread operator](#4-spread-operator)
   - [5. Modules](#5-modules)
-- [III. Hook](#iii-hook)
 </details>
 
 <details>
@@ -26,7 +25,11 @@
   - [5. Sử dụng thư viện clsx để viết câu lệnh if](#5-sử-dụng-thư-viện-clsx-để-viết-câu-lệnh-if)
   - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
   - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
-
+- [III. Hook](#iii-hook)
+  - [1. useState](#1-usestate)
+  - [2. Closures](#2-closures)
+  - [3. Các nguyên tắc khi làm việc với Hooks](#3-các-nguyên-tắc-khi-làm-việc-với-hooks)
+  - [4. Tính bất biến trong ReactJS](#4-tính-bất-biến-trong-reactjs)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -1188,3 +1191,235 @@ Vì vậy, vì `name` được định nghĩa trong `getUser`, nó có thể đ�
 - Quy tắc số 2: Chỉ gọi Hook ở Cấp độ trên cùng và **không bao giờ gọi hook trong vòng lặp, điều kiện if hoặc các hàm lồng nhau**.
 
 React phụ thuộc vào thứ tự các hook được gọi để hoạt động một cách chính xác.
+
+### 4. Tính bất biến trong ReactJS
+[:arrow_up: Mục lục](#mục-lục)
+
+Hãy bắt đầu bằng việc so sánh số, chuỗi và boolean:
+
+```
+1 === 1; //true
+27 === 27; //true
+"hello world" === "hello world"; //true
+"welcome" === "welcome"; //true
+true === true; //true
+false === false; //true (because they're the same)
+```
+
+Không có gì đặc biệt ở đây. Chúng ta đang so sánh hai giá trị hoàn toàn giống nhau, vì vậy kết quả là true.
+
+Bây giờ hãy thử với mảng và đối tượng:
+
+```
+[] === []; //false
+{} === {}; //false
+[10] === [10]; //false
+{key: "something"} === {key: "something"}; //false
+```
+
+Chú ý: bạn vẫn nhận được `false` ngay cả khi bạn sử dụng `==` thay vì `===`.
+
+Mảng và Đối tượng đều được coi là đối tượng trong JavaScript.
+
+Khi bạn viết `[]`, bạn đang tạo một thực thể mới của **Array**.
+
+Khi bạn viết `{}`, bạn đang tạo một thực thể mới của **Object**.
+
+```
+new Array(); // creates []
+new Object(); //creates {}
+```
+
+Hãy quay lại ví dụ trước và thay đổi các mảng và đối tượng thành cú pháp mới:
+
+```
+new Array() === new Array(); //false
+new Object() === new Object(); //false
+
+const arr1 = new Array();
+arr1.push(10);
+const arr2 = new Array();
+arr2.push(10);
+arr1 === arr2; //false
+
+const obj1 = new Object();
+obj1.key = "something";
+const obj2 = new Object();
+obj2.key = "something";
+obj1 === obj2; //false
+```
+
+Điều này sẽ giải thích lý do tại sao chúng không bằng nhau.
+
+`new Array()` tạo ra một **thực thể mới của mảng**.
+
+Mỗi lần bạn gọi `new Array()`, bạn nhận được một thực thể mới, tức là `new Array()` **chắc chắn không giống** `new Array()` vì chúng là **các thực thể khác nhau**.
+
+Vì vậy, với Mảng và Đối tượng, chúng ta cần một phương pháp khác để so sánh ngang bằng từ quan điểm giá trị.
+
+Chúng ta mong đợi `[] === []` là `true` vì chúng đều là mảng rỗng, nhưng JavaScript lại hoạt động theo cách khác, nó kiểm tra xem chúng có phải là cùng một thực thể hay không.
+
+- **Tính bất biến (Immutability) là gì?**
+
+**Đối tượng bất biến là một đối tượng không thể thay đổi. Mỗi lần cập nhật tạo ra một giá trị mới, không làm thay đổi giá trị cũ.**
+
+Hãy cùng tìm hiểu lý do tại sao React yêu cầu tính bất biến khi làm việc với Mảng và Đối tượng. Giả sử bạn đã viết Component sau:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+  const [data, setData] = useState([]);
+  
+  function handleAddClick() {
+      data.push(10)
+      setData(data);
+  }
+
+  return <button onClick={handleAddClick}>Add 10</button>;
+}
+```
+
+Đây không phải là cách chính xác để thêm **10** vào trạng thái data (mảng). Nhưng hãy xem lý do tại sao và điều gì xảy ra sau cùng.
+
+Khi bạn gọi `useState` với một mảng rỗng, `const [data, setData] = useState([])`, nó sẽ tạo một biến trạng thái với giá trị `[]`.
+
+Sau đó, hàm `setData` sẽ lấy `newState` (giá trị mới của trạng thái) và kiểm tra xem nó đã thay đổi chưa. Nếu nó đã thay đổi, nó sẽ yêu cầu ReactDOM hiển thị lại Component này.
+
+Nếu chúng ta viết một hàm setData đơn giản, nó sẽ có dạng như sau:
+
+```jsx
+let state = []; //created by `useState([])`
+
+// newState is the result of `data.push(10)` on <button /> click 
+function setData(newState) {
+  if (state === newState) {
+    // no need to re-render because the state has not changed
+    return false;
+  }
+  // store the newState for the next time the user calls setData()
+  state = newState;
+  // Ask ReactDOM to re-render
+}
+```
+
+Để ý React đã so sánh `state === newState`. Điều này cho React biết trạng thái đã thay đổi hay chưa.
+
+Nếu `state === newState` là `true`, **điều đó có nghĩa là trạng thái KHÔNG thay đổi, tức là không cần hiển thị lại Component.**
+
+Nhưng khi `state === newState` là `false`, **điều đó có nghĩa là trạng thái đã thay đổi và React phải hiển thị lại Component bằng ReactDOM.**
+
+- **Điều gì xảy ra khi không sử dụng tính bất biến?**
+
+Trong ví dụ trước, chúng ta sử dụng `data.push(10)` để thay đổi mảng. Nếu chúng ta viết tất cả các thao tác theo từng dòng, chương trình sẽ trông như sau:
+
+```jsx
+let state = []; //from useState([])
+let newState = state;
+state.push(10);
+
+state === newState; //true, whereas it should have been false
+```
+
+Vì **chúng ta đã thay đổi mảng bằng `.push`**, React sẽ nghĩ rằng chúng ta **CHƯA thay đổi trạng thái** và do đó sẽ **KHÔNG hiển thị lại Component.**
+
+Và đây là lý do tại sao React yêu cầu sử dụng tính bất biến.
+
+Vì vậy, cách duy nhất để `state === newState` trả về false khi ta sửa đổi mảng là trả về một mảng mới. 
+
+Lưu ý rằng React sử dụng toán tử `===` thay vì so sánh sâu vì so sánh sâu thường khá chậm (khi số lượng Component trong ứng dụng tăng lên).
+
+Đây là lý do tại sao mỗi khi bạn có một trạng thái của mảng hoặc đối tượng, chúng phải là bất biến.
+
+- **Thêm phần tử vào mảng (bất biến)**
+
+Vậy làm thế nào để thêm một phần tử vào mảng mà vẫn duy trì tính bất biến?
+
+Chúng ta không thể sử dụng `.push()` vì `push` sẽ thay đổi mảng.
+
+Thay vào đó, chúng ta phải tạo một bản sao nông và chèn phần tử mới vào mảng mới:
+
+```jsx
+const numbers = [1, 2, 3];
+const result = [...numbers, 4];
+console.log(result); //[1, 2 ,3 ,4]
+```
+
+Chúng ta sao chép các giá trị của mảng numbers và sau đó thêm 4. Mảng mới sẽ chứa `1, 2, 3, 4`.
+
+Đây là thao tác bất biến vì chúng ta **KHÔNG thay đổi mảng numbers** mà **tạo ra một bản sao mới và thêm giá trị vào**.
+
+- **Cập nhật phần tử (bất biến)**
+
+Để cập nhật một hoặc nhiều phần tử trong mảng, bạn có thể sử dụng phương thức `.map` để trả về một bản sao của mảng và đồng thời sửa đổi một hoặc nhiều phần tử. Ví dụ:
+
+```jsx
+const grades = [10, 20, 18, 14];
+// change 18 to 17
+const updatedGrades = grades.map(grade => {
+    if (grade === 18){
+        return 17;
+    }
+    // in all other cases, keep it as it was
+    return grade;
+});
+console.log(updatedGrades); //[10, 20, 17, 14]
+```
+
+Bạn cũng có thể cập nhật nhiều phần tử, ví dụ: cộng 1 cho tất cả các điểm thi thấp hơn 10:
+
+```jsx
+const grades = [10, 8, 9, 4, 16];
+// add 1 to all grades below 10
+const updatedGrades = grades.map(grade => {
+    if (grade < 10){
+        return grade + 1;
+    }
+    // in all other cases, keep it as it was
+    return grade;
+});
+console.log(updatedGrades); //[10, 9, 10, 5, 16]
+```
+
+- **Xóa phần tử (bất biến)**
+
+Bạn có thể xóa phần tử một cách bất biến bằng cách sử dụng phương thức `.slice` (slice chứ không phải splice). **slice là phương thức bất biến trong khi splice là phương thức thay đổi mảng**.
+
+```jsx
+const grades = [10, 8, 9, 4, 16];
+
+// remove the first grade
+// think of it as: get all grades except the first one
+const subset1 = grades.slice(1); //start from position 1
+console.log(subset1); // [8, 9, 4, 16]
+
+// remove the last 2 grades
+// think of it as: get all grades except the last 2
+// so start from 0 and stop after 5 - 2 = 3 items
+const subset2 = grades.slice(0, grades.length - 2); 
+console.log(subset2); // [10, 8, 9]
+```
+
+Đôi khi việc sử dụng `.filter` sẽ dễ dàng hơn bởi nó **trả về một tập con của mảng gốc dựa trên điều kiện**, ví dụ:
+
+```jsx
+const grades = [10, 8, 9, 4, 16];
+
+// return all grades >= 10
+const subset1 = grades.filter(grade => grade >= 10);
+console.log(subset1); // [10, 16]
+
+// remove the 2nd grade
+const subset2 = grades.filter(grade => grade !== 8);
+console.log(subset2); // [10, 9, 4, 16]
+```
+
+Lưu ý rằng ví dụ thứ hai sẽ bỏ qua tất cả các điểm thi là 8. Nếu bạn chỉ muốn bỏ qua phần tử thứ hai, bạn có thể sử dụng đối số thứ hai mà bạn nhận được với `filter`, đó là chỉ số.
+
+```jsx
+const grades = [10, 8, 9, 4, 16];
+
+const subset = grades.filter((grade, index) => index !== 1);
+console.log(subset); // [10, 9, 4, 16];
+```
+
