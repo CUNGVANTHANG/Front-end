@@ -1423,3 +1423,68 @@ const subset = grades.filter((grade, index) => index !== 1);
 console.log(subset); // [10, 9, 4, 16];
 ```
 
+### 5. Trạng thái với mảng
+[:arrow_up: Mục lục](#mục-lục)
+
+Giả sử chúng ta có mảng grades và chúng ta muốn tạo một thẻ ul và một thẻ li cho mỗi điểm số:
+
+```jsx
+function Grades(){
+    const grades = [8, 18, 10, 7, 14];
+
+    // this will generate a warning (keep reading)
+    return <ul>
+        { grades.map(grade => <li>{grade}</li>) }
+    </ul>;
+}
+```
+
+Component trên sẽ hiển thị:
+
+```jsx
+<ul>
+    <li>8</li>
+    <li>18</li>
+    <li>10</li>
+    <li>7</li>
+    <li>14</li>
+</ul>
+```
+
+Mỗi khi sử dụng phương thức map trong JSX, bạn cần cung cấp một **thuộc tính key** để tránh gặp cảnh báo (vì lý do hiệu suất):
+
+```jsx
+function Grades() {
+    const grades = [8, 18, 10, 10];
+
+    return <ul>{
+        grades.map((grade, index) => <li key={index}>{grade}</li>)
+    }</ul>;
+}
+```
+
+`key` nên là giá trị đại diện duy nhất cho từng phần tử trong danh sách. Tuy nhiên, trong trường hợp các phần tử không phải là duy nhất, chúng ta có thể sử dụng index được cung cấp bởi phương thức `.map` làm `key`.
+
+Chỉ số bắt đầu từ 0 và tăng lên 1 sau mỗi lần lặp.
+
+Nếu mảng chứa các mục duy nhất thì các giá trị của mục sẽ là key:
+
+```jsx
+function Users() {
+    // collection of user ids
+    const users = [1, 10, 3, 4, 13];
+
+    return <ul>{
+        users.map(user => <li key={user}>{user}</li>)
+    }</ul>;
+}
+```
+
+Vì vậy, việc sử dụng `index` làm key chỉ nên là phương án cuối cùng. Trong các ví dụ trước đây, vì chúng ta chỉ làm việc với mảng chứa chuỗi và mảng số nên việc sử dụng chỉ số làm `key` là tạm thời chấp nhận.
+
+Tuy nhiên, khi tìm hiểu về mảng chứa đối tượng, bạn sẽ được hướng dẫn cách chọn giá trị `key` phù hợp cho từng trường hợp.
+
+- **Tại sao chúng ta cần key?**
+
+Khi **một phần tử mảng thay đổi**, **React cần biết li nào cần được cập nhật**; do đó, nó yêu cầu **cung cấp một key duy nhất** để chỉ **cập nhật phần tử đó** mà không **xóa tất cả các li khác** và hiển thị lại.
+
