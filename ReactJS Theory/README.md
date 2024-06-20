@@ -11,6 +11,7 @@
   - [3. Destructuring, Rest](#3-destructuring-rest)
   - [4. Spread operator](#4-spread-operator)
   - [5. Modules](#5-modules)
+- [III. Hook](#iii-hook)
 </details>
 
 <details>
@@ -22,6 +23,9 @@
   - [2. Component](#2-component)
   - [3. Props](#3-props)
   - [4. Cách viết hàm chuẩn](#4-cách-viết-hàm-chuẩn)
+  - [5. Sử dụng thư viện clsx để viết câu lệnh if](#5-sử-dụng-thư-viện-clsx-để-viết-câu-lệnh-if)
+  - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
+  - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
 
 </details>
 
@@ -811,49 +815,6 @@ Trong ví dụ này, `props.children` là một mảng chứa 3 mục:
 <p>Another content</p>
 ```
 
-- **Destructuring props**
-
-Hãy giả sử chúng ta có đối tượng person sau:
-
-```jsx
-const person = {
-    firstName: "Sam",
-    lastName: "Doe",
-    age: 24
-}
-```
-
-và bạn muốn tạo 2 biến firstName và lastName:
-
-```jsx
-const firstName = person.firstName;
-const lastName = person.lastName;
-```
-
-Bạn có thể làm điều đó trong một dòng bằng cú pháp destructuring sau:
-
-```jsx
-const {firstName, lastName} = person;
-```
-
-Bạn cũng có thể cung cấp giá trị mặc định cho biến trong trường hợp không có giá trị tương ứng trong đối tượng. Ví dụ:
-
-```jsx
-const {firstName, lastName, status = 'single'} = person;
-```
-
-Trong trường hợp này, `status` sẽ có giá trị mặc định là `"single"` vì đối tượng `person` không có thuộc tính này.
-
-Bạn cũng có thể destructuring biến props trong đối số, thoạt nhìn thì code có vẻ khó đọc nhưng bạn sẽ thấy nó được sử dụng khá nhiều trong thực tế:
-
-```jsx
-function WelcomeUser({username, notifications}) {
-    return <div>Welcome {username}! You've got {notifications} unread notifications.</div>;
-}
-```
-
-Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
-
 ### 4. Cách viết hàm chuẩn
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -975,7 +936,7 @@ Trong đoạn code trên, `props.loggedIn` là một giá trị boolean. Chúng 
 - khi `props.loggedIn` là **true**, clsx nhận `{"title": true}` và trả về chuỗi title.
 - Ngược lại, khi `props.loggedIn` là **false**, clsx nhận`{"title": false}` và trả về chuỗi rỗng "".
 
-### 6. Truyền thuộc tính theo cú pháp spread trong JSX
+### 6. Truyền props sử dụng toán tử Spread
 [:arrow_up: Mục lục](#mục-lục)
 
 Việc sử dụng cú pháp này trong JSX đôi khi có khá nhiều công dụng hữu ích. Ví dụ, bạn có **một Component nhận nhiều props** và bạn muốn lấy ra **children**, sau đó **destructure tất cả các props còn lại vào một biến mới** và truyền chúng vào một phần tử:
@@ -989,7 +950,7 @@ function Navbar(props) {
 
 Chúng ta bắt đầu bằng cách `destructure children` từ props, sau đó chúng ta tạo một đối tượng mới gọi là rest chứa tất cả các props khác.
 
-Và cuối cùng, chúng ta sử dụng cú pháp `spread` để truyền đối tượng này vào <h1>, theo đó truyền toàn bộ props vào phần tử <h1>.
+Và cuối cùng, chúng ta sử dụng cú pháp `spread` để truyền đối tượng này vào `<h1>`, theo đó truyền toàn bộ props vào phần tử `<h1>`.
 
 Ví dụ, nếu bạn sử dụng Navbar như sau: `<Navbar tabIndex="2" className="navbar">Hello World</Navbar>`, bạn sẽ nhận được biến `children = "Hello World"` và biến rest với đối tượng sau:
 
@@ -1007,3 +968,179 @@ và sau đó Component sẽ trả về phần tử React sau:
 ```
 
 Giả sử chúng ta thêm một thuộc tính mới, ví dụ: `disabled={true}`, khi đó code vẫn hoạt động và vẫn áp dụng thuộc tính **disabled** cho h1 **mà không cần cập nhật Component**.
+
+### 7. Trích xuất giá trị từ mảng với Destructuring
+[:arrow_up: Mục lục](#mục-lục)
+
+Hãy giả sử chúng ta có đối tượng person sau:
+
+```jsx
+const person = {
+    firstName: "Sam",
+    lastName: "Doe",
+    age: 24
+}
+```
+
+và bạn muốn tạo 2 biến firstName và lastName:
+
+```jsx
+const firstName = person.firstName;
+const lastName = person.lastName;
+```
+
+Bạn có thể làm điều đó trong một dòng bằng cú pháp destructuring sau:
+
+```jsx
+const {firstName, lastName} = person;
+```
+
+Bạn cũng có thể cung cấp giá trị mặc định cho biến trong trường hợp không có giá trị tương ứng trong đối tượng. Ví dụ:
+
+```jsx
+const {firstName, lastName, status = 'single'} = person;
+```
+
+Trong trường hợp này, `status` sẽ có giá trị mặc định là `"single"` vì đối tượng `person` không có thuộc tính này.
+
+Bạn cũng có thể destructuring biến props trong đối số, thoạt nhìn thì code có vẻ khó đọc nhưng bạn sẽ thấy nó được sử dụng khá nhiều trong thực tế:
+
+```jsx
+function WelcomeUser({username, notifications}) {
+    return <div>Welcome {username}! You've got {notifications} unread notifications.</div>;
+}
+```
+
+Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
+
+## III. Hook
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. useState
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Cài đặt useState**
+
+Hãy bắt đầu bằng cách tạo biến trạng thái đầu tiên.
+
+Để làm điều đó, chúng ta cần thêm hàm **useState** từ gói `"react"`.
+
+**useState** là một named export có cú pháp thêm là:
+
+```jsx
+import {useState} from "react";
+```
+
+Nếu bạn đã thêm React vào trong cùng một file, bạn có thể kết hợp các lệnh import thành một lệnh import duy nhất. Ví dụ:
+
+```jsx
+import React from "react";
+import {useState} from "react";
+```
+
+2 câu lệnh có thể được kết hợp thành một lệnh import duy nhất:
+
+```jsx
+import React, {useState} from "react";
+```
+
+Thoạt nhìn cú pháp có thể trông hơi lạ mắt, nhưng bạn hãy nhớ rằng:
+
+1. React là **default export** (không có dấu ngoặc nhọn)
+2. useState là **named export** (được đóng gói trong dấu ngoặc nhọn)
+
+- **useState trả về cái gì?**
+
+useState trả về một mảng gồm 2 phần tử:
+
+1. phần tử đầu tiên là **giá trị hiện tại của trạng thái**
+2. phần tử thứ hai là một hàm cập nhật trạng thái
+
+Vì vậy, thay vì viết:
+
+```jsx
+const result = useState(0)
+const seconds = result[0];
+const setSeconds = result[1];
+```
+
+Chúng ta sẽ sử dụng cú pháp array destructuring:
+
+```jsx
+const [seconds, setSeconds] = useState(0);
+```
+
+`seconds` hiện tại là một số có giá trị `0` và `setSeconds` là một hàm.
+
+Điều quan trọng là đặt tên các thuộc tính được destructure như sau:
+
+1. Phần tử đầu tiên nên lấy tên của trạng thái (trong ví dụ này là `seconds`)
+2. Phần tử thứ hai có phần đầu là `set` và theo sau là tên trạng thái viết hoa chữ cái đầu (trong ví dụ này là `setSeconds`)
+
+Điều này quan trọng vì khi các component trở nên phức tạp hơn, chúng ta cần biết rằng **seconds là trạng thái** và **setSeconds là hàm cập nhật trạng thái của seconds**.
+
+**Các điểm quan trọng cần lưu ý:**
+
+1. Bạn chỉ nên gọi **useState bên trong component**, không phải bên ngoài.
+2. **useState nên là thành phần đầu tiên được gọi bên trong hàm**
+
+- **Thay đổi trạng thái?**
+
+Trạng thái là **một biến mà chúng ta có thể cập nhật** vào thời điểm nào đó trong tương lai.
+
+Để cập nhật trạng thái, **bạn luôn phải sử dụng hàm 'set' nhận được từ useState**.
+
+Vì vậy nếu ta tạo một trạng thái gọi là `seconds` thì ta sẽ sử dụng hàm `setSeconds(newValue)` đã được destructure. Hãy sử dụng Component Stopwatch giống như trước đây:
+
+```jsx
+import {useState} from "react";
+
+function Stopwatch() {
+    // hooks have to be at the top
+    const [seconds, setSeconds] = useState(0);
+
+    return (<>
+        <h2>{seconds}</h2>
+        {/* increment seconds state by 1, when you click on the button*/}
+        <button onClick={() => setSeconds(seconds + 1)}>Click to add 1</button>
+    </>);
+}
+```
+
+Đoạn code cập nhật trạng thái bằng cách gọi `setSeconds()` và truyền vào đó giá trị mới của trạng thái.
+
+Giá trị mới của trạng thái là `seconds + 1`, tương đương với: **giá trị hiện tại + 1**.
+
+Điều đó xảy ra là vì `seconds` lưu giữ giá trị hiện tại của trạng thái, vì vậy `seconds + 1` sẽ **tăng giá trị đó lên 1.**
+
+### 2. Closures
+[:arrow_up: Mục lục](#mục-lục)
+
+**Closure** là khi hàm bên trong có quyền truy cập vào các biến của hàm bên ngoài. Hãy xem ví dụ dưới đây:
+
+```jsx
+function getUser() {
+    const name = "Sam";
+
+    function getWelcomeMessage() {
+        return `Hello ${name}`;
+    }
+
+    return {
+        name: name,
+        message: getWelcomeMessage()
+    }
+}
+```
+
+Chúng ta có một closure ở đây vì chúng ta có hàm `getWelcomeMessage` bên trong hàm `getUser`.
+
+Giải thích đoạn code:
+
+- Hàm getUser định nghĩa biến name có giá trị là "Sam".
+- Bên trong hàm đó, chúng ta định nghĩa hàm getWelcomeMessage trả về Hello ${name}.
+- Sau đó, chúng ta return một đối tượng chứa name và message, trong đó message là kết quả trả về bởi getWelcomeMessage().
+
+Như bạn thấy, biến `name` có thể được truy cập bởi hàm `getWelcomeMessage` vì `getWelcomeMessage` được định nghĩa bên trong `getUser`.
+Vì vậy, vì `name` được định nghĩa trong `getUser`, nó có thể được truy cập bởi bất kỳ hàm nào được định nghĩa bên trong `getUser`, trong ví dụ này là `getWelcomeMessage`.
+
