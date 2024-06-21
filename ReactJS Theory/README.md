@@ -25,7 +25,7 @@
   - [5. Sử dụng thư viện clsx để viết câu lệnh if](#5-sử-dụng-thư-viện-clsx-để-viết-câu-lệnh-if)
   - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
   - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
-- [III. Hook](#iii-hook)
+- [III. Hook - useState](#iii-hook-usestate)
   - [1. useState](#1-usestate)
   - [2. Closures](#2-closures)
   - [3. Các nguyên tắc khi làm việc với Hooks](#3-các-nguyên-tắc-khi-làm-việc-với-hooks)
@@ -1019,7 +1019,7 @@ function WelcomeUser({username, notifications}) {
 
 Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
 
-## III. Hook
+## III. Hook - useState
 [:arrow_up: Mục lục](#mục-lục)
 
 ### 1. useState
