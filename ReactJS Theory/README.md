@@ -30,6 +30,8 @@
   - [2. Closures](#2-closures)
   - [3. Các nguyên tắc khi làm việc với Hooks](#3-các-nguyên-tắc-khi-làm-việc-với-hooks)
   - [4. Tính bất biến trong ReactJS](#4-tính-bất-biến-trong-reactjs)
+  - [5. Trạng thái với mảng](#5-trạng-thái-với-mảng)
+  - [6. Trạng thái với đối tượng](#6-trạng-thái-với-đối-tượng)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -1331,6 +1333,9 @@ Lưu ý rằng React sử dụng toán tử `===` thay vì so sánh sâu vì so 
 
 Đây là lý do tại sao mỗi khi bạn có một trạng thái của mảng hoặc đối tượng, chúng phải là bất biến.
 
+### 5. Trạng thái với mảng
+[:arrow_up: Mục lục](#mục-lục)
+
 - **Thêm phần tử vào mảng (bất biến)**
 
 Vậy làm thế nào để thêm một phần tử vào mảng mà vẫn duy trì tính bất biến?
@@ -1423,8 +1428,7 @@ const subset = grades.filter((grade, index) => index !== 1);
 console.log(subset); // [10, 9, 4, 16];
 ```
 
-### 5. Trạng thái với mảng
-[:arrow_up: Mục lục](#mục-lục)
+- **Trạng thái của mảng**
 
 Giả sử chúng ta có mảng grades và chúng ta muốn tạo một thẻ ul và một thẻ li cho mỗi điểm số:
 
@@ -1488,3 +1492,179 @@ Tuy nhiên, khi tìm hiểu về mảng chứa đối tượng, bạn sẽ đư�
 
 Khi **một phần tử mảng thay đổi**, **React cần biết li nào cần được cập nhật**; do đó, nó yêu cầu **cung cấp một key duy nhất** để chỉ **cập nhật phần tử đó** mà không **xóa tất cả các li khác** và hiển thị lại.
 
+### 6. Trạng thái với đối tượng
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Thêm khóa/giá trị một cách bất biến**
+
+Hãy bắt đầu với phương thức làm thay đổi đối tượng:
+
+```jsx
+const data = {
+    id: 1,
+    name: "Sam"
+}
+
+//BAD: mutates
+data.age = 18;
+console.log(data); // {id: 1, name: "Sam", age: 18}
+```
+
+Thay vì cách trên, chúng ta có thể tạo một bản sao của đối tượng bằng cách sử dụng toán tử `spread: {...data}`.
+
+Toán tử này tạo ra một đối tượng mới với các khóa và giá trị tương tự, sau đó chúng ta có thể thêm cặp khóa/giá trị mới vào đối tượng:
+
+```jsx
+const data = {
+    id: 1,
+    name: "Sam"
+}
+
+//GOOD: immutable
+const newObj = {...data, age: 18}
+console.log(newObj); // {id: 1, name: "Sam", age: 18}
+```
+
+- **Thay thế giá trị của khóa hiện có**
+
+Cách sử dụng phương thức thay đổi đối tượng sẽ như sau:
+
+```jsx
+const data = {
+    id: 1,
+    name: "Sam"
+}
+
+//GOOD: immutable
+const newObj = {...data, age: 18}
+console.log(newObj); // {id: 1, name: "Sam", age: 18}
+```
+
+Thay vì cách trên, chúng ta có thể tạo một bản sao mới của đối tượng với `{...data}` và sau đó kết hợp nó với khóa mới nhưng có giá trị khác:
+
+```jsx
+const data = {
+    id: 1,
+    age: 19
+}
+
+// GOOD: immutable
+const newObj = {...data, age: 20};
+console.log(newObj); // {id: 1, age: 20}
+console.log(data); // original object did not change {id: 1, age: 19}
+```
+
+Đoạn code này hoạt động vì `age: 20` trong `{...data, age: 20}` sẽ ghi đè lên `age` hiện tại.
+
+- **Để ý thứ tự**
+
+Lưu ý rằng khi bạn muốn thay thế giá trị, các giá trị mới nên đứng sau bản sao của đối tượng cũ.
+
+Điều này cho phép ghi đè lên các giá trị cũ bằng các giá trị mới.
+
+Do đó, đoạn code dưới đây SẼ KHÔNG hoạt động:
+
+```jsx
+const data = {
+    id: 1,
+    age: 19
+}
+const wrongNewObj = {age: 20, ...data};
+```
+
+Nguyên nhân là vì `age: 19` từ đối tượng data sẽ ghi đè lên `age: 20`.
+
+Bạn chỉ cần sửa đổi thành `{...data, age: 20}` và đoạn code sẽ hoạt động.
+
+- **Loại bỏ key-value**
+
+Để xóa cặp key/value khỏi đối tượng mà không làm thay đổi đối tượng gốc, chúng ta cũng cần sử dụng toán tử `spread` nhưng với một cách tiếp cận khác.
+
+Trước tiên, hãy bắt đầu với phương thức làm thay đổi đối tượng:
+
+```jsx
+const obj = {
+    id: 1,
+    title: "Harry potter",
+    year: 2017,
+    rating: 4.5
+}
+
+// BAD: mutates
+delete obj.year;
+console.log(obj); // { id: 1, title: "Harry potter", rating: 4.5}
+```
+
+Để xóa `year` mà không làm thay đổi đối tượng, chúng ta sẽ phải sử dụng 2 tính năng của JavaScript: **destructuring đối tượng và toán tử spread**:
+
+```jsx
+const obj = {
+    id: 1,
+    title: "Harry potter",
+    year: 2017,
+    rating: 4.5
+}
+
+// GOOD: immutable
+const {year, ...rest} = obj;
+console.log(rest); // { id: 1, title: "Harry potter", rating: 4.5}
+```
+
+Đoạn code này hoạt động vì const `{year, ...rest} = obj` destructure giá trị của khóa year từ `obj`.
+
+Điều này tương tự như việc đọc `obj.year`.
+
+Tuy nhiên, chúng ta cũng yêu cầu JavaScript destructure phần còn lại của đối tượng với `...rest`; tương đương với việc kết hợp tất cả các key/value khác trong một đối tượng mới tên là `rest`.
+
+Vì vậy, chúng ta có rest là một bản sao bất biến của `obj` nhưng không có khóa `year`!
+
+- **Giá trị mặc định**
+
+Khi khởi tạo một trạng thái mới, chúng ta cần cung cấp một giá trị mặc định. 
+
+Dạng phổ biến nhất mà bạn thường thấy là đặt giá trị mặc định là một đối tượng rỗng:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [data, setData] = useState({});
+}
+```
+
+- **Lặp qua đối tượng trong JSX**
+
+Đôi khi chúng ta có thể cần lặp qua đối tượng. Tuy nhiên, thao tác này không phổ biến như việc lặp qua mảng. Cách thực hiện như sau:
+
+```jsx
+function App() {
+    const settings = {
+        title: "Blog",
+        theme: "dark"
+    }
+
+    return <ul>{
+        Object.entries(settings).map(item => {
+            return <li key={item[0]}>{item[0]} with value {item[1]}</li>
+        })
+    }</ul>;
+}
+```
+
+JSX kết quả sẽ là:
+
+```jsx
+<ul>
+    <li key="title">title with value Blog</li>
+    <li key="theme">theme with value dark</li>
+</ul>
+```
+
+Đoạn code trên hoạt động vì `Object.entries(settings)` trả về mảng sau:
+
+```jsx
+[
+    ["title", "Blog"],
+    ["theme", "dark"],
+]
+```
