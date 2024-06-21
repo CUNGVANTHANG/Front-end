@@ -32,6 +32,7 @@
   - [4. Tính bất biến trong ReactJS](#4-tính-bất-biến-trong-reactjs)
   - [5. Trạng thái với mảng](#5-trạng-thái-với-mảng)
   - [6. Trạng thái với đối tượng](#6-trạng-thái-với-đối-tượng)
+  - [7. Xử lý form](#7-xử-lý-form)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -1668,3 +1669,117 @@ JSX kết quả sẽ là:
     ["theme", "dark"],
 ]
 ```
+
+### 7. Xử lý form
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Thuộc tính value trong HTML**
+
+Trong HTML, chúng ta thường cung cấp giá trị mặc định cho ô nhập liệu bằng cách chỉ định thuộc tính value, ví dụ:
+
+```jsx
+<!-- HTML example -->
+<input type="text" name="address" value="Amsterdam">
+```
+
+Đoạn code trên sẽ hiển thị một trường nhập liệu chứa giá trị **Amsterdam** và người dùng **có thể chỉnh sửa văn bản**.
+
+Tuy nhiên, trong React, cách hoạt động của phần tử này có chút khác biệt.
+
+**defaultValue**
+
+Khi bạn thiết lập value cho phần tử input trong React, **giá trị đó sẽ không bao giờ thay đổi** (trừ khi bạn chỉ định trình xử lý onChange).
+
+Do đó, dòng code JSX dưới đây không nên được sử dụng:
+
+```jsx
+<input type="text" name="address" value="Amsterdam" />
+```
+
+Để ý code sử dụng cú pháp **tự đóng thẻ** vì chúng ta đang sử dụng JSX; điều này là bắt buộc.
+
+Kết quả trả về một trường nhập liệu **chứa giá trị Amsterdam nhưng không thể thay đổi**, nghĩa là nó là một trường nhập liệu **chỉ đọc**.
+
+Thay vào đó, khi bạn muốn cung cấp giá trị mặc định cho người dùng, bạn nên sử dụng thuộc tính `defaultValue` như sau:
+
+```jsx
+<input type="text" name="address" defaultValue="Amsterdam" />
+```
+
+- **Nhận giá trị đầu vào**
+
+Để lấy văn bản do người dùng viết, chúng ta sử dụng trình xử lý sự kiện `onChange` trên thẻ `<input />`:
+
+```jsx
+function handleAddressChange(event) {
+    //...
+}
+
+<input type="text" name="address" onChange={handleAddressChange} />
+```
+
+Hàm `handleAddressChange` sẽ được gọi mỗi khi người dùng nhập một ký tự mới, xóa một ký tự hoặc thực hiện bất kỳ chỉnh sửa nào trên ô văn bản. Hàm sẽ được kích hoạt mỗi khi giá trị của trường nhập liệu thay đổi.
+
+**Đối số event**
+
+Hàm được truyền vào `onChange` sẽ nhận đối số là một `event`, tương tự như khi làm việc với DOM.
+
+Tuy nhiên, event này về mặt kỹ thuật là sự kiện tổng hợp (**synthetic event**)
+
+Bạn có thể đọc giá trị được viết bởi người dùng bằng cách truy cập vào: `event.target.value`:
+
+```jsx
+function handleAddressChange(event) {
+    console.log(event.target.value);
+}
+
+<input type="text" name="address" onChange={handleAddressChange} />
+```
+
+Trong ví dụ này, `event.target` **tham chiếu đến phần tử** (trong ví dụ này là `<input />`). Vì đó là một trường nhập liệu, bạn đọc nội dung bên trong nó bằng cách truy cập trường thuộc tính `.value`.
+
+**target vs currentTarget**
+
+Nếu bạn đã từng viết code JavaScript thuần túy, bạn có thể đã quen việc sử dụng `currentTarget` thay cho `target` (vì `currentTarget` luôn tham chiếu đến phần tử mà bạn gọi `addEventListener` trong khi `target` sẽ phụ thuộc vào vị trí chính xác mà người dùng nhấp chuột).
+
+Khi sử dụng `onChange` của React, **không có sự khác biệt** giữa `target` và `currentTarget` vì **chỉ có một phần tử duy nhất mà không có phần tử con**. Do đó, cả **hai giá trị sẽ trỏ đến cùng một phần tử**.
+
+Bạn sẽ thấy nhiều nhà phát triển sử dụng `target` và đó cũng là một thực hành mà bạn nên làm theo.
+
+**Hàm nội tuyến**
+
+Các hàm inline (nội tuyến) thường được sử dụng với biểu mẫu vì bạn thường cần có một trình xử lý sự kiện nhỏ, ví dụ:
+
+```jsx
+<input type="text" name="address" onChange={event => console.log(event.target.value)} />
+```
+
+- **Controlled component là gì?**
+
+**Controlled component** là khi bạn theo dõi giá trị của một input dưới dạng state và cập nhật giá trị mỗi khi nó thay đổi.
+
+Việc sử dụng controlled component là rất hữu ích trong các trường hợp có thẻ `<input />` (hoặc các thẻ `<select />` hoặc `<textarea />`) vì nó cho phép bạn lấy giá trị do người dùng viết và tự động thay đổi giá trị khi trạng thái thay đổi.
+
+**Cách tạo một controlled component:**
+
+- Bắt đầu bằng việc tạo biến state để lưu trữ giá trị
+- Biến sẽ có giá trị mặc định là một chuỗi rỗng ""
+- Thiết lập giá trị của input là biến state đó
+- Cập nhật state mỗi khi nó thay đổi
+
+**Cung cấp giá trị mặc định**
+
+Để lấy một giá trị mặc định **khác chuỗi rỗng**, bạn có thể cập nhật giá trị mặc định của `useState`:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [address, setAddress] = useState("Amsterdam");
+
+    return <input type="text" value={address} onChange={event => setAddress(event.target.value)} />;
+}
+```
+
+Bạn **không cần sử dụng thuộc tính `defaultValue`** nữa vì đây là một **controlled component**.
+
