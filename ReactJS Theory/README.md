@@ -2035,3 +2035,105 @@ Component là **stateless** vì nó **KHÔNG quản lý trạng thái**. Mặc d
 
 Bạn có nhận thấy rằng `App` là **stateful component** và `NameForm` là **stateless component** không?
 
+- **Chia sẻ trạng thái giữa các component**
+
+Giả sử chúng ta muốn xây dựng một Danh sách việc cần làm; chúng ta sẽ cần một form để thêm "todo" cũng như một danh sách ul để liệt kê các tác vụ.
+
+```jsx
+import {useState} from "react";
+
+function TodoApp() {
+    const [todos, setTodos] = useState([]);
+    const [entry, setEntry] = useState("");
+
+    function handleEntryChange(event) {
+        setEntry(event.target.value);
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        // add the new entry
+        setTodos([...todos, entry]);
+        // reset/empty the textbox
+        setEntry("");
+    }
+
+    return <>
+        <form onSubmit={handleFormSubmit}>
+            <label htmlFor="todo">Enter To do: </label>
+            <input type="text" id="todo" value={entry} onChange={handleEntryChange} />
+        </form>
+        <ul>
+            {todos.map((todo, index) => <li key={index}>{todo}</li>)}
+        </ul>
+    </>;
+}
+```
+
+Bây giờ hãy tách component này thành 2 component mới:
+
+`<TodoForm />` chứa `<form>` và các component con của nó
+
+`<TodoList />` chứa `<ul>` và các component con của nó
+
+Vấn đề là cả hai component `TodoForm` và `TodoList` đều phụ thuộc vào cùng một trạng thái, đó là `todos` và `entry`.
+
+Biểu mẫu cần trạng thái `todos` để có thể thêm `entry` mới vào mảng `todos`.
+
+Vì vậy, chúng ta phải nâng trạng thái và định nghĩa trạng thái trong component cha, đó là `<TodoApp />`.
+
+Sau đó, component `TodoApp` này sẽ truyền trạng thái và phương thức onChange xuống cả hai component con.
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/f8e6c191-5ccd-4856-aaa0-b7c1ed13e2e9)
+
+Như vậy, trạng thái đã được định nghĩa trong component cha.
+
+Code sau khi được tái cấu trúc:
+
+```jsx
+// TodoApp.js
+import {useState} from "react";
+import TodoForm from "./TodoForm.js";
+import TodoList from "./TodoList.js";
+
+function TodoApp() {
+    const [todos, setTodos] = useState([]);
+    const [entry, setEntry] = useState("");
+
+    function handleEntryChange(event) {
+        setEntry(event.target.value);
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        setTodos([...todos, entry]);
+        setEntry("");
+    }
+
+    return <>
+        <TodoForm entry={entry} onEntryChange={handleEntryChange} onFormSubmit={handleFormSubmit} />
+        <TodoList todos={todos} />
+    </>;
+}
+
+// TodoForm.js
+function TodoForm(props) {
+    return <form onSubmit={props.onFormSubmit}>
+        <label htmlFor="todo">Enter To do: </label>
+        <input type="text" id="todo" value={props.entry} onChange={props.onEntryChange} />
+    </form>;
+}
+
+// TodoList.js
+function TodoList(props) {
+    return <ul>
+        {props.todos.map((todo, index) => <li key={index}>{todo}</li>)}
+    </ul>;
+}
+```
+
+Việc có trạng thái chung trong component cha chung gần nhất mang lại một số lợi ích nhất định (mặc dù code có thể dài hơn một chút). Cụ thể:
+
+1. Component cha chung trở thành **nguồn dữ liệu duy nhất**. Điều này giúp dễ dàng việc tìm kiếm và sửa lỗi, vì bạn biết chỉ có một nơi duy nhất mà trạng thái sẽ được thay đổi.
+2. Có một vị trí quản lý trạng thái chung giúp duy trì tính nhất quán trong ứng dụng. Nếu bạn tạo một số logic xác thực cho entry, bạn chỉ cần thực hiện một lần duy nhất trong component cha chung.
+
