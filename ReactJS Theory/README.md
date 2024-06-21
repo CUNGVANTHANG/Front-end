@@ -33,6 +33,8 @@
   - [5. Trạng thái với mảng](#5-trạng-thái-với-mảng)
   - [6. Trạng thái với đối tượng](#6-trạng-thái-với-đối-tượng)
   - [7. Xử lý form](#7-xử-lý-form)
+  - [8. Truyền vào hàm](#8-truyền-vào-hàm)
+  - [9. Chuyển trạng thái lên](#9-chuyển-trạng-thái-lên)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -1850,4 +1852,186 @@ Vì vậy, đây là biểu mẫu tương tự nhưng được viết bằng JSX
 ```
 
 `<label />` cần một trường thuộc tính `htmlFor` trỏ tới `id` của phần tử.
+
+### 8. Truyền vào hàm
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Phân biệt Stateless component và Stateful component?**
+
+**Stateless component** KHÔNG quản lý trạng thái bên trong. (**Không** có lệnh gọi **useState** bên trong component)
+
+**Stateful component** quản lý trạng thái bên trong (**Có ít nhất** một lệnh gọi **useState** bên trong component).
+
+- **Truyền hàm vào props**
+
+Ngoài ra, **props cũng có thể chứa hàm**. Dưới đây là một ví dụ (để thuận tiện, cả hai component được định nghĩa trong cùng một file):
+
+```jsx
+function App() {
+    function handleWelcome() {
+        console.log("Hello World");
+    }
+    return <StoreFront onWelcome={handleWelcome} />;
+}
+
+function StoreFront(props) {
+    props.onWelcome();
+
+    return <div>Store renders here</div>;
+}
+```
+
+Cùng phân tích các bước:
+
+Chúng ta định nghĩa phương thức `handleWelcome` trong component cha tên là `App`.
+
+Sau đó, chúng ta hiển thị component `StoreFront` và truyền một prop có tên là `onWelcome`.
+
+Prop `onWelcome` là một hàm (tham chiếu đến hàm `handleWelcome`)
+
+Từ bên trong component `StoreFront`, chúng ta có thể gọi hàm đó bằng `props.onWelcome()`.
+
+`Hello World` sẽ được in ra màn hình.
+
+- **Quy ước đặt tên**
+
+Khi truyền hàm, bạn cần tuân theo quy ước đặt tên sau:
+
+1. Các hàm vẫn được gọi bằng cách sử dụng `handleSubjectEvent`. (Ví dụ trên đã được đơn giản hóa và không có Event nên ta đã bỏ qua nó)
+2. Đối với props là hàm, bắt đầu chúng với `onSubjectEvent`. Điều này giúp phân biệt dễ dàng giữ các phần tử props là hàm.
+
+Thêm một ví dụ:
+
+```jsx
+function App() {
+    function handleStoreOpen() {
+
+    }
+
+    function handleItemClick() {
+
+    }
+
+    return <StoreFront
+            onStoreOpen={handleStoreOpen}
+            onItemClick={handleItemClick}
+        />
+}
+```
+
+Để ý `onStoreOpen` là một prop truyền một hàm và tương tự cho `onItemClick`.
+
+### 9. Chuyển trạng thái lên
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Phân biệt Stateless component và Stateful component?**
+
+**Stateless component** KHÔNG quản lý trạng thái bên trong. (**Không** có lệnh gọi **useState** bên trong component)
+
+**Stateful component** quản lý trạng thái bên trong (**Có ít nhất** một lệnh gọi **useState** bên trong component).
+
+- **Cải tiến component Form**
+
+Bây giờ chúng ta đã biết cách truyền hàm dưới dạng props trong React, hãy xem xét component React sau:
+
+```jsx
+// index.js
+import {useState} from "react";
+
+function App() {
+    const [name, setName] = useState("");
+
+    function handleNameChange(event) {
+        setName(event.target.value);
+    }
+
+    return <div>
+        <h2>Hello {name}</h2>
+        <form>
+            <label htmlFor="name">Name: </label>
+            <input type="text" id="name" value={name} onChange={handleNameChange} />
+        </form>
+    </div>
+}
+```
+
+Chúng ta muốn tái cấu trúc component thành:
+
+```jsx
+// index.js
+import {useState} from "react";
+import NameForm from "./NameForm.js";
+
+function App() {
+    const [name, setName] = useState("");
+
+    function handleNameChange(event) {
+        setName(event.target.value);
+    }
+
+    return <div>
+        <h2>Hello {name}</h2>
+        <NameForm />
+    </div>
+}
+```
+
+Để ý đoạn code đã tái cấu trúc component `<form>` thành component `NameForm`.
+
+**Truyền "value" và "onChange"**
+
+Component `NameForm` cần hiển thị một hộp văn bản và cập nhật giá trị của nó mỗi khi có thay đổi; do đó, nó cần thiết lập các prop `value` và `onChange`.
+
+Để làm điều đó, chúng ta bắt đầu bằng cách truyền chúng từ component App xuống:
+
+```jsx
+// index.js
+import NameForm from "./NameForm.js";
+
+function App() {
+    const [name, setName] = useState("");
+
+    function handleNameChange(event) {
+        setName(event.target.value);
+    }
+
+    return <div>
+        <h2>Hello {name}</h2>
+        <NameForm name={name} onNameChange={handleNameChange} />
+    </div>
+}
+```
+
+Một số điều cần lưu ý:
+
+`name={name}` truyền biến trạng thái name xuống
+
+`onNameChange={handleNameChange}` truyền hàm `handleNameChange`
+
+`onNameChange` tuân theo quy ước đặt tên
+
+Để ý trạng thái được tạo và duy trì trong component cha. Component App là **stateful component** vì nó **quản lý trạng thái**.
+
+**Sử dụng "value" và "onChange"**
+
+Bây giờ trong component `NameForm`, chúng ta có thể sử dụng 2 `prop` này:
+
+```jsx
+//NameForm.js
+export default function NameForm(props) {
+
+    return <form>
+        <label htmlFor="name">Name: </label>
+        <input type="text" id="name" value={props.name} onChange={props.onNameChange} />
+    </form>
+}
+```
+
+Một số điều cần lưu ý:
+
+Component là **stateless** vì nó **KHÔNG quản lý trạng thái**. Mặc dù có một hộp văn bản, component này có một trình xử lý `onChange` gọi `props.onNameChange` thuộc về component cha của nó. Component cha xử lý trạng thái.
+
+`value={name}` đã thay đổi thành `value={props.name}` vì `name` không còn là trạng thái nội bộ nữa mà là một `prop` **nhận được từ component cha**.
+
+Bạn có nhận thấy rằng `App` là **stateful component** và `NameForm` là **stateless component** không?
 
