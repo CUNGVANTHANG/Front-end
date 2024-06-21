@@ -1357,7 +1357,7 @@ Chúng ta sao chép các giá trị của mảng numbers và sau đó thêm 4. M
 
 - **Cập nhật phần tử (bất biến)**
 
-Để cập nhật một hoặc nhiều phần tử trong mảng, bạn có thể sử dụng phương thức `.map` để trả về một bản sao của mảng và đồng thời sửa đổi một hoặc nhiều phần tử. Ví dụ:
+Để cập nhật một hoặc nhiều phần tử trong mảng, bạn có thể sử dụng phương thức [`.map`](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#6-l%C3%A0m-vi%E1%BB%87c-v%E1%BB%9Bi-m%E1%BA%A3ng) để trả về một bản sao của mảng và đồng thời sửa đổi một hoặc nhiều phần tử. Ví dụ:
 
 ```jsx
 const grades = [10, 20, 18, 14];
@@ -1389,7 +1389,7 @@ console.log(updatedGrades); //[10, 9, 10, 5, 16]
 
 - **Xóa phần tử (bất biến)**
 
-Bạn có thể xóa phần tử một cách bất biến bằng cách sử dụng phương thức `.slice` (slice chứ không phải splice). **slice là phương thức bất biến trong khi splice là phương thức thay đổi mảng**.
+Bạn có thể xóa phần tử một cách bất biến bằng cách sử dụng phương thức [`.slice`](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#6-l%C3%A0m-vi%E1%BB%87c-v%E1%BB%9Bi-m%E1%BA%A3ng) (slice chứ không phải splice). **slice là phương thức bất biến trong khi splice là phương thức thay đổi mảng**.
 
 ```jsx
 const grades = [10, 8, 9, 4, 16];
@@ -1406,7 +1406,7 @@ const subset2 = grades.slice(0, grades.length - 2);
 console.log(subset2); // [10, 8, 9]
 ```
 
-Đôi khi việc sử dụng `.filter` sẽ dễ dàng hơn bởi nó **trả về một tập con của mảng gốc dựa trên điều kiện**, ví dụ:
+Đôi khi việc sử dụng [`.filter`](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#6-l%C3%A0m-vi%E1%BB%87c-v%E1%BB%9Bi-m%E1%BA%A3ng) sẽ dễ dàng hơn bởi nó **trả về một tập con của mảng gốc dựa trên điều kiện**, ví dụ:
 
 ```jsx
 const grades = [10, 8, 9, 4, 16];
@@ -1782,4 +1782,72 @@ function App() {
 ```
 
 Bạn **không cần sử dụng thuộc tính `defaultValue`** nữa vì đây là một **controlled component**.
+
+- **Gửi biểu mẫu**
+
+Phần tử Form trong React hoạt động tương tự như trong các ứng dụng không sử dụng React, tức là khi bạn submit biểu mẫu, nó sẽ gửi dữ liệu đến trang hiện tại và dẫn đến việc tải lại trang.
+
+Khi làm việc với `fetch`, bạn cần ngăn biểu mẫu gửi dữ liệu để có thể gửi dữ liệu với [`fetch`](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#c-fetch).
+
+Cách thực hiện cũng tương tự trong React, chúng ta cần gọi [`event.preventDefault()`](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#k-preventdefault-and-stoppropagation) trong sự kiện submit:
+
+```jsx
+function App() {
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+    }
+
+    return <form onSubmit={handleFormSubmit}>
+        <input type="text" name="name" />
+        <input type="submit" value="Add" />
+    </form>;
+}
+```
+
+- **Gán nhãn cho form**
+
+Dưới đây là cách thêm label cho một input trong HTML (trong React sẽ khác một chút):
+
+```jsx
+<form>
+    <label for="login-email">Email: </label>
+    <input type="email" id="login-email" placeholder="alex@email.com">
+
+    <label for="login-password">Password: </label>
+    <input type="password" id="login-password" placeholder="Password">
+
+    <input type="submit" >
+</form>
+```
+
+Phần tử `<label>` cần một thuộc tính for trỏ tới id của trường nhập liệu/hộp chọn/vùng văn bản mà nó liên kết đến.
+
+Để ý đoạn code làm cho phần tử HTML hoạt động bằng cách thêm: `id="login-email"` và sau đó tham chiếu đến nó bằng `for="login-email"`. Và đối với trường mật khẩu: `id="login-password"` và sau đó tham chiếu đến nó bằng `for="login-password"`.
+
+Đảm bảo rằng `id` là duy nhất vì `id` đó chỉ nên được sử dụng một lần trên mỗi trang HTML.
+
+**Nhãn trong React**
+
+Trong React, cách sử dụng thẻ label có một số khác biệt nhỏ so với cách sử dụng thông thường, tương tự như việc sử dụng thuộc tính class trong React khác với cách sử dụng trong HTML thông thường.
+
+Hãy nhớ rằng trong React, chúng ta phải sử dụng `className` thay vì `class`. React truyền tất cả những props này xuống DOM, DOM mong đợi `props` là các trường thuộc tính hợp lệ của một phần tử HTML.
+
+Điều tương tự áp dụng cho thuộc tính `for`. Tên trường thuộc tính thực tế là `htmlFor`.
+
+Vì vậy, đây là biểu mẫu tương tự nhưng được viết bằng JSX:
+
+```jsx
+<form>
+    <label htmlFor="login-email">Email: </label>
+    <input type="email" id="login-email" placeholder="alex@email.com" />
+
+    <label htmlFor="login-password">Password: </label>
+    <input type="password" id="login-password" placeholder="Password" />
+
+    <input type="submit" />
+</form>
+```
+
+`<label />` cần một trường thuộc tính `htmlFor` trỏ tới `id` của phần tử.
 
