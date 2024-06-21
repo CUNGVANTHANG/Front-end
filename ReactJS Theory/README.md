@@ -25,7 +25,7 @@
   - [5. Sử dụng thư viện clsx để viết câu lệnh if](#5-sử-dụng-thư-viện-clsx-để-viết-câu-lệnh-if)
   - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
   - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
-- [III. Hook - useState](#iii-hook-usestate)
+- [III. Hook - useState](#iii-hook---usestate)
   - [1. useState](#1-usestate)
   - [2. Closures](#2-closures)
   - [3. Các nguyên tắc khi làm việc với Hooks](#3-các-nguyên-tắc-khi-làm-việc-với-hooks)
