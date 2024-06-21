@@ -35,6 +35,7 @@
   - [7. Xử lý form](#7-xử-lý-form)
   - [8. Truyền vào hàm](#8-truyền-vào-hàm)
   - [9. Chuyển trạng thái lên](#9-chuyển-trạng-thái-lên)
+- [IV. Hook - useEffect](#iv-hook---useeffect)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -2136,4 +2137,205 @@ Việc có trạng thái chung trong component cha chung gần nhất mang lại
 
 1. Component cha chung trở thành **nguồn dữ liệu duy nhất**. Điều này giúp dễ dàng việc tìm kiếm và sửa lỗi, vì bạn biết chỉ có một nơi duy nhất mà trạng thái sẽ được thay đổi.
 2. Có một vị trí quản lý trạng thái chung giúp duy trì tính nhất quán trong ứng dụng. Nếu bạn tạo một số logic xác thực cho entry, bạn chỉ cần thực hiện một lần duy nhất trong component cha chung.
+
+### 10. Cập nhật trạng thái bằng hàm
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Cập nhật trạng thái có tính chất không đồng bộ**
+
+Cập nhật trạng thái trong React là **hành vi bất đồng bộ**, tức là trạng thái không nhất thiết phải được cập nhật ngay lập tức.
+
+Hành vi này được thiết kế như vậy nhằm giúp cải thiện hiệu suất của ứng dụng React.
+
+Khi bạn cập nhật trạng thái trong React, điều này yêu cầu phải hiển thị lại component (và có thể cả các component khác), đó có thể là một hoạt động tốn kém. Đó là lý do tại sao React gom nhóm nhiều cập nhật trạng thái lại với nhau và kết hợp chúng thành một lần render để làm cho ứng dụng phản hồi nhanh hơn và giảm công việc mà trình duyệt phải thực hiện.
+
+Hãy xem ví dụ sau:
+
+```jsx
+import React, {useState} from "react";
+
+function App() {    
+    const [date, setDate] = useState(new Date());
+    const [counter, setCounter] = useState(0);
+
+    console.log("rendered"); //allows us to visualize re-renders
+
+    function handleButtonClick() {
+        setDate(new Date());
+        setCounter(counter + 1);
+    }
+
+    return <button onClick={handleButtonClick}>Click me</button>
+}
+```
+
+Hàm `setDate()` thiết lập ngày hiện tại bằng cách gọi `new Date()`.
+
+Bây giờ hãy trả lời những câu hỏi sau:
+
+1. Có bao nhiêu cập nhật trạng thái xảy ra khi nhấp vào nút?
+2. Component này sẽ được hiển thị lại bao nhiêu lần khi nhấp vào nút?
+
+**Câu trả lời cho câu hỏi đầu tiên là:** có **hai** cập nhật trạng thái. Tuy nhiên, **component chỉ hiển thị lại một lần**.
+
+Điều này là do React gom nhóm (kết hợp) hai thay đổi trạng thái này và thực hiện chúng cùng một lúc. Điều này giúp ứng dụng phản hồi nhanh hơn đối với tương tác của người dùng.
+
+- **Cập nhật trạng thái bằng hàm**
+
+Vì cập nhật trạng thái là hành vi bất đồng bộ, có một điều mà chúng ta cần phải để ý.
+
+Để cho đơn giản, chúng ta sẽ xem xét component sau:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [counter, setCounter] = useState(0);
+
+    function handleButtonClick() {
+        setCounter(counter + 1);
+        setCounter(counter + 1);
+    }
+
+    return <button onClick={handleButtonClick}>Click me {counter}</button>
+}
+```
+
+Đây chỉ là code minh họa; tuy nhiên, code có **hai lệnh** gọi `setCounter` liên tiếp nhau.
+
+Với đoạn code trên, bạn dự đoán giá trị của counter sẽ là bao nhiêu sau khi nhấp vào nút?
+
+**Giá trị sẽ là 1**, không phải 2, lý do là:
+
+```jsx
+//assuming: counter is 0
+setCounter(counter + 1);
+setCounter(counter + 1);
+```
+
+Hai lần cập nhật trạng thái này sẽ được **gộp chung** và khi `counter = 0`, cuộc gọi `setCounter()` đầu tiên sẽ đặt giá trị của counter là `0 + 1 = 1`, nhưng việc cập nhật này không xảy ra ngay lập tức vì nó là **hành vi bất đồng bộ**.
+
+Khi gọi **lần thứ hai** `setCounter(counter + 1)`, **giá trị của counter vẫn là 0** vì component chưa được hiển thị lại. Vì vậy, lần gọi thứ hai cũng sẽ cập nhật trạng thái thành 1.
+
+Lưu ý rằng điều này xảy ra do các lần cập nhật trạng thái được gộp chung.
+
+- **Cập nhật trạng thái bằng hàm**
+
+Để giải quyết vấn đề này, React cung cấp khái niệm cập nhật trạng thái bằng hàm (**functional state updates**), đó là truyền một hàm vào hàm cập nhật trạng thái, dưới đây là một ví dụ:
+
+```jsx
+setCounter((previousCounter) => {
+    return previousCounter + 1;
+});
+```
+
+Phiên bản ngắn gọn hơn:
+
+```jsx
+setCounter(previousCounter => previousCounter + 1);
+```
+
+Chúng ta định nghĩa một hàm nhận giá trị trạng thái trước đó và trả về giá trị trạng thái mới. Trong ví dụ này, giá trị trạng thái mới là giá trị trạng thái trước đó + 1.
+
+Dưới đây là cách bạn có thể sửa ví dụ trên để cộng vào trạng thái hai lần:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [counter, setCounter] = useState(0);
+
+    function handleButtonClick() {
+        setCounter(prevCounter => prevCounter + 1);
+        setCounter(prevCounter => prevCounter + 1);
+    }
+
+    return <button onClick={handleButtonClick}>Click me {counter}</button>
+}
+```
+
+**Giá trị trạng thái counter sẽ tăng thêm 2** mỗi lần bạn nhấp vào nút.
+
+Bạn có thể chưa hiểu rõ nguồn gốc của `prevCounter`. Hãy nhớ rằng `prevCounter => prevCounter + 1` là **một định nghĩa hàm**. React sẽ gọi hàm này và truyền giá trị trạng thái trước đó vào làm đối số đầu tiên.
+
+Điều này có nghĩa là bạn có thể đặt tên đối số đó thành bất cứ điều gì bạn muốn. Trong ví dụ này, ta sử dụng `prevCounter`.
+
+## IV. Hook - useEffect
+[:arrow_up: Mục lục](#mục-lục)
+
+- **React.StrictMode**
+
+React cung cấp component `StrictMode` giúp bạn tìm ra một số lỗi không mong muốn khi React đang chạy ở **chế độ phát triển**.
+
+Bạn có thể giữ `StrictMode` khi chạy trong **chế độ sản xuất vì nó không có tác động đến ứng dụng**.
+
+Thông qua đối tượng **React**, bạn có thể truy cập vào component `StrictMode`. Vì React là một đối tượng và `StrictMode` **là một khóa** của đối tượng đó, bạn có thể truy cập component đó bằng cách sử dụng cú pháp: `<React.StrictMode></React.StrictMode>` miễn là bạn đã thêm React vào file JavaScript.
+
+```jsx
+import React from "react";
+import {createRoot} from "react-dom/client";
+
+function App() {
+}
+
+const root = document.querySelector("#root");
+
+createRoot(root).render(<React.StrictMode><App /></React.StrictMode>);
+```
+
+### 1. useEffect
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook `useEffect` được dùng để triển khai hiệu ứng (effect) trong component.
+
+Dưới đây là một số ví dụ về hiệu ứng:
+
+- Gửi một yêu cầu đến nhà cung cấp dịch vụ phân tích
+- Khởi tạo một plugin DOM ngoài React (ví dụ: vẽ bản đồ; sẽ được triển khai trong Dự án tiếp theo)
+- Thay đổi tiêu đề trang (tiêu đề hiển thị trên thanh tab của trình duyệt)
+- Đăng ký người dùng vào dịch vụ trò chuyện trực tiếp (với WebSockets)
+
+Những hành động này được gọi là hiệu ứng vì chúng là các **chỉ thị chạy bên ngoài component hoặc là kết quả của component**.
+
+- **Tiêu đề trang**
+
+Trong JavaScript, bạn có thể cập nhật tiêu đề trang bằng cách thay đổi `document.title`, ví dụ:
+
+```jsx
+document.title = "React Tutorial App";
+```
+
+Bây giờ, giả sử chúng ta có một component React và chúng ta muốn đồng bộ tiêu đề với trạng thái hiện tại; ví dụ, chúng ta có biến trạng thái counter và chúng ta muốn hiển thị giá trị của bộ đếm đó trong tiêu đề; cách thực hiện như sau:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function Counter() {
+    const [counter, setCounter] = useState(0);
+
+    useEffect(() => {
+        document.title = `Counter is ${counter}`;
+    });
+
+    function handleButtonClick() {
+        setCounter(prevCounter => prevCounter + 1);
+    }
+    
+    return <button onClick={handleButtonClick}>Click me {counter}</button>
+}
+```
+
+Bây giờ hàm này:
+
+```jsx
+() => {
+    document.title = `Counter is ${counter}`;
+}
+```
+
+sẽ được gọi sau mỗi lần hiển thị lại của component `Counter`.
+
+Vì vậy, sau mỗi lần component `Counter` hiển thị (hoặc hiển thị lại), hàm trên sẽ được gọi, từ đó cập nhật tiêu đề trang.
+
+Điều này cho phép bạn đồng bộ tiêu đề của tài liệu với giá trị `counter`.
 
