@@ -523,7 +523,7 @@ const title = React.createElement("h1", {}, "Hello World");
 
 - **JSX KHÔNG PHẢI là một phần của trình duyệt**
 
-Trình duyệt không hiểu được JSX vì đó là một cú pháp được tạo bởi React. Bạn sẽ cần một công cụ (như **babel**) để **chuyển đổi code JSX thành JavaScript thông thường** (sẽ chứa các cuộc gọi `React.createElement`).
+Trình duyệt không hiểu được JSX vì đó là một cú pháp được tạo bởi React. Bạn sẽ cần một công cụ (như **babel**) để **chuyển đổi code JSX thành JavaScript thông thường** (sẽ chứa các cuộc gọi `React.createElement`). **Ngoài ra babel còn giúp cho các trình duyệt cũ có thể chạy được khi ta sử dụng ES6 (phiên bản mới so với ES5)**
 
 - **Làm việc với JSX**
 
