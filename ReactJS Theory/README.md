@@ -11,6 +11,7 @@
   - [3. Destructuring, Rest](#3-destructuring-rest)
   - [4. Spread operator](#4-spread-operator)
   - [5. Modules](#5-modules)
+- [III. Set up](#iii-set-up)
 </details>
 
 <details>
@@ -368,6 +369,41 @@ import * as constants from './constants.js'
 console.log(constants); // object
 logger2('Test message...', constants.TYPE_WARN)
 ```
+
+## III. Set up
+[:arrow_up: Mục lục](#mục-lục)
+
+Extension sử dụng:
+
+```
+- Auto Rename Tag
+- Babel Javascript
+- Bookmarks
+- DotENV
+- ESLint
+- Javascript (ES6) code snippets
+- Prettier
+- Reactjs code snippets
+- Tailwind CSS Intellisense
+- Turbo Console Log
+- Visual Studio IntelliCode
+- styled-components-snippets
+- vscode-styled-components
+```
+
+File `setting.json`
+
+```
+"editor.defaultFormatter": "esbenp.prettier-vscode", "editor.inlineSuggest.enabled": true, "editor.formatOnSave": true, "typescript.updateImportsOnFileMove.enabled": "always", "emmet.includeLanguages": { "javascript": "javascriptreact", "vue-html": "html" }, "emmet.triggerExpansionOnTab": true, "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, "javascript.updateImportsOnFileMove.enabled": "always", "eslint.alwaysShowStatus": true, "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, "editor.suggestSelection": "first", "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue", "editor.wordWrapColumn": 100,
+```
+
+Extension tools sử dụng:
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/710561dc-4eb0-4df6-befe-386baa820e4a)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/f1285c66-7479-4e0d-a112-fd1f7dacc2e0)
+
+![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/1ec88a8c-f4f5-4637-a2de-b1da53ec085a)
 
 ## I. React, ReactDOM
 [:arrow_up: Mục lục](#mục-lục)
