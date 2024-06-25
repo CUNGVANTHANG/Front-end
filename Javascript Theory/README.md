@@ -2127,6 +2127,50 @@ const obj2 = {
 obj2.getName?.(123); // 123
 ```
 
+Dấu `?` có thể được sử dụng **để chỉ định một thuộc tính của một đối tượng là tùy chọn**. Điều này có nghĩa là thuộc tính đó có thể có hoặc không có trong đối tượng.
+
+```ts
+interface Person {
+  name: string;
+  age?: number; // age is optional
+}
+
+const person1: Person = { name: "Alice" };
+const person2: Person = { name: "Bob", age: 30 };
+```
+
+complier ra
+
+```js
+const person1 = { name: "Alice" };
+const person2 = { name: "Bob", age: 30 };
+```
+
+Dấu `?` cũng có thể được sử dụng để **chỉ định một tham số của một hàm là tùy chọn**. Điều này có nghĩa là **tham số đó có thể có hoặc không** khi hàm được gọi.
+
+```js
+function greet(name, greeting) {
+  return greeting ? `${greeting}, ${name}!` : `Hello, ${name}!`;
+}
+
+console.log(greet("Alice")); // Output: "Hello, Alice!"
+console.log(greet("Bob", "Good morning")); // Output: "Good morning, Bob!"
+```
+
+Dấu `?.` cho phép bạn truy cập vào thuộc tính của một đối tượng một cách an toàn, **nghĩa là nếu đối tượng hoặc thuộc tính không tồn tại (undefined hoặc null), nó sẽ trả về undefined thay vì gây ra lỗi**.
+
+```js
+const user = {
+  address: {
+    street: "123 Main St",
+    city: "Anytown"
+  }
+};
+
+const street = user?.address?.street; // "123 Main St"
+const zipcode = user?.address?.zipcode; // undefined
+```
+
 ## 13. IIFE, Scope, Closure
 ### A. IIFE
 [:arrow_up: Mục lục](#mục-lục)
