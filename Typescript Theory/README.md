@@ -128,3 +128,86 @@ Mọi biến `any` sẽ cho phép bạn **gán bất kỳ giá trị nào**, nh�
 
 Một đoạn code sử dụng `any` **khó bảo trì hơn vì nó khó hiểu hơn**. Cách mã nguồn được định kiểu chính là tài liệu cho biết thông tin về những gì dự kiến sẽ xảy ra với biến và hàm dựa trên kiểu
 
+### 6. Mảng thay đổi và Mảng bất biến
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Mảng thay đổi**
+
+**Chú ý:** **Kiểu dữ liệu của mảng sẽ được xác định cuối cùng sau khi không còn thay đổi nữa**
+
+Gán kiểu cho mảng
+
+```ts
+let a: number[];
+```
+
+Một cách định nghĩa kiểu cho mảng khác là sử dụng cú pháp `Array<T>`. Cả hai cách đều tương tự nhau.
+
+```ts
+let usingArraySyntax: Array<number> = [1, 2, 3];
+let myArray = new Array<number>();
+```
+
+```ts
+let myArray = new Array<number>();
+printArray(myArray);
+
+// Is the same as:
+let myArray2: Array<number> = [];
+printArray(myArray2);
+
+// Is the same as:
+let myArray3: number[] = [];
+printArray(myArray3);
+
+function printArray(a: number[]): void {
+    console.log(`Before: ${a}`);
+    a.push(1);
+    console.log(`After: ${a}`);
+}
+```
+
+- **Mảng bất biến**
+
+`ReadonlyArray` là một mảng `generic` **chỉ cho phép đọc dữ liệu** từ mảng sau khi nó được tạo. Giống như mảng thay đổi, có hai cách để viết một mảng bất biến (tập dữ liệu chỉ đọc).
+
+Cách tiếp cận đầu tiên là sử dụng ReadonlyArray<T> thay vì Array<T>.
+
+```ts
+// Cách 1:
+
+let list: ReadonlyArray<number> = [1, 2];
+list.push(3); // Lỗi
+console.log(list);
+```
+
+```ts
+// Cách 2
+
+let list: readonly number[] = [1, 2];
+list.push(3);
+console.log(list);
+```
+
+Đoạn code trên **không biên dịch** được vì bạn không thể thay đổi mảng bằng `push`. Lỗi này khá thú vị và dẫn đến cách viết mảng bất biến thứ hai.
+
+- **Phân tích luồng điều khiển để xây dựng mảng**
+
+Phân tích luồng điều khiển là quá trình TypeScript suy luận kiểu dữ liệu cho biến. Mảng có thể trở nên phức tạp vì chúng có thể **nhận nhiều giá trị thuộc nhiều kiểu dữ liệu khác nhau**. 
+
+_Ví dụ_: Đoạn code sau đây nhận một danh sách số hoặc chuỗi:
+
+```ts
+let myArray: (number | string)[] = [];
+```
+
+Nếu chúng ta để TypeScript tự suy luận kiểu, kết quả sẽ là:
+
+```ts
+let myArray  = [];
+```
+
+### 7. Giá trị undefined vs Giá trị null
+[:arrow_up: Mục lục](#mục-lục)
+
+
