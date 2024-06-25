@@ -210,4 +210,88 @@ let myArray  = [];
 ### 7. Giá trị undefined vs Giá trị null
 [:arrow_up: Mục lục](#mục-lục)
 
+- **Undefined**
+
+`undefined`: Là giá trị mặc định của một biến chưa được khởi tạo.
+
+Khi một biến được khai báo nhưng không được gán giá trị, giá trị của nó là `undefined`.
+
+```ts
+let x; // x is undefined
+```
+
+`undefined` là một kiểu dữ liệu riêng biệt trong TypeScript.
+
+```ts
+console.log(typeof undefined); // "undefined"
+```
+
+- **null**
+
+`null`: Là giá trị thể hiện một biến không có giá trị hoặc không trỏ đến đối tượng nào.
+
+`null` thường được gán cho một biến để chỉ rõ rằng biến này hiện không có giá trị.
+
+```ts
+let y = null; // y is null
+```
+
+`null` là một đối tượng.
+
+```ts
+console.log(typeof null); // "object"
+```
+
+- **Cách sử dụng trong TypeScript**
+
+**Union Types**: Khi sử dụng trong các kiểu liên hợp, chúng có thể xuất hiện cùng nhau.
+
+```ts
+let value: string | undefined | null;
+value = "Hello";  // OK
+value = undefined; // OK
+value = null; // OK
+```
+
+**Optional Chaining**: Khi truy cập vào các thuộc tính của một đối tượng một cách an toàn mà không gặp lỗi nếu một phần của chuỗi đó là `null` hoặc `undefined`.
+
+```ts
+const person = {
+  name: "Alice",
+  address: undefined
+};
+
+console.log(person.address); // Output: undefined
+
+// Sử dụng Optional Chaining
+const street = person.address?.street;
+console.log(street); // Output: undefined, vì person.address là undefined
+```
+
+**Strict Null Checks**: Khi sử dụng tùy chọn `strictNullChecks` trong TypeScript, bạn phải chỉ rõ kiểu cho phép `undefined` và `null` nếu muốn sử dụng chúng.
+
+```ts
+let name: string | undefined;
+name = "Alice"; // OK
+name = undefined; // OK
+name = null; // Error
+```
+
+- **Phân biệt sử dụng union và optional trong một số trường hợp**
+
+```ts
+function functionWithUndefinedParameter(a:number|undefined, b:number){ }
+functionWithUndefinedParameter(1 , 2);
+functionWithUndefinedParameter(undefined, 2);
+functionWithUndefinedParameter(, 2); // Does not compile
+```
+
+Điểm khác biệt là với `|undefined`, tham số phải được truyền với **giá trị hoặc undefined**. Tuy nhiên, với `?`, bạn **có thể truyền undefined hoặc không truyền gì cả**.
+
+```ts
+function functionWithQuestionMarkParameter1(a:number, b?:number){}
+functionWithQuestionMarkParameter1(1, 2);
+functionWithQuestionMarkParameter1(1, undefined);
+functionWithQuestionMarkParameter1(1);
+```
 
