@@ -12,6 +12,10 @@
 **Ví dụ:**
 
 ```ts
+// Kiểu any
+let variables: any = "hello"
+variables = 1132
+
 // Kiểu string
 let name: string = "Hello World"
 
@@ -27,10 +31,22 @@ let arr2: number[] = [1, 2, 3, 4, 5]
 // Kiểu boolean
 let tasty: boolean = true
 
-// Kiểu hàm void
+// Kiểu hàm void: trả về undefined
 function speak(food: string, energy: number): void {
   console.log("Our " + food + " has " + energy + " calories.");
 }
+
+// undefined
+let obj: number | undefined = 8;
+obj = undefined
+
+// null
+let names: null | string = "Thang";
+names = null
+
+// Gán 2 kiểu
+let number: number | string = 1;
+number = "2"
 ```
 
 ### 2. Type Inference
@@ -280,6 +296,7 @@ name = null; // Error
 - **Phân biệt sử dụng union và optional trong một số trường hợp**
 
 ```ts
+// union
 function functionWithUndefinedParameter(a:number|undefined, b:number){ }
 functionWithUndefinedParameter(1 , 2);
 functionWithUndefinedParameter(undefined, 2);
@@ -289,9 +306,138 @@ functionWithUndefinedParameter(, 2); // Does not compile
 Điểm khác biệt là với `|undefined`, tham số phải được truyền với **giá trị hoặc undefined**. Tuy nhiên, với `?`, bạn **có thể truyền undefined hoặc không truyền gì cả**.
 
 ```ts
+// optional
 function functionWithQuestionMarkParameter1(a:number, b?:number){}
 functionWithQuestionMarkParameter1(1, 2);
 functionWithQuestionMarkParameter1(1, undefined);
 functionWithQuestionMarkParameter1(1);
+```
+
+### 8. Kiểu never
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `never` trong TypeScript được **sử dụng để chỉ những giá trị mà không bao giờ xảy ra**.
+
+- Sử dụng never cho các hàm không bao giờ trả về giá trị, như các **hàm ném ra ngoại lệ hoặc chạy mãi mãi**.
+
+- Sử dụng never trong các kiểm tra sự đầy đủ của union types để đảm bảo tất cả các trường hợp đã được xử lý
+
+**Ví dụ với hàm ném ngoại lệ:**
+
+```ts
+function throwError(message: string): never {
+    throw new Error(message);
+}
+
+// Sử dụng hàm
+try {
+    throwError("Something went wrong!");
+} catch (error) {
+    console.error(error);
+}
+```
+
+**Ví dụ với hàm chạy mãi mãi:**
+
+```ts
+function infiniteLoop(): never {
+    while (true) {
+        console.log("This loop runs forever!");
+    }
+}
+
+// Gọi hàm
+// infiniteLoop(); // Cẩn thận với hàm này vì nó sẽ làm treo chương trình
+```
+
+**Ví dụ kiểm tra sự đầy đủ trong union types:**
+
+```ts
+type Animal = "cat" | "dog" | "fish";
+
+function handleAnimal(animal: Animal): string {
+    switch (animal) {
+        case "cat":
+            return "Meow!";
+        case "dog":
+            return "Woof!";
+        case "fish":
+            return "Blub!";
+        default:
+            // Nếu chúng ta thêm một loại động vật mới vào kiểu Animal mà không cập nhật hàm này,
+            // TypeScript sẽ báo lỗi ở đây, vì kiểu `never` không bao giờ nên xảy ra.
+            const exhaustiveCheck: never = animal;
+            throw new Error(`Unhandled animal type: ${exhaustiveCheck}`);
+    }
+}
+
+// Sử dụng hàm
+console.log(handleAnimal("cat")); // Output: "Meow!"
+console.log(handleAnimal("dog")); // Output: "Woof!"
+console.log(handleAnimal("fish")); // Output: "Blub!"
+```
+
+Cuối cùng, `never` được **sử dụng để biểu thị các trạng thái hoặc tình huống không mong đợi hoặc không nên xảy ra**. 
+
+Ví dụ: Ngoại lệ không phải là một hành vi nên xảy ra. Vòng lặp vô hạn trong hàm không nên được thiết kế đề tồn tại lâu dài trong hệ thống. Một điều kiện không bao giờ được thực thi cũng không nên tồn tại trong chương trình.
+
+### 9. Ép kiểu
+[:arrow_up: Mục lục](#mục-lục)
+
+Có hai cách phổ biến để ép kiểu trong TypeScript: sử dụng cú pháp `angle-bracket` (`<>`) và cú pháp `as`.
+
+**1. Sử dụng cú pháp angle-bracket (`<>`)**
+
+Cú pháp này thường được sử dụng với JSX trong React, vì vậy nếu bạn đang làm việc với JSX, hãy sử dụng cú pháp `as`.
+
+Ví dụ:
+
+```ts
+let someValue: any = "this is a string";
+
+// Ép kiểu từ any sang string
+let strLength: number = (<string>someValue).length;
+
+console.log(strLength); // Output: 16
+```
+
+**2. Sử dụng cú pháp `as`**
+
+Cú pháp này được ưa chuộng hơn trong các dự án TypeScript hiện đại và đặc biệt hữu ích khi bạn đang làm việc với JSX trong React.
+
+Ví dụ:
+
+```ts
+let someValue: any = "this is a string";
+
+// Ép kiểu từ any sang string
+let strLength: number = (someValue as string).length;
+
+console.log(strLength); // Output: 16
+```
+
+### 10. Kiểu unknown
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `unknown` có một phần giống một kiểu dữ liệu cụ thể và một phần giống kiểu `any` cho phép **biểu diễn mọi kiểu dữ liệu**. Khai báo một biến với kiểu `unknown` cho phép ta **thiết lập nhiều kiểu dữ liệu** đồng thời **ngăn chặn việc truy cập không mong muốn** vào các trường thuộc tính hoặc giá trị của kiểu đó.
+
+Đoạn code sau đây cho thấy một biến với kiểu `any` có thể được gán một chuỗi và sau đó được sử dụng với một hàm kiểu `string`. Sau đó, biến được gán cho một giá trị là `number` mà không có hàm `substr`. Tuy nhiên, TypeScript không phát hiện được việc gọi một hàm không tồn tại.
+
+```ts
+let variable1: any;
+variable1 = "It is a string";
+console.log(variable1.substr(0,2)) // Output "it"
+variable1 = 1;
+console.log(variable1.substr(0,2)) // Crash
+```
+
+Việc thay đổi kiểu từ `any` thành `unknown` thông báo cho TypeScript biết rằng kiểu đó có thể nhận bất kỳ giá trị nào nhưng phải sử dụng cẩn thận vì nó không cho phép gọi hàm.
+
+```ts
+let variable2: unknown;
+variable2 = "It is a string";
+console.log(variable2.substr(0,2)) // Does not compile here
+variable2 = 1;
+console.log(variable2.substr(0,2)) // Does not compile here
 ```
 
