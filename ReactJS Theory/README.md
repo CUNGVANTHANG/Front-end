@@ -1193,8 +1193,40 @@ if (props.enabled) {
 }
 ```
 
+- **Stale state**
+
+```jsx
+const Counter = () => {
+    const [count, setCount] = useState(0);
+    const handleIncrement = () => {
+        setTimeout(function delay() {
+            setCount(count + 1);
+        }, 1000);
+    };
+
+    return <div onClick={handleIncrement}>Increment {count}</div>;
+};
+```
+
+Kết quả của đoạn code trên là khi ta bấm 5 lần thì nó vẫn chỉ hiện thị 1. Đây còn gọi là hiện tượng Stale state, khi mà ta cố gắng thay đổi giá trị của biến bên ngoài trong function. Để khắc phục điều này chúng ta sử dụng callback
+
+```jsx
+const Counter = () => {
+    const [count, setCount] = useState(0);
+    const handleIncrement = () => {
+        setTimeout(function delay() {
+            setCount((count) => count + 1);
+        }, 1000);
+    };
+
+    return <div onClick={handleIncrement}>Increment {count}</div>;
+};
+```
+
 ### 2. Closures
 [:arrow_up: Mục lục](#mục-lục)
+
+Hiểu đơn giản là truy xuất 1 biến ở bên ngoài function được gọi là **Closure**
 
 **Closure** là khi hàm bên trong có quyền truy cập vào các biến của hàm bên ngoài. Hãy xem ví dụ dưới đây:
 
