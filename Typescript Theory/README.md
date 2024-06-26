@@ -854,3 +854,130 @@ Giá trị của các thành viên `enum` có thể **được thiết lập tr�
 
 2. Giá trị thuần tính toán: Các giá trị được tính toán hoàn toàn bằng hàm.
 
+### 2. Truy cập giá trị Enum
+[:arrow_up: Mục lục](#mục-lục)
+
+**TypeScript ánh xạ đối tượng để cho phép truy cập giá trị**
+
+Một biến được gán với `enum` có giá trị number cho phép bạn truy cập tên của `enum` từ số nguyên đó. Tuy nhiên, với `enum` có giá trị chuỗi, bạn không thể làm như vậy. Điều này có nghĩa bạn có thể sử dụng tên `enum` theo sau là tên của hằng số để lấy giá trị. Ngoài ra, với một số, bạn cũng có thể sử dụng giá trị để trả về tên.
+
+Ví dụ: một enum có tên là `Orientation` với các giá trị `East`, `West`, `North`, `South` có thể sử dụng `Orientation.East` để nhận giá trị `0` hoặc sử dụng `Orientation[0]` để nhận giá trị `East`. Nó hoạt động bởi vì TypeScript tạo ra một đối tượng `map` cho phép bạn truy cập bằng cách sử dụng tên của hằng số hoặc giá trị của nó.
+
+Dưới đây là code được tạo ra từ `enum` orientation:
+
+```ts
+enum Orientation {
+    East,
+    West,
+    North,
+    South,
+}
+let directionInNumber = Orientation.East; // Access with the Enum
+let directionInString = Orientation[0];  // Access the Enum string from number
+console.log(directionInNumber);
+console.log(directionInString);
+```
+
+Như đã đề cập, với `enum` có giá trị là chuỗi, ta không thể sử dụng cách truy cập giống như với enum có giá trị là số. Đoạn code sau không biên dịch được vì các dòng **8** và **9** cố gắng truy cập `enum` theo cách không chính xác.
+
+```ts
+enum OrientationString {
+    East = "E",
+    West = "W",
+    North = "N",
+    South = "S",
+}
+let directionInNumber = OrientationString.East; // Access with the Enum
+let directionInString = OrientationString[0];  // Access the Enum string from number
+let directionInString2 = OrientationString["E"];  // Access the Enum string from number
+console.log(directionInNumber);
+console.log(directionInString);
+console.log(directionInString2);
+```
+
+**Thiết lập enum là const để tăng tốc độ xử lý**
+
+`enum` có thể được **thiết lập là hằng số** để tăng tốc độ thực thi. Điều này có nghĩa là trong quá trình thực thi, thay vì tham chiếu đến các hàm được TypeScript tạo ra khi chuyển đổi code sang JavaScript, chương trình sẽ sử dụng giá trị trực tiếp.
+
+Ví dụ: khi sử dụng `enum` không phải là hằng số, giá trị được gán cho một biến `direction` với `Orientation.East` sẽ bằng một hàm tìm kiếm giá trị trong `map` để lấy giá trị tương ứng. Tuy nhiên, khi sử dụng `enum` là hằng số, giá trị trong mã nguồn đã chuyển đổi sẽ được gán trực tiếp là `0` - không cần thêm hàm hoặc `map` nữa.
+
+**Hợp nhất các giá trị**
+
+Giống như `interface`, `enum` có thể được định nghĩa ở nhiều nơi. Bạn có thể bắt đầu định nghĩa enum và sau đó định nghĩa lại nó một lần nữa. Cuối cùng, tất cả các giá trị sẽ được hợp nhất thành một `enum` duy nhất. 
+
+Tuy nhiên, việc định nghĩa một `enum` nhiều lần có một điều kiện là: giá trị đầu tiên của `enum` phải được định nghĩa rõ ràng. Nếu một giá trị rõ ràng được định nghĩa hai lần, chỉ giá trị cuối cùng sẽ được liên kết với `enum` khi sử dụng giá trị đảo ngược để tìm kiếm một `enum`. Liệt kê cùng một giá trị hai lần không phải lúc nào cũng là kết quả của việc định nghĩa `enum` nhiều lần; thay vào đó, một định nghĩa `enum` đơn lẻ cũng có thể có nhiều mục có cùng giá trị.
+
+```ts
+enum EnumA {
+    ChoiceA,
+}
+enum EnumA {
+    ChoiceB = 1,
+}
+
+let variable1: EnumA = EnumA.ChoiceA;
+console.log(variable1);
+variable1 = EnumA.ChoiceB;
+console.log(variable1);
+```
+
+**Thêm hàm**
+
+Một tính năng khác của `enum` là gắn các hàm có thể được truy cập tĩnh thông qua `enum`. Sử dụng `enum` kết hợp với hàm cho phép bạn sử dụng `Orientation.East` cũng như `Orientation.yourFunction`. Để định nghĩa một hàm trong `enum`, bạn cần sử dụng một **không gian tên cùng với một hàm được xuất**.
+
+```ts
+enum Orientation {
+    East,
+    West,
+    North,
+    South,
+}
+namespace Orientation {
+    export function yourFunction() {
+        console.log("I am in a Enum");
+    }
+}
+Orientation.yourFunction();
+```
+
+## III. Kiểu Generic
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `generic` giúp tăng **khả năng tái sử dụng của mã nguồn bằng cách tham số hóa một kiểu bằng kiểu khác**.
+
+```ts
+// Generic Component that has properties that can change depending of the implementation
+interface MyComponent<TProps> {
+  name: string;
+  id: number;
+  props: TProps;
+}
+
+// First property that has a string
+interface Props1 {
+  color: string;
+}
+
+// Second property that has a number
+interface Props2 {
+  size: number;
+}
+
+// First component that has color in property because it is generic with Props1
+const component1: MyComponent<Props1> = {
+  name: "My Component One",
+  id: 1,
+  props: { color: "red" }
+};
+
+// Second component that has size in property because it is generic with Props2
+const component2: MyComponent<Props2> = {
+  name: "My Component Two",
+  id: 2,
+  props: { size: 100 }
+};
+
+console.log(component1);
+console.log(component2);
+```
+
