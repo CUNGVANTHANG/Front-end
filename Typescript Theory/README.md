@@ -14,6 +14,14 @@
  - [8. Kiểu never](#8-kiểu-never)
  - [9. Ép kiểu](#9-ép-kiểu)
  - [10. Kiểu unknown](#10-kiểu-unknown)
+ - [11. Sử dụng kiểu hằng để thu hẹp kiểu nguyên thủy](#11-sử-dụng-kiểu-hằng-để-thu-hẹp-kiểu-nguyên-thủy)
+ - [12. Non-Null Assertion Operator](#12-non-null-assertion-operator)
+ - [13. Kiểu Symbol và Unique Symbol](#13-kiểu-symbol-và-unique-symbol)
+</details>
+
+<details>
+  <summary>II. Enum</summary>
+
 </details>
 
 ## I. Các kiến thức cơ bản về biến
@@ -431,6 +439,54 @@ let strLength: number = (someValue as string).length;
 console.log(strLength); // Output: 16
 ```
 
+**3. Rủi ro của việc chuyển kiểu**
+
+Nếu bạn trực tiếp chuyển kiểu thành `string` mà không sử dụng kiểu `unknown`, TypeScript sẽ **cảnh báo rằng không có điểm chung giữa hai kiểu dữ liệu**. Trình biên dịch TypeScript đưa ra giải pháp cho vấn đề này là chuyển đối sang kiểu `unknown`.
+
+```ts
+const str: string = "123";
+const bool: boolean = true;
+const castFromString:number = str as number;
+const castFromBoolean:number = bool as number;
+console.log(castFromString)
+console.log(castFromBoolean)
+```
+
+Trong trường hợp đó, **ta cần chuyển đổi hai lần**. Trước tiên, bạn **chuyển kiểu thành `unknown` và sau đó chuyển thành kiểu mong muốn**.
+
+```ts
+const str: string = "123";
+const bool: boolean = true;
+const castFromString:number= (str as unknown) as number;
+const castFromBoolean:boolean = (bool as unknown) as boolean;
+console.log(castFromString)
+console.log(castFromBoolean)
+```
+
+**4. Khẳng định kiểu**
+
+Việc chuyển đổi kiểu cần được cẩn trọng xem xét vì bạn có thể chuyển đổi kiểu của mọi biến sang bất kỳ kiểu nào, dẫn đến giá trị có thể không đồng nhất với hành vi của kiểu dữ liệu mới. Một trường hợp cụ thể là **type assertion (khẳng định kiểu)**. Khẳng định kiểu được sử dụng để thông báo cho TypeScript biết kiểu dữ liệu của một đối tượng.
+
+```ts
+interface YourType {
+  m1: string;
+}
+
+let v1 = {m1: "ValueOfM1"} as YourType;
+console.log(v1);
+```
+
+Ví dụ: nếu bạn có một interface yêu cầu nhiều trường và bạn chuyển kiểu của một đối tượng rỗng thành interface đó, code sẽ biên dịch ngay cả khi đối tượng không có thành viên.
+
+```ts
+interface IMyType {
+  m1: string;
+  m2: number;
+}
+
+let myVariable = {} as IMyType; //
+```
+
 ### 10. Kiểu unknown
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -598,3 +654,132 @@ function handleResponse(response: Response) {
 
 handleResponse(response);
 ```
+
+### 12. Non-Null Assertion Operator
+[:arrow_up: Mục lục](#mục-lục)
+
+Non-Null Assertion Operator (`!`) được sử dụng để khẳng định rằng một biểu thức không phải là `null` hoặc `undefined`. Điều này cho phép bạn bỏ qua kiểm tra `null` và `undefined` và báo cho TypeScript rằng **giá trị sẽ luôn tồn tại**.
+
+Cú pháp:
+
+```ts
+let value: string | null;
+value!.toUpperCase();
+```
+
+_Ví dụ:_
+
+```ts
+function processString(input: string | null) {
+    // Khẳng định rằng input không phải là null
+    let nonNullInput = input!;
+    console.log(nonNullInput.toUpperCase());
+}
+
+processString("Hello"); // Output: "HELLO"
+processString(null);    // Lỗi runtime: Cannot read property 'toUpperCase' of null
+```
+
+Trong ví dụ này, `input!` khẳng định rằng `input` không phải là `null`. Điều này giúp tránh lỗi biên dịch, nhưng bạn cần chắc chắn rằng giá trị thực sự không phải là `null` tại thời điểm chạy, nếu không sẽ gây ra lỗi runtime
+
+### 13. Kiểu Symbol và Unique Symbol
+[:arrow_up: Mục lục](#mục-lục)
+
+`symbol` là một kiểu nguyên thủy cho phép bạn tạo ra các giá trị độc nhất, điều này rất hữu ích khi bạn cần các khóa độc nhất cho các thuộc tính của đối tượng hoặc khi bạn cần các hằng số duy nhất.
+
+```ts
+let sym1 = Symbol();
+let sym2 = Symbol("description");
+
+console.log(typeof sym1); // Output: "symbol"
+console.log(sym1 === sym2); // Output: false, mỗi symbol là duy nhất
+
+// Sử dụng symbol làm khóa của đối tượng
+const obj = {
+    [sym1]: "value1",
+    [sym2]: "value2"
+};
+
+console.log(obj[sym1]); // Output: "value1"
+console.log(obj[sym2]); // Output: "value2"
+```
+
+**Hằng số khác symbol ở chỗ symbol là duy nhất**. Khi sử dụng hằng số chuỗi, **ai đó có thể truyền một chuỗi có giá trị giống với hằng số và chuỗi đó sẽ được chấp nhận như là một giá trị hợp lệ.** Tuy nhiên, khi sử dụng symbol hằng số, chỉ có cùng một symbol hằng số mới có giá trị bằng nhau. **Với symbol, ta không thể ép kiểu nó thành chuỗi**. Điều này có nghĩa là bạn không thể thêm một chuỗi vào symbol và mong đợi nó trở thành chuỗi.
+
+```ts
+let v1 = "value1";
+let v2 = "value1";
+if (v1 === v2) {
+    console.log("Equal when string"); // This will print
+}
+
+let s1 = Symbol("value1");
+let s2 = Symbol("value1");
+if (s1 === s2) {
+    console.log("Equal when symbol"); // This will not print, they are not equal
+}
+```
+
+`unique symbol` là một phần mở rộng của `symbol` trong TypeScript, được sử dụng để đảm bảo rằng một giá trị `symbol` là duy nhất và có thể được dùng như một kiểu hằng số.
+
+```ts
+const sym3: unique symbol = Symbol();
+const sym4: unique symbol = Symbol();
+
+// sym3 và sym4 là hai giá trị duy nhất và không thể gán cho nhau
+// let sym5: unique symbol = sym3; // Error: Type 'unique symbol' is not assignable to type 'unique symbol'
+
+interface Foo {
+    [sym3]: string;
+}
+
+// Tạo một đối tượng tuân theo giao diện Foo
+const foo: Foo = {
+    [sym3]: "Hello"
+};
+
+console.log(foo[sym3]); // Output: "Hello"
+```
+
+- **Ứng dụng của symbol và unique symbol**
+
+**Khóa thuộc tính độc nhất:** Sử dụng `symbol` để tránh xung đột tên thuộc tính trong các đối tượng lớn hoặc khi làm việc với các thư viện.
+
+**Định nghĩa hằng số duy nhất:** Sử dụng `unique symbol` để định nghĩa các hằng số duy nhất và đảm bảo tính toàn vẹn kiểu.
+
+_Ví dụ ứng dụng thực tế:_
+
+Sử dụng `symbol` làm khóa thuộc tính trong đối tượng:
+
+```ts
+const uniqueKey = Symbol("uniqueKey");
+
+const myObject = {
+    [uniqueKey]: "This is a unique value"
+};
+
+console.log(myObject[uniqueKey]); // Output: "This is a unique value"
+```
+
+Sử dụng `unique symbol` trong giao diện:
+
+```ts
+const UNIQUE_ID: unique symbol = Symbol("uniqueId");
+
+interface Person {
+    name: string;
+    [UNIQUE_ID]: number;
+}
+
+const person: Person = {
+    name: "Alice",
+    [UNIQUE_ID]: 123
+};
+
+console.log(person[UNIQUE_ID]); // Output: 123
+```
+
+## II. Enum
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. 
