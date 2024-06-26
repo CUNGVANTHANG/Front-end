@@ -54,6 +54,7 @@
   - [B. Bind](#b-bind)
   - [C. Call](#c-call)
   - [D. Apply](#d-apply)
+- [16. Nullish Coalescing Operator](#16-nullish-coalescing-operator)
 
 ## 1. Biến, comments, built-in
 [:arrow_up: Mục lục](#mục-lục)
@@ -2973,3 +2974,30 @@ function fn() {
     fn.apply(thisArg, [arg1, arg2])
 }
 ```
+
+## 16. Nullish Coalescing Operator
+[:arrow_up: Mục lục](#mục-lục)
+
+Nullish Coalescing Operator (`??`) được giới thiệu trong ECMAScript 2020 (ES11). Nó được sử dụng để cung cấp một giá trị mặc định khi một biểu thức là `null` hoặc `undefined`.
+
+Cú pháp:
+
+```js
+let value = expression ?? defaultValue;
+```
+
+_Ví dụ:_
+
+```js
+let name = null;
+let defaultName = "Guest";
+
+let displayName = name ?? defaultName;
+console.log(displayName); // Output: "Guest"
+
+name = "Alice";
+displayName = name ?? defaultName;
+console.log(displayName); // Output: "Alice"
+```
+
+Trong ví dụ này, `displayName` sẽ nhận giá trị từ `name` nếu `name` không phải là `null` hoặc `undefined`. Nếu `name` là `null` hoặc `undefined`, `displayName` sẽ nhận giá trị từ `defaultName`.
