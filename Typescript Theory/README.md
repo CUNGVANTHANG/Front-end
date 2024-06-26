@@ -782,4 +782,75 @@ console.log(person[UNIQUE_ID]); // Output: 123
 ## II. Enum
 [:arrow_up: Mục lục](#mục-lục)
 
-### 1. 
+`enum` (viết tắt của "**enumeration**") được sử dụng để định nghĩa một tập hợp các hằng số có tên, giúp mã dễ đọc và bảo trì hơn.
+
+### 1. Enum có giá trị và Enum không có giá trị
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Enum có giá trị:**
+
+`enum` có thể có kiểu string. Trong trường hợp này, bạn phải cung cấp giá trị cho mỗi thành viên mà không có ngoại lệ nào.
+
+```ts
+enum MyStringEnum {
+    ChoiceA = "A",
+    ChoiceB = "B",
+}
+```
+
+Nếu mỗi thành viên của `enum` đã được định nghĩa thì bạn có thể sử dụng kiểu enum hỗn hợp (các thành viên có kiểu dữ liệu khác nhau). 
+
+Ví dụ: enum có một thành viên là số nguyên và một thành viên là chuỗi. Tuy nhiên, bạn không nên kết hợp các kiểu khác nhau trong enum vì nó có thể gây nhầm lẫn.
+
+```ts
+enum MyStringAndNumberEnum {    
+    ChoiceA, // 0    
+    ChoiceB = "B",    
+    ChoiceC = 100
+}
+```
+
+- **Enum không có giá trị:**
+
+`enum` là một kiểu dữ liệu dùng để giới hạn và định nghĩa một nhóm hằng số. 
+
+**Khi khai báo enum**, ta phải cung cấp tên cho nó và chỉ định các giá trị được chấp nhận trong `enum`. Sau đó, bạn có thể sử dụng `enum` như một kiểu dữ liệu. 
+
+Để sử dụng `enum`, ta sẽ gọi tên của nó, theo sau là dấu chấm `.` và một giá trị tiềm năng từ danh sách các giá trị đã được định nghĩa.
+
+```ts
+enum MyEnum {
+    ChoiceA,
+    ChoiceB,
+    ChoiceC,
+}
+let x: MyEnum = MyEnum.ChoiceA;
+console.log(x);
+```
+
+Các giá trị được xác định là các hằng số **bắt đầu từ 0** cho thành viên đầu tiên và **tăng lên một đơn vị cho mỗi thành viên tiếp theo cho đến khi kết thúc danh sách**. Các giá trị enum trong trường hợp này được **xác định một cách ngầm định**. Ngoài ra, ta có thể chỉ định một giá trị cụ thể cho mỗi thành viên bằng cách gán một số nguyên. Trong trường hợp đó, giá trị enum được xác định một cách tường minh.
+
+```ts
+enum MyEnum {
+    ChoiceA,
+    ChoiceB,
+    ChoiceC,
+}
+enum MyEnum2 {
+    ChoiceA, // 0
+    ChoiceB = 100, // 100
+    ChoiceC, // 101
+    ChoiceD = MyEnum.ChoiceC, // 2
+}
+console.log(MyEnum2.ChoiceA);
+console.log(MyEnum2.ChoiceB);
+console.log(MyEnum2.ChoiceC);
+console.log(MyEnum2.ChoiceD);
+```
+
+Giá trị của các thành viên `enum` có thể **được thiết lập trực tiếp hoặc thông qua tính toán**. Có hai loại tính toán:
+
+1. Giá trị hằng số: Các giá trị được cung cấp bởi `enum` khác hoặc giá trị được tính toán bằng phép cộng, trừ, nhân, chia, toán tử bitwise, chia lấy phần dư, toán tử "or," "and," "xor" hoặc toán tử đảo ngược (~). 
+
+2. Giá trị thuần tính toán: Các giá trị được tính toán hoàn toàn bằng hàm.
+
