@@ -1,6 +1,21 @@
 # Typescript Theory
 ## Mục lục
 
+<details>
+  <summary>I. Các kiến thức cơ bản về biến</summary>
+
+ - [1. Type Annotations](#1-type-annotations)
+ - [2. Type Inference](#2-type-inference)
+ - [3. Khai báo biến trong mã lệnh không được định kiểu](#3-khai-báo-biến-trong-mã-lệnh-không-được-định-kiểu)
+ - [4. Kiểu dữ liệu số](#4-kiểu-dữ-liệu-số)
+ - [5. any](#5-any)
+ - [6. Mảng thay đổi và Mảng bất biến](#6-mảng-thay-đổi-và-mảng-bất-biến)
+ - [7. Giá trị undefined vs Giá trị null](#7-giá-trị-undefined-vs-giá-trị-null)
+ - [8. Kiểu never](#8-kiểu-never)
+ - [9. Ép kiểu](#9-ép-kiểu)
+ - [10. Kiểu unknown](#10-kiểu-unknown)
+</details>
+
 ## I. Các kiến thức cơ bản về biến
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -421,6 +436,8 @@ console.log(strLength); // Output: 16
 
 Kiểu `unknown` có một phần giống một kiểu dữ liệu cụ thể và một phần giống kiểu `any` cho phép **biểu diễn mọi kiểu dữ liệu**. Khai báo một biến với kiểu `unknown` cho phép ta **thiết lập nhiều kiểu dữ liệu** đồng thời **ngăn chặn việc truy cập không mong muốn** vào các trường thuộc tính hoặc giá trị của kiểu đó.
 
+Hiểu đơn giản: Nó tương tự như kiểu `any`, nhưng an toàn hơn vì bạn không thể trực tiếp thực hiện các thao tác trên một giá trị có kiểu `unknown` **mà không kiểm tra kiểu của nó trước**.
+
 Đoạn code sau đây cho thấy một biến với kiểu `any` có thể được gán một chuỗi và sau đó được sử dụng với một hàm kiểu `string`. Sau đó, biến được gán cho một giá trị là `number` mà không có hàm `substr`. Tuy nhiên, TypeScript không phát hiện được việc gọi một hàm không tồn tại.
 
 ```ts
@@ -441,3 +458,143 @@ variable2 = 1;
 console.log(variable2.substr(0,2)) // Does not compile here
 ```
 
+- **Sử dụng `unknown` với kiểm tra kiểu**
+
+Trước khi thực hiện bất kỳ thao tác nào trên giá trị có kiểu `unknown`, bạn phải kiểm tra kiểu của nó
+
+```ts
+let value: unknown = "Hello";
+
+if (typeof value === "string") {
+    console.log(value.toUpperCase()); // "HELLO"
+}
+
+value = 42;
+
+if (typeof value === "number") {
+    console.log(value.toFixed(2)); // "42.00"
+}
+```
+
+- **Sử dụng `unknown` với các hàm**
+
+Khi làm việc với các hàm, bạn có thể sử dụng kiểu `unknown` cho các tham số mà bạn không biết trước kiểu của chúng.
+
+```ts
+function printValue(value: unknown): void {
+    if (typeof value === "string") {
+        console.log(`String value: ${value}`);
+    } else if (typeof value === "number") {
+        console.log(`Number value: ${value}`);
+    } else {
+        console.log("Unknown type");
+    }
+}
+
+printValue("Hello"); // Output: String value: Hello
+printValue(42);      // Output: Number value: 42
+printValue(true);    // Output: Unknown type
+```
+
+### 11. Sử dụng kiểu hằng để thu hẹp kiểu nguyên thủy
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu hằng (**literal type**) cho phép bạn chỉ định một giá trị cụ thể làm kiểu, giúp TypeScript hiểu rõ hơn về giá trị của biến.
+
+_Ví dụ:_
+
+**1. Kiểu hằng chuỗi**
+
+Bạn có thể khai báo biến chỉ nhận một giá trị chuỗi cụ thể.
+
+```ts
+let direction: "left" | "right";
+
+direction = "left"; // Đúng
+direction = "right"; // Đúng
+// direction = "up"; // Sai, vì không khớp với kiểu hằng đã định nghĩa
+```
+
+Hằng ký tự chuỗi có thể được gán mà không cần `type` bằng cách gán một giá trị chuỗi với khai báo `const` hoặc `as const`.
+
+```ts
+const stringLit1 = "oneValueOnly";
+let stringLit2 = "oneValueOnly" as const
+```
+
+**2. Kiểu hằng số**
+
+Tương tự, bạn có thể khai báo biến chỉ nhận một giá trị số cụ thể.
+
+```ts
+let count: 0 | 1 | 2;
+
+count = 0; // Đúng
+count = 1; // Đúng
+count = 2; // Đúng
+// count = 3; // Sai, vì không khớp với kiểu hằng đã định nghĩa
+```
+
+**3. Kiểu hằng boolean**
+
+Bạn có thể sử dụng kiểu hằng `boolean` để giới hạn biến chỉ nhận giá trị `true` hoặc `false`.
+
+```ts
+let isActive: true | false;
+
+isActive = true; // Đúng
+isActive = false; // Đúng
+// isActive = 1; // Sai, vì không phải là kiểu boolean
+```
+
+**4. Sử dụng kiểu hằng để thu hẹp kiểu**
+
+Kiểu hằng rất hữu ích trong việc thu hẹp kiểu của một biến, đặc biệt khi làm việc với **union types**.
+
+```ts
+type Status = "success" | "error" | "loading";
+
+function handleStatus(status: Status) {
+    if (status === "success") {
+        console.log("Operation was successful!");
+    } else if (status === "error") {
+        console.log("There was an error.");
+    } else if (status === "loading") {
+        console.log("Loading...");
+    }
+}
+
+// Sử dụng hàm
+handleStatus("success"); // Output: Operation was successful!
+handleStatus("error");   // Output: There was an error.
+handleStatus("loading"); // Output: Loading...
+// handleStatus("completed"); // Sai, vì không khớp với kiểu hằng Status
+```
+
+**5. Kết hợp kiểu hằng với kiểu nguyên thủy**
+
+Bạn có thể kết hợp kiểu hằng với các kiểu nguyên thủy khác để tạo các kiểu phức tạp hơn.
+
+```ts
+type Response = {
+    status: "success" | "error";
+    code: 200 | 400 | 500;
+    message: string;
+};
+
+const response: Response = {
+    status: "success",
+    code: 200,
+    message: "Request succeeded"
+};
+
+function handleResponse(response: Response) {
+    if (response.status === "success" && response.code === 200) {
+        console.log(response.message); // Output: Request succeeded
+    } else if (response.status === "error") {
+        console.log(`Error: ${response.message}`);
+    }
+}
+
+handleResponse(response);
+```
