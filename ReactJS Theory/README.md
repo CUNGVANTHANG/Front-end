@@ -2563,7 +2563,7 @@ function Countdown() {
     function handleCountdownClick() {
         if (count > 0){
             setCount(count - 1);
-        }else if (count === 0) {
+        } else if (count === 0) {
             setCount(5);
             setLives(lives - 1);
         }
@@ -2578,4 +2578,44 @@ function Countdown() {
 
 createRoot(document.querySelector("#react-root")).render(<React.StrictMode><Countdown /></React.StrictMode>);
 ```
+
+### 4. Local Storage
+[:arrow_up: Mục lục](#mục-lục)
+
+`localStorage` (hoặc `window.localStorage`) là một API của trình duyệt cho phép chúng ta lưu trữ dữ liệu dưới dạng các cặp khóa và giá trị.
+
+Vấn đề với `localStorage` là **nó là một API đồng bộ**, tức là:
+
+```jsx
+console.log("A");
+localStorage.setItem("key", "value");
+console.log("B");
+```
+
+Trong đoạn code trên, chúng ta sẽ thấy `console.log("A")` được in ra trước, sau đó, nếu `localStorage.setItem()` **mất 200 mili giây để hoàn thành** thì `console.log("B")` **sẽ phải đợi** `localStorage.setItem()` hoàn thành trước khi nó được gọi.
+
+Cú pháp:
+
+```jsx
+localStorage.setItem("key", "value")
+```
+
+Để lưu trữ trạng thái vào `localStorage`, bạn phải sử dụng API localStorage **bên trong** cuộc gọi useEffect:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [random, setRandom] = useState(Math.random());
+
+    useEffect(() => {
+        // every time the value of random changes, save it to localStorage:
+        localStorage.setItem("random", random);
+    }, [random]);
+
+    return <button onClick={() => setRandom(Math.random())}>Re-render</button>;
+}
+```
+
+Mỗi khi trạng thái `random` thay đổi, hiệu ứng sẽ chạy, từ đó lưu giá trị mới vào `localStorage` với khóa là `random`
 
