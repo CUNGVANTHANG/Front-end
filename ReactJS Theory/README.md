@@ -2619,3 +2619,108 @@ function App() {
 
 Mỗi khi trạng thái `random` thay đổi, hiệu ứng sẽ chạy, từ đó lưu giá trị mới vào `localStorage` với khóa là `random`
 
+- **Lưu đối tượng vào localStorage**
+
+Sau khi chuyển đổi mảng hoặc đối tượng thành chuỗi, bạn có thể lưu nó trong `localStorage`:
+
+```jsx
+const person = {
+    id: 1,
+    name: "Sam"
+};
+
+localStorage.setItem("person", JSON.stringify(person)); // '{"id":1,"name":"Sam"}'
+```
+
+Nếu bạn muốn khôi phục đối tượng đó từ `localStorage`, bạn cần chuyển đổi nó từ chuỗi thành đối tượng/mảng bằng cách sử dụng `JSON.parse()`
+
+```jsx
+let person = localStorage.getItem("person");
+person = JSON.parse(person);
+console.log(person); // {id: 1, name: "Sam"}
+```
+
+- **Khôi phục trạng thái từ localStorage**
+
+**ĐỐI VỚI SỐ:**
+
+Bởi vì localStorage luôn trả về chuỗi, chúng ta cần chuyển đổi chuỗi thành số một cách thủ công:
+
+```jsx
+let value = localStorage.getItem("key-here");
+value = Number.parseInt(value, 10); // convert to number
+```
+
+Bạn cũng có thể sử dụng `Number.parseFloat (value, 10)` nếu muốn hiển thị phần thập phân (ví dụ: 12.5).
+
+Số 10 chính là đối số thứ hai, gọi là cơ số.
+
+**ĐỐI VỚI BOOLEAN:**
+
+Giá trị boolean có thể là `true` hoặc `false`. Khi được lưu vào localStorage, chúng sẽ là `"true"` hoặc `"false"` (vì chúng được chuyển đổi thành chuỗi).
+
+Cách chuyển đổi chuỗi trở lại thành boolean đơn giản nhất là so sánh mục trong `localStorage` với chuỗi `"true"`; sau đây là lý do:
+
+```jsx
+"true" === "true" // true (means original value was true)
+"false" === "true" // false (means original value was false)
+```
+
+Dưới đây là cách viết khi đọc từ `localStorage`:
+
+```jsx
+const value = localStorage.getItem("key-here") === "true";
+```
+
+Bằng cách so sánh với chuỗi `"true"`, bạn đang chuyển đổi giá trị từ chuỗi thành kiểu boolean.
+
+**GIÁ TRỊ MẶC ĐỊNH:**
+
+Khi bạn đọc một khóa chưa được lưu trữ trong `localStorage`, kết quả sẽ trả về giá trị `null`.
+
+Bạn có thể đặt giá trị mặc định cho biến theo nhiều cách như câu lệnh `if`, **toán tử ba ngôi** hoặc **toán tử coalescing nullish** (`??`). Dưới đây là một số ví dụ gán giá trị mặc định là mảng rỗng:
+
+```jsx
+// using an if condition
+let value = []; // default value
+if (localStorage.getItem("key-here")) {
+    value = localStorage.getItem("key-here");
+}
+
+// OR: using the ternary operator
+const value = localStorage.getItem("key-here") !== null ? localStorage.getItem("key-here") : [];
+
+// OR: using the nullish coalescing operator
+const value = localStorage.getItem("key-here") ?? [];
+```
+
+Chúng ta cần đặt giá trị mặc định cho mảng nếu mong đợi `localStorage` trả về mảng. Điều này đảm bảo rằng việc gọi `.map()` hoặc các phương thức mảng khác sẽ không gây lỗi nếu `localStorage.getItem()` trả về `null`.
+
+**KHÔI PHỤC MẢNG VÀ ĐỐI TƯỢNG:**
+
+Hãy nhớ rằng chúng ta có thể xử lý mảng và đối tượng theo cách tương tự nhau và chúng ta cần chuyển đổi mảng và đối tượng thành chuỗi trước khi lưu vào `localStorage`.
+
+Điều này có nghĩa là khi **chúng ta muốn đọc lại giá trị của đối tượng từ localStorage**, chúng ta cần `parse` chuỗi trở lại thành đối tượng.
+
+Dưới đây là cách thực hiện:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [array, setArray] = useState(() => {
+        return JSON.parse(localStorage.getItem("key-here"));
+    });
+
+    useEffect(() => {
+        localStorage.setItem("key-here", JSON.stringify(array));
+    }, [array]);
+}
+```
+
+Đoạn code có thể được viết lại bằng cách sử dụng trả về ngầm định:
+
+```jsx
+const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-here")));
+```
+
