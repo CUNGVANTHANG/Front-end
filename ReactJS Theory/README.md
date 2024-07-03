@@ -2407,3 +2407,74 @@ Vì vậy, sau mỗi lần component `Counter` hiển thị (hoặc hiển thị
 
 Điều này cho phép bạn đồng bộ tiêu đề của tài liệu với giá trị `counter`.
 
+### 2. Các hiệu ứng yêu cầu phải dọn dẹp
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Dọn dẹp là gì?**
+
+Khi bạn tạo một bộ đếm thời gian bằng cách sử dụng `setTimeout`, bạn đang trì hoãn việc chạy một đoạn code trong tương lai, ví dụ:
+
+```jsx
+import {useEffect} from "react";
+
+function App() {
+    useEffect(() => {
+        setTimeout(() => {
+            console.log("This will run in 1 second");
+        }, 1_000);
+    });
+
+    return <h1>App</h1>;
+}
+```
+
+Nếu đoạn code này được đóng gói trong một hàm và hàm đó có thể được gọi nhiều lần, bạn có thể **gặp phải tình trạng rò rỉ bộ nhớ**. Điều này có nghĩa là bạn đang tăng dần bộ nhớ của ứng dụng vì bạn liên tục lên lịch cho một bộ đếm thời gian mới mỗi khi hàm được gọi.
+
+- **Cách dọn dẹp hiệu ứng**
+
+Để dọn dẹp một hiệu ứng, **bạn phải trả về một hàm** (dọn dẹp) từ bên trong cuộc gọi `useEffect`. Chúng ta sẽ bắt đầu với ví dụ đơn giản nhất:
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    console.log("effect running");
+    return () => {
+      console.log("effect cleaning up");
+    }
+  })
+
+  return (
+    <>
+      <h2>{counter}</h2>
+      <button onClick={() => setCounter(prevCounter => prevCounter + 1)}>Add</button>
+    </>
+  );
+}
+```
+
+Vào lần đầu tiên component được hiển thị, chúng ta chỉ thấy `console.log`: "**effect running**".
+
+Sau đó, mỗi khi component được hiển thị lại vì trạng thái của nó thay đổi (khi ta nhấp vào nút), nó bắt đầu bằng cách dọn dẹp component (chúng ta thấy "**effect cleaning up**") và sau đó là "**effect running**".
+
+Kết luận là `return () => { console.log("effect running"); }` sẽ chạy mỗi khi component bị xóa (còn gọi là hủy gắn kết).
+
+Một số phương thức JavaScript yêu cầu dọn dẹp để tránh rò rỉ bộ nhớ (ví dụ: `setTimeout`, `setInterval`)
+
+Sử dụng `clearTimeout(timerId)` hủy bỏ bộ đếm thời gian được khởi tạo bởi `setTimeout`.
+
+```jsx
+useEffect(() => {
+    const timerId = setTimeout(() => {
+        console.log("This will run in 1 second");
+    }, 1_000);
+    return function cleanupTimer() {
+        clearTimeout(timerId);
+    };
+});
+
+
+```
