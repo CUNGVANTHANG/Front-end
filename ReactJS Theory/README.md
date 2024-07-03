@@ -2512,10 +2512,70 @@ React sẽ lưu trữ `[0]` và sau đó khi người dùng nhấp vào nút. Gi
 
 React sẽ so sánh giá trị mới này với giá trị cũ (từng cái một). Và vì `1` trong `[1]` không giống như `0` trong `[0]` (từ lần chạy trước) nên React sẽ chạy lại useEffect.
 
-**Hiệu ứng chỉ chạy một lần**
-
+- **Hiệu ứng chỉ chạy một lần**
 
 Ta cũng có thể truyền mảng rỗng làm phụ thuộc: `[]`
 
 Khi bạn truyền một mảng rỗng, so sánh giữa lần hiển thị trước và lần hiển thị tiếp theo **luôn trả về kết quả giống nhau** (vì React so sánh cùng một thực thể của `[]`, không có giá trị nào trong mảng đó có thể thay đổi). Điều này có nghĩa là việc truyền `[]` sẽ chỉ **chạy hiệu ứng một lần sau lần hiển thị đầu tiên.**
+
+- **Bài tập vòng đời của Component**
+
+Thêm các lệnh `console.log` sau vào component Countdown để hiệu ứng chạy vào thời điểm cụ thể trong vòng đời của component:
+
+`console.log("first render")` khi component được gắn kết
+
+`console.log("will be removed")` trước khi component bị hủy gắn kết
+
+`console.log("count changed")` khi biến count thay đổi
+
+`console.log("lives changed")` khi biến lives thay đổi
+
+`console.log("count or lives changed")` khi count hoặc lives thay đổi
+
+```jsx
+import React, {useState, useEffect} from "react";
+import {createRoot} from "react-dom/client";
+
+function Countdown() {
+    const [count, setCount] = useState(5);
+    const [lives, setLives] = useState(3);
+    
+    useEffect(() => {
+        console.log("first render")
+        
+        return () => {
+          console.log("will be removed")
+        }
+    }, [])
+    
+    useEffect(() => {
+      console.log("count changed")
+    }, [count])
+    
+    useEffect(() => {
+      console.log("lives changed")
+    }, [lives])
+    
+    useEffect(() => {
+      console.log("count or lives changed")
+    }, [count, lives])
+
+    function handleCountdownClick() {
+        if (count > 0){
+            setCount(count - 1);
+        }else if (count === 0) {
+            setCount(5);
+            setLives(lives - 1);
+        }
+    }
+
+    return <>
+        <h2>Attempts remaining: {count}</h2>
+        <button onClick={handleCountdownClick}>Count down</button>
+        <h3>Lives remaining: {lives}</h3>
+    </>;
+}
+
+createRoot(document.querySelector("#react-root")).render(<React.StrictMode><Countdown /></React.StrictMode>);
+```
 
