@@ -2475,6 +2475,47 @@ useEffect(() => {
         clearTimeout(timerId);
     };
 });
-
-
 ```
+
+### 3. Effect dependencies
+[:arrow_up: Mục lục](#mục-lục)
+
+Tất cả các cuộc gọi `useEffect` mà chúng ta đã thấy cho đến nay **đều chạy sau lần hiển thị đầu tiên của component và sau mỗi lần component hiển thị lại**. Nhưng đôi khi bạn không muốn `useEffect` hiển thị lại mỗi lần (đôi khi điều này sẽ tạo ra vòng lặp vô hạn). Đó là lý do tại sao hàm `useEffect` có đối số thứ hai.
+
+```jsx
+useEffect(effectCallback, dependencies)
+```
+
+**dependencies** trong `useEffect` là một mảng **quyết định khi nào hiệu ứng sẽ được chạy lại**. Dưới đây là cách nó hoạt động:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [counter, setCounter] = useState(0);
+
+    useEffect(() => {
+        console.log("effect is running");
+    }, [counter]);
+
+    return <button onClick={() => setCounter(prev => prev + 1)}>Click me</button>;
+}
+```
+
+Chúng ta đã truyền vào `useEffect` đối số thứ hai của `[counter]`. Đó là **mảng các phụ thuộc (dependencies)**.
+
+Điều này cho React biết nó chỉ nên gọi lại `useEffect` khi giá trị của counter thay đổi. Điều này có nghĩa là nó sẽ gọi lại sau lần đầu tiên component hiển thị và mỗi lần giá trị counter thay đổi.
+
+Vì vậy trong ví dụ này, `[counter]` bắt đầu là `[0]` (vì trạng thái counter bắt đầu từ 0).
+
+React sẽ lưu trữ `[0]` và sau đó khi người dùng nhấp vào nút. Giá trị mới của `[counter]` trở thành `[1]`
+
+React sẽ so sánh giá trị mới này với giá trị cũ (từng cái một). Và vì `1` trong `[1]` không giống như `0` trong `[0]` (từ lần chạy trước) nên React sẽ chạy lại useEffect.
+
+**Hiệu ứng chỉ chạy một lần**
+
+
+Ta cũng có thể truyền mảng rỗng làm phụ thuộc: `[]`
+
+Khi bạn truyền một mảng rỗng, so sánh giữa lần hiển thị trước và lần hiển thị tiếp theo **luôn trả về kết quả giống nhau** (vì React so sánh cùng một thực thể của `[]`, không có giá trị nào trong mảng đó có thể thay đổi). Điều này có nghĩa là việc truyền `[]` sẽ chỉ **chạy hiệu ứng một lần sau lần hiển thị đầu tiên.**
+
