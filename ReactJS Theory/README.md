@@ -37,6 +37,12 @@
   - [8. Truyền vào hàm](#8-truyền-vào-hàm)
   - [9. Chuyển trạng thái lên](#9-chuyển-trạng-thái-lên)
 - [IV. Hook - useEffect](#iv-hook---useeffect)
+  - [1. useEffect](#1-useeffect)
+  - [2. Các hiệu ứng yêu cầu phải dọn dẹp](#2-các-hiệu-ứng-yêu-cầu-phải-dọn-dẹp)
+  - [3. Effect dependencies](#3-effect-dependencies)
+  - [4. Local Storage](#4-local-storage)
+- [V. Fetch](#v-fetch)
+  - [1. Fetch API](#1-fetch-api)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -2354,7 +2360,7 @@ createRoot(root).render(<React.StrictMode><App /></React.StrictMode>);
 ### 1. useEffect
 [:arrow_up: Mục lục](#mục-lục)
 
-Hook `useEffect` được dùng để triển khai hiệu ứng (effect) trong component.
+Hook `useEffect` được dùng để triển khai hiệu ứng (effect) trong component. `useEffect` được **gọi sau khi component đã hiển thị**
 
 Dưới đây là một số ví dụ về hiệu ứng:
 
@@ -2722,5 +2728,108 @@ function App() {
 
 ```jsx
 const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-here")));
+```
+
+## V. Fetch
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. Fetch API
+[:arrow_up: Mục lục](#mục-lục)
+
+- **XỬ LÝ PROMISE**
+
+Việc sử dụng promise là một yêu cầu cơ bản khi làm việc với Fetch API. Xử lý promise có nghĩa là thực hiện một hành động khi promise đã hoàn thành công việc của nó.
+
+Giả sử chúng ta có hàm `functionThatReturnsPromise`, sau đây là cách bạn xử lý hàm:
+
+```jsx
+functionThatReturnsPromise().then(result => {
+    console.log(result);
+});
+```
+
+Để xử lý Promise, bạn cần gọi `.then()` trên promise và truyền một **hàm callback**. Hàm callback đó sẽ được gọi khi promise đã hoàn thành công việc của nó.
+
+Đối số đầu tiên được truyền vào hàm callback đó (trong ví dụ này là `result`) **sẽ là dữ liệu** mà hàm đó **đã tính toán**.
+
+Promise cũng có thể gặp lỗi, trong trường hợp đó, hàm mà bạn truyền vào `.then()` **sẽ KHÔNG được gọi**. Bạn cần sử dụng `.catch()` để bắt lỗi. Đây là một ví dụ:
+
+```jsx
+functionThatReturnsPromise()
+.then(result => {
+    console.log(result); // when successful
+})
+.catch(error => {
+    console.error(error); // when there's an error
+})
+```
+
+- **FETCH API**
+
+```jsx
+fetch(URL)
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
+
+Có bốn điều cần lưu ý ở đây:
+
+1. Cuộc gọi `fetch()` trả về một promise, vì vậy ta xử lý nó bằng `.then()`.
+2. `response` mà ta nhận được từ fetch là một phản hồi chung, vì vậy ta cần chuyển đổi nó thành đối tượng JSON bằng cách gọi `response.json()`.
+3. `response.json()` cũng trả về một promise, vì vậy ta cần xử lý nó một lần nữa bằng `.then()`.
+4. Luôn luôn bắt đầu bằng `console.log(data)` vì mỗi backend/API sẽ trả về dữ liệu khác nhau dựa trên mục đích của API đó.
+
+- **GỌI FETCH Ở ĐÂU**
+
+Gọi `fetch` bên trong component được coi là một hiệu ứng phụ vì `fetch` thực hiện các kết nối mạng (bên ngoài component), vì vậy `fetch` cần được đặt bên trong một **hiệu ứng** (`useEffect`)
+
+```jsx
+useEffect(() => {
+    // call fetch here
+}, []);
+```
+
+- **LẤY DỮ LIỆU**
+
+```jsx
+import {useEffect} from "react";
+
+function App() {
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+    }, []);
+}
+```
+
+Đoạn code này sẽ chạy cuộc gọi `fetch` **một lần bên trong component**.
+
+- **LIÊN KẾT FETCH VỚI STATE**
+
+Để lưu trữ phản hồi từ `fetch` API vào biến trạng thái, bạn có thể làm theo 2 bước sau:
+
+1. Tạo một biến trạng thái. Ví dụ: `const [users, setUsers] = useState()`.
+2. Gọi hàm `setState` bên trong `.then(data => {})`. Ví dụ: `.then(data => { setUsers(data) })`.
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // keep it for debugging
+            setUsers(data);
+        });
+    }, []);
+}
 ```
 
