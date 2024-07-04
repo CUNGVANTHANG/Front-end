@@ -2744,6 +2744,9 @@ const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-he
 - [e. LIÊN KẾT FETCH VỚI STATE](#e-liên-kết-fetch-với-state)
 - [f. Cannot read property X of undefined](#f-cannot-read-property-x-of-undefined)
 - [g. SỬ DỤNG TOÁN TỬ &&](#g-sử-dụng-toán-tử-)
+- [h. XỬ LÝ LỖI HTTP](#h-xử-lý-lỗi-http)
+- [j. XỬ LÝ LỖI LIÊN QUAN ĐẾN MẠNG](#j-xử-lý-lỗi-liên-quan-đến-mạng)
+- [k. XỬ LÝ TẢI DỮ LIỆU BẰNG FETCH](#k-xử-lý-tải-dữ-liệu-bằng-fetch)
 
 #### a. XỬ LÝ PROMISE
 [:arrow_up: Fetch API](#1-fetch-api)
@@ -3137,3 +3140,26 @@ function App() {
 }
 ```
 
+### l. Fetch khi click
+[:arrow_up: Fetch API](#1-fetch-api)
+
+Một trường hợp sử dụng phổ biến của `fetch` là tải dữ liệu khi người dùng nhấp chuột vào nút.
+
+Bạn có thể làm điều đó bằng cách viết code `fetch` bên trong hàm `handleButtonClick`, ví dụ:
+
+```jsx
+function App() {
+    const [isLoading, setIsLoading] = useState(false);
+
+    function handleButtonClick() {
+        setIsLoading(true);
+        // fetch("...") as usual
+    }
+
+    return <button disabled={isLoading} onClick={handleButtonClick}>Load data</button>;
+}
+```
+
+Vì vậy, nếu bạn muốn thực hiện yêu cầu `fetch` trên sự kiện `onClick`, bạn cần đặt cuộc gọi fetch bên trong hàm `handleButtonClick` thay vì trong `useEffect`.
+
+Lưu ý rằng chúng ta thiết lập giá trị mặc định của `isLoading` là `false` vì nó chỉ bắt đầu tải khi người dùng nhấp vào nút. Chúng ta bắt đầu hiển thị trình tải bên trong `handleButtonClick` bằng `setIsLoading(true)`.
