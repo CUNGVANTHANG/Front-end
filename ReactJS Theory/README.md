@@ -2743,9 +2743,10 @@ const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-he
 - [d. LẤY DỮ LIỆU](#d-lấy-dữ-liệu)
 - [e. LIÊN KẾT FETCH VỚI STATE](#e-liên-kết-fetch-với-state)
 - [f. Cannot read property X of undefined](#f-cannot-read-property-x-of-undefined)
-- [g. SỬ DỤNG TOÁN TỬ &&](#g-sử-dụng-toán-tử-&&)
+- [g. SỬ DỤNG TOÁN TỬ &&](#g-sử-dụng-toán-tử-)
 
 #### a. XỬ LÝ PROMISE
+[:arrow_up: Fetch API](#1-fetch-api)
 
 Việc sử dụng promise là một yêu cầu cơ bản khi làm việc với Fetch API. Xử lý promise có nghĩa là thực hiện một hành động khi promise đã hoàn thành công việc của nó.
 
@@ -2774,6 +2775,7 @@ functionThatReturnsPromise()
 ```
 
 #### b. FETCH API
+[:arrow_up: Fetch API](#1-fetch-api)
 
 ```jsx
 fetch(URL)
@@ -2791,6 +2793,7 @@ Có bốn điều cần lưu ý ở đây:
 4. Luôn luôn bắt đầu bằng `console.log(data)` vì mỗi backend/API sẽ trả về dữ liệu khác nhau dựa trên mục đích của API đó.
 
 #### c. GỌI FETCH Ở ĐÂU
+[:arrow_up: Fetch API](#1-fetch-api)
 
 Gọi `fetch` bên trong component được coi là một hiệu ứng phụ vì `fetch` thực hiện các kết nối mạng (bên ngoài component), vì vậy `fetch` cần được đặt bên trong một **hiệu ứng** (`useEffect`)
 
@@ -2801,6 +2804,7 @@ useEffect(() => {
 ```
 
 #### d. LẤY DỮ LIỆU
+[:arrow_up: Fetch API](#1-fetch-api)
 
 ```jsx
 import {useEffect} from "react";
@@ -2819,6 +2823,7 @@ function App() {
 Đoạn code này sẽ chạy cuộc gọi `fetch` **một lần bên trong component**.
 
 #### e. LIÊN KẾT FETCH VỚI STATE
+[:arrow_up: Fetch API](#1-fetch-api)
 
 Để lưu trữ phản hồi từ `fetch` API vào biến trạng thái, bạn có thể làm theo 2 bước sau:
 
@@ -2843,6 +2848,7 @@ function App() {
 ```
 
 #### f. Cannot read property X of undefined
+[:arrow_up: Fetch API](#1-fetch-api)
 
 ```jsx
 import {useState, useEffect} from "react";
@@ -2896,6 +2902,7 @@ function App() {
 ```
 
 #### g. SỬ DỤNG TOÁN TỬ &&
+[:arrow_up: Fetch API](#1-fetch-api)
 
 Đôi khi bạn không muốn hiển thị một JSX mới hoàn toàn mà chỉ muốn bỏ qua việc hiển thị một phần của JSX phụ thuộc vào `data` từ API. Ví dụ:
 
@@ -2990,4 +2997,143 @@ Vì vậy sau khi users được tải, component App sẽ hiển thị:
 </>
 ```
 
-#### 
+#### h. XỬ LÝ LỖI HTTP
+[:arrow_up: Fetch API](#1-fetch-api)
+
+Sử dụng `if` kiểm tra trước khi `setState`
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        // this fetch request is designed to always fail
+        fetch("https://course-assets.tek4.vn/reactjs-assets/validation-example.json", {
+            method: "post"
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // only set the users when there's no error
+            if (data && !data.error) {
+                setUsers(data);
+            }
+        });
+
+    }, []);
+}
+```
+
+#### j. XỬ LÝ LỖI LIÊN QUAN ĐẾN MẠNG
+[:arrow_up: Fetch API](#1-fetch-api)
+
+Lỗi mạng xảy ra khi kết nối bị gián đoạn hoặc khi người dùng không kết nối mạng. Trong trường hợp này, cuộc gọi `fetch` sẽ đưa ra ngoại lệ thay vì trả về giá trị đã được xử lý. Điều này có nghĩa là bạn có thể bắt được lỗi này bằng cách thêm một khối `.catch()`, dưới đây là một ví dụ:
+
+```jsx
+fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+.catch(error => {
+    console.log(error); // or console.error(error)
+});
+```
+
+Đoạn code trên đã thêm một khối `.catch`. Nếu kết nối internet bị gián đoạn trong khi yêu cầu này đang được gửi hoặc nếu người dùng không kết nối mạng thì `.then()` sẽ không chạy mà `.catch` sẽ được chạy, in thông báo lỗi ra console.
+
+#### k. XỬ LÝ TẢI DỮ LIỆU BẰNG FETCH
+[:arrow_up: Fetch API](#1-fetch-api)
+
+Khi tải dữ liệu từ mạng bằng Fetch API, việc hiển thị trình tải (loader) là một phần quan trọng trong giao diện người dùng, đó là một chỉ báo hình ảnh cho người dùng biết rằng dữ liệu đang được tìm nạp từ mạng và họ nên đợi một chút.
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/d4a3c7cb-25e5-43b4-a59d-fe6f308aa160" height="50px" />
+
+**Làm thế nào để hiển thị trình tải?**
+
+Chúng ta cần biết khi nào yêu cầu fetch bắt đầu và kết thúc để hiển thị trình tải. Chúng ta cần một biến trạng thái để theo dõi điều này.
+
+Vì vậy, chúng ta bắt đầu bằng cách định nghĩa một biến trạng thái cho biết yêu cầu fetch có đang tải hay không; chúng ta sẽ gọi biến là `isLoading` và đặt giá trị mặc định là `false`:
+
+```jsx
+// inside a React component
+const [isLoading, setIsLoading] = useState(false);
+```
+
+**Bắt đầu tải**
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [isLoading, setIsLoading] = useState(true); // create and start the loader
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+    }, []);
+}
+```
+
+**Dừng tải**
+
+Đoạn code trên sẽ thiết lập isLoading thành true và không bao giờ dừng trình tải. Đây là lý do tại sao chúng ta cần dừng trình tải khi nhận được phản hồi.
+
+Tuy nhiên, chúng ta cũng nên dừng trình tải trong trường hợp yêu cầu `fetch` bị lỗi, vì vậy chúng ta cần gọi `setIsLoading(false)` trong `.then()` và `.catch()`.
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [isLoading, setIsLoading] = useState(true); // create and start the loader
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            setIsLoading(false); // stop the loader
+            console.log(data);
+        })
+        .catch(error => {
+            setIsLoading(false); // stop the loader
+            console.error(error);
+        });
+    }, []);
+}
+```
+
+Bạn có thể nhận thấy có một số câu lệnh trùng lặp trong các ví dụ trước khi chúng ta gọi `setIsLoading(false)` ở 2 nơi:
+
+trong phần `.then()`
+
+trong phần `.catch()`
+
+Một phương án hiệu quả hơn là sử dụng `.finally()`. Callback được truyền vào `.finally()` sẽ chạy trong cả hai trường hợp: **fetch thành công và lỗi**.
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [isLoading, setIsLoading] = useState(true); // create and start the loader
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            setIsLoading(false); // stop the loader
+        });
+    }, []);
+}
+```
+
