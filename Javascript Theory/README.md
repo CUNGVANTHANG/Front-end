@@ -26,7 +26,8 @@
   - [A. JSON](#a-json)
   - [B. Promise](#b-promise)
   - [C. Fetch](#c-fetch)
-  - [D. Postman](#d-postman)
+  - [D. Async/Await](#d-asyncawait)
+  - [E. Postman](#e-postman)
 - [12. ECMAScript 6+](#12-ecmascript-6)
   - [A. Let, const](#a-let-const)
   - [B. Template Literals](#b-template-literals)
@@ -1664,7 +1665,110 @@ fetch(postApi)
     });
 ```
 
-### D. Postman
+### D. Async/Await
+[:arrow_up: Mục lục](#mục-lục)
+
+**Async được dùng để khai báo một hàm bất đồng bộ**. Các hàm bất đồng bộ sẽ luôn trả về một giá trị. Việc sử dụng async chỉ đơn giản là ngụ ý rằng một lời hứa sẽ được trả lại và nếu một lời hứa không được trả lại.
+
+**Await được sử dụng để chờ một Promise**. Nó chỉ có thể được **sử dụng bên trong một khối Async**. Từ khóa Await làm cho JavaScript **đợi cho đến khi promise trả về kết quả**. Cần lưu ý rằng nó chỉ làm cho khối chức năng không đồng bộ chờ đợi chứ không phải toàn bộ chương trình thực thi.
+
+**1. Async**
+
+Từ khóa Async được đặt trước 1 hàm làm cho hàm trả về promise.
+
+Ví dụ:
+
+```js
+async function myFunction() {
+  return "Hello";
+}
+```
+
+Tương tự như trên:
+
+```js
+async function myFunction() {
+  return Promise.resolve("Hello");
+}
+```
+
+Dưới đây là cách sử dụng Promise:
+
+```js
+myFunction().then(
+  function(value) { /* code if successful */ },
+  function(error) { /* code if some error */ }
+);
+```
+
+**2. Await**
+
+Từ khóa Await được đặt trước 1 hàm làm cho hàm chờ một promise.
+
+```js
+let value = await promise;
+```
+
+Từ khóa `await` chỉ có thể được sử dụng bên trong một hàm không đồng bộ.
+
+- **Chú ý:**
+
+1. Chúng ta không thể sử dụng Await bên trong các hàm thông thường. Để hàm trên hoạt động bình thường, chúng ta cần thêm từ khóa `async` trước function
+2. Async/Await thực hiện tuần tự
+
+Ví dụ:
+
+```js
+async function sequence() {
+  await promise1(50); // Wait 50ms…
+  await promise2(50); // …then wait another 50ms.
+  return "done!";
+}
+```
+
+Đoạn code trên mất 100ms để hoàn thành. Để thực hiện song song chúng ta sử dụng `Promise.all()`
+
+Ví dụ:
+
+```js
+async function sequence() {
+    await Promise.all([promise1(), promise2()]);  
+    return "done!";
+}
+```
+
+Hàm `Promise.all()` giải quyết khi tất cả các lời hứa bên trong có thể lặp được giải quyết và sau đó trả về kết quả.
+
+3. Xử lí lỗi với Async/Await
+
+Ví dụ:
+
+Nếu một promise giải quyết bình thường, sau đó `await promise` trả về kết quả. Nhưng trong trường hợp từ chối, nó sẽ ném lỗi, giống như có một câu lệnh throw tại dòng đó.
+
+```js
+async function f() {
+  await Promise.reject(new Error("Whoops!"));
+}
+```
+
+Trong tình huống thực tế, lời hứa có thể mất một thời gian trước khi nó từ chối. Trong trường hợp đó sẽ có độ trễ trước khi `await` đưa ra lỗi.
+
+Chúng ta có thể bắt lỗi đó bằng cách sử dụng `try..catch`, giống như cách thông thường `throw`:
+
+```js
+async function f() {
+
+  try {
+    let response = await fetch('http://no-such-url');
+  } catch(err) {
+    alert(err); // TypeError: failed to fetch
+  }
+}
+
+f();
+```
+
+### E. Postman
 [:arrow_up: Mục lục](#mục-lục)
 
 ```js
