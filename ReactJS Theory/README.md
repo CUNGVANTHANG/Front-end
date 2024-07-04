@@ -43,6 +43,7 @@
   - [4. Local Storage](#4-local-storage)
 - [V. Fetch](#v-fetch)
   - [1. Fetch API](#1-fetch-api)
+  - [2. Fetch POST](#2-fetch-post)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -2736,7 +2737,15 @@ const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-he
 ### 1. Fetch API
 [:arrow_up: Mục lục](#mục-lục)
 
-- **XỬ LÝ PROMISE**
+- [a. XỬ LÝ PROMISE](#a-xử-lý-promise)
+- [b. FETCH API](#b-fetch-api)
+- [c. GỌI FETCH Ở ĐÂU](#c-gọi-fetch-ở-đâu)
+- [d. LẤY DỮ LIỆU](#d-lấy-dữ-liệu)
+- [e. LIÊN KẾT FETCH VỚI STATE](#e-liên-kết-fetch-với-state)
+- [f. Cannot read property X of undefined](#f-cannot-read-property-x-of-undefined)
+- [g. SỬ DỤNG TOÁN TỬ &&](#g-sử-dụng-toán-tử-&&)
+
+#### a. XỬ LÝ PROMISE
 
 Việc sử dụng promise là một yêu cầu cơ bản khi làm việc với Fetch API. Xử lý promise có nghĩa là thực hiện một hành động khi promise đã hoàn thành công việc của nó.
 
@@ -2764,7 +2773,7 @@ functionThatReturnsPromise()
 })
 ```
 
-- **FETCH API**
+#### b. FETCH API
 
 ```jsx
 fetch(URL)
@@ -2781,7 +2790,7 @@ Có bốn điều cần lưu ý ở đây:
 3. `response.json()` cũng trả về một promise, vì vậy ta cần xử lý nó một lần nữa bằng `.then()`.
 4. Luôn luôn bắt đầu bằng `console.log(data)` vì mỗi backend/API sẽ trả về dữ liệu khác nhau dựa trên mục đích của API đó.
 
-- **GỌI FETCH Ở ĐÂU**
+#### c. GỌI FETCH Ở ĐÂU
 
 Gọi `fetch` bên trong component được coi là một hiệu ứng phụ vì `fetch` thực hiện các kết nối mạng (bên ngoài component), vì vậy `fetch` cần được đặt bên trong một **hiệu ứng** (`useEffect`)
 
@@ -2791,7 +2800,7 @@ useEffect(() => {
 }, []);
 ```
 
-- **LẤY DỮ LIỆU**
+#### d. LẤY DỮ LIỆU
 
 ```jsx
 import {useEffect} from "react";
@@ -2809,7 +2818,7 @@ function App() {
 
 Đoạn code này sẽ chạy cuộc gọi `fetch` **một lần bên trong component**.
 
-- **LIÊN KẾT FETCH VỚI STATE**
+#### e. LIÊN KẾT FETCH VỚI STATE
 
 Để lưu trữ phản hồi từ `fetch` API vào biến trạng thái, bạn có thể làm theo 2 bước sau:
 
@@ -2833,3 +2842,152 @@ function App() {
 }
 ```
 
+#### f. Cannot read property X of undefined
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setUsers(data);
+        });
+    }, []);
+    
+    // ❌ This will throw an error
+    return <h1>There are {users.length} users</h1>
+}
+```
+
+Code trên sẽ đưa ra thông báo lỗi: **Cannot read property 'length' of undefined**.
+
+Điều này có nghĩa là trong biểu thức `users.length`, `users` có giá trị là `undefined`, vì vậy chúng ta không thể truy cập `.length` trên nó vì điều đó tương đương với việc chạy `undefined.length`.
+
+**KHẮC PHỤC BẰNG CÁCH:**
+
+Trong ví dụ trên, chúng ta kiểm tra `if (!users)` (hoặc `if (users === undefined)`) và trả về `null` hoặc thông báo như Loading...:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setUsers(data);
+        });
+    }, []);
+    
+    if (!users) {
+        return null;
+    }
+
+    return <h1>There are {users.length} users</h1>
+}
+```
+
+#### g. SỬ DỤNG TOÁN TỬ &&
+
+Đôi khi bạn không muốn hiển thị một JSX mới hoàn toàn mà chỉ muốn bỏ qua việc hiển thị một phần của JSX phụ thuộc vào `data` từ API. Ví dụ:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            setUsers(data);
+        });
+    }, []);
+    
+    // This will throw an ERROR
+    return <>
+        <h1>Users</h1>
+        <ul>
+            {users.map(user => <li key={user.id}>{user.name}</li>)}
+        </ul>
+  </>
+}
+```
+
+Chương trình sẽ đưa ra thông báo lỗi: **Cannot read property 'map' of undefined**.
+
+Vậy nếu bạn muốn chặn thông báo lỗi mà không thay đổi phần hiển thị của component thì phải làm như thế nào? Giả sử trước khi `users` được tải, bạn chỉ muốn component hiển thị JSX sau:
+
+```jsx
+<>
+    <h1>Users</h1>
+    <ul>
+    </ul>
+</>
+```
+
+**KHẮC PHỤC BẰNG CÁCH:**
+
+Bạn có thể thêm tiền tố `users && trước users.map()`, kết quả cuối cùng như sau:
+
+```jsx
+import {useState, useEffect} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            setUsers(data);
+        });
+    }, []);
+    
+    // this will work without breaking 👍
+    return <>
+        <h1>Users</h1>
+        <ul>
+            {users && users.map(user => <li key={user.id}>{user.name}</li>)}
+        </ul>
+  </>
+}
+```
+
+Đoạn code trên hoạt động là vì:
+
+**Trước khi 'users' được tải**: biểu thức `users && users.map()` sẽ gặp xung đột tại `users`, có nghĩa là nó sẽ không tiếp tục thực thi sau `&&` vì `users` trả về `undefined`. Điều này sẽ ngăn chặn việc thực thi `users.map()`, tránh gây ra lỗi.
+
+Vì vậy trước khi users được tải, component App sẽ hiển thị:
+
+```jsx
+<>
+    <h1>Users</h1>
+    <ul>
+    </ul>
+</>
+```
+
+**Sau khi 'users' được tải**: biểu thức `users && users.map()` sẽ được thực thi toàn bộ vì `users` không trả về một giá trị `falsy` (như `undefined` hoặc `false`). Do đó, `users.map()` sẽ được gọi.
+
+Vì vậy sau khi users được tải, component App sẽ hiển thị:
+
+```jsx
+<>
+    <h1>Users</h1>
+    <ul>
+        {users && users.map(user => <li key={user.id}>{user.name}</li>)}
+    </ul>
+</>
+```
+
+#### 
