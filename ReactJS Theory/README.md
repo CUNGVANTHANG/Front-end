@@ -26,6 +26,7 @@
   - [5. Sử dụng thư viện clsx để viết câu lệnh if](#5-sử-dụng-thư-viện-clsx-để-viết-câu-lệnh-if)
   - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
   - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
+  - [8. Ký hiệu dấu chấm](#8-ký-hiệu-dấu-chấm)
 - [III. Hook - useState](#iii-hook---usestate)
   - [1. useState](#1-usestate)
   - [2. Closures](#2-closures)
@@ -50,6 +51,10 @@
   - [3. Custom hooks với useFetch](#3-custom-hooks-với-usefetch)
 - [VII. Hook - useRef](#vii-hook---useref)
 - [VIII. Context](#viii-context)
+  - [1. Tạo Context](#1-tạo-context)
+  - [2. Sử dụng Context](#2-sử-dụng-context)
+  - [3. Giá trị Context](#3-giá-trị-context)
+  - [4. Cập nhật giá trị Context](#4-cập-nhật-giá-trị-context)
 
 </details>
 
@@ -1071,6 +1076,50 @@ function WelcomeUser({username, notifications}) {
 ```
 
 Thay vì viết WelcomeUser(props), bạn ngay lập tức thay thế props bằng `{username, notifications}`, lệnh này trích xuất `props.username` và `props.notifications` và tạo ra 2 biến: `username` và `notifications`.
+
+### 8. Ký hiệu dấu chấm
+[:arrow_up: Mục lục](#mục-lục)
+
+Vì JSX luôn chuyển đổi `<Component />` thành cuộc gọi `React.createElement(Component, {})`, do đó một đối tượng có thể chứa nhiều component, ví dụ:
+
+```jsx
+const Buttons = {
+    Default: function(props) {
+        return <button className="btn-default">{props.children}</button>;
+    },
+    Outline: function(props) {
+        return <button className="btn-outline">{props.children}</button>;
+    }
+}
+```
+
+Sau đó, bạn có thể sử dụng các component trên như sau:
+
+```jsx
+<Buttons.Default>Login</Buttons.Default>
+<Buttons.Outline>Register</Buttons.Outline>
+```
+
+Lý do tại sao điều này hoạt động là vì chúng sẽ được chuyển đổi thành các cuộc gọi `React.createElement` như sau:
+
+```jsx
+React.createElement(Buttons.Default, {}, "Login");
+React.createElement(Buttons.Outline, {}, "Register");
+```
+
+Chúng ta đã sử dụng `ThemeContext.Provider` trong các chương về `Context`:
+
+```jsx
+return (
+    <ThemeContext.Provider value={value}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+```
+
+Cú pháp cũng được sử dụng trong các Thư viện Giao diện người dùng, trong đó thư viện sẽ xuất tất cả các nút trong một đối tượng duy nhất tên là `Buttons`, và sau đó bạn có thể chọn loại nút bằng cách sử dụng `Buttons.Default` hoặc `Buttons.Outline`.
+
+Cú pháp tương tự cũng được áp dụng cho `<React.StrictMode />`.
 
 ## III. Hook - useState
 [:arrow_up: Mục lục](#mục-lục)
@@ -3698,7 +3747,7 @@ function App() {
 }
 ```
 
-## VI. Hook - useRef
+## VII. Hook - useRef
 [:arrow_up: Mục lục](#mục-lục)
 
 Trường hợp sử dụng useRef: `.play()` hoặc `.focus()`.
