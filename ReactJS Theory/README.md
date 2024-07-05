@@ -45,6 +45,11 @@
   - [1. Fetch API](#1-fetch-api)
   - [2. Fetch POST](#2-fetch-post)
 - [VI. Custom Hooks](#vi-custom-hooks)
+  - [1. Custom hooks với useEffect](#1-custom-hooks-với-useeffect)
+  - [2. Custom hooks với useState](#2-custom-hooks-với-usestate)
+  - [3. Custom hooks với useFetch](#3-custom-hooks-với-usefetch)
+- [VII. Hook - useRef](#vii-hook---useref)
+- [VIII. Context](#viii-context)
 
 </details>
 
@@ -3692,4 +3697,91 @@ function App() {
     </>);
 }
 ```
+
+## VI. Hook - useRef
+[:arrow_up: Mục lục](#mục-lục)
+
+Trường hợp sử dụng useRef: `.play()` hoặc `.focus()`.
+
+1. Tập trung vào một phần tử.
+2. Phát video (`videoElement.play()`), tạm dừng video, v.v.
+3. Chọn văn bản từ DOM.
+4. Khởi tạo thư viện DOM.
+
+Ví dụ, khi bạn mở [https://google.com](https://google.com), ô tìm kiếm sẽ được tập trung và trỏ nhắm tự động được đặt trong ô đó.
+
+<img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/cf39df37-85c2-40a6-bb11-e4942c9e97d9" height="200px" />
+
+Phương thức `.focus()` trên các phần tử `<input>` là một phương thức đặt con trỏ của người dùng vào trường nhập liệu
+
+Bạn có thể nghĩ đến việc sử dụng `document.querySelector()` để tìm `<input type="text" />` nhưng đây không phải là cách khuyên dùng vì một số lý do sau:
+
+- Phương thức có thể không hoạt động (cụ thể là khi **trường nhập liệu chưa được hiển thị**, hãy nhớ rằng **React tạo ra các phần tử React tạo thành DOM ảo và sau đó hiển thị chúng lên DOM thực của trình duyệt**).
+
+- Ngay cả khi phương thức hoạt động, bạn có thể nhận được **kết quả không đồng nhất** khi tiếp tục phát triển ứng dụng. Ví dụ: bạn sử dụng lại component đó nhiều lần trong ứng dụng.
+
+Giải pháp cho vấn đề này là sử dụng `ref` của React. 
+
+Ref cho phép bạn **giữ một tham chiếu đến phần tử DOM đã được hiển thị**. Sau khi tạo ra `ref` và gán nó cho một phần tử React trong JSX, bạn có thể gọi các phương thức mệnh lệnh trên phần tử DOM đã được hiển thị, chẳng hạn như `.focus()`.
+
+Dưới đây là cách ref hoạt động:
+
+```jsx
+import {useRef} from "react";
+
+function App() {
+    const inputRef = useRef();
+
+    return <input ref={inputRef} type="text" />;
+}
+```
+
+Sau khi gán `inputRef` cho `<input />` bằng `ref={inputRef}`, chúng ta có thể truy cập vào phần tử DOM đã được hiển thị với `inputRef.current`.
+
+Sau đó, bất cứ khi nào bạn muốn tập trung vào phần tử input, bạn có thể gọi `inputRef.current.focus()`. Vì vậy, kết quả cuối cùng sẽ như sau:
+
+```jsx
+import {useRef, useEffect} from "react";
+
+function App() {
+    const inputRef = useRef();
+
+    useEffect(() => {
+        inputRef.current.focus();
+    }, []);
+
+    return <input ref={inputRef} type="text" />;
+}
+```
+
+Lời khuyên là hãy luôn kết thúc tên biến `ref` bằng từ Ref. Ví dụ:
+
+- `inputRef` khi tham chiếu đến `input`
+- `buttonRef` khi tham chiếu đến `button`
+- `carouselRef` khi tham chiếu đến `carousel` (một plugin)
+
+**Đối tượng được tạo ra bởi useRef:**
+
+Khi bạn gọi `useRef()`, React sẽ tạo ra một đối tượng chứa **khóa** `current`. Vì vậy, việc gọi `const inputRef = useRef();` sẽ trả về một đối tượng có cấu trúc sau:
+
+```jsx
+{
+    current: undefined
+}
+```
+
+Sau đó, khi bạn gán `ref` cho phần tử JSX, React sẽ gán **khóa** `current` cho phần tử DOM đã được hiển thị. Ví dụ:
+
+```jsx
+{
+    current: <input type="text" />
+}
+```
+
+Điều này có nghĩa là mỗi khi bạn muốn truy cập vào phần tử đang tham chiếu, bạn phải sử dụng khóa `.current`. Đây là lý do tại sao trong ví dụ ở trên, chúng ta phải gọi `inputRef.current.focus()`. Đó là vì `inputRef.current` sẽ **cho phép bạn truy cập vào phần tử DOM được tham chiếu**.
+
+Bạn phải nhớ rằng `inputRef.current` chỉ trả về phần tử DOM **sau khi component đã được hiển thị trên DOM**. Đây là lý do tại sao bạn chỉ nên sử dụng `ref` **bên trong** trình lý sự kiện (**useEffect**) hoặc cuộc gọi useEffect. Nguyên nhân là vì cả hai phương thức này đều chạy **sau** khi component đã được hiển thị trên DOM.
+
+## VIII. Context
+[:arrow_up: Mục lục](#mục-lục)
 
