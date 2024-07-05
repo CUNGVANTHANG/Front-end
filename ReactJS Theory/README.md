@@ -3671,3 +3671,25 @@ export default function useFetch(baseUrl) {
 };
 ```
 
+Bạn cũng có thể destructure biến trạng thái `loading`, đây là một giá trị `boolean` cho biết `fetch` có đang trong trạng thái tải hay không. Ví dụ:
+
+```jsx
+import {useEffect} from "react";
+import useFetch from "./useFetch.js";
+
+function App() {
+    const {get, loading} = useFetch("https://course-assets.tek4.vn/reactjs-assets/");
+
+    useEffect(() => {
+        get("users.json").then(data => {
+            console.log(data);
+        })
+        .catch(error => console.error(error));
+    }, []);
+
+    return (<>
+        <h2>{loading ? "Loading..." : ""}</h2>
+    </>);
+}
+```
+
