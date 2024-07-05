@@ -3163,3 +3163,123 @@ function App() {
 Vì vậy, nếu bạn muốn thực hiện yêu cầu `fetch` trên sự kiện `onClick`, bạn cần đặt cuộc gọi fetch bên trong hàm `handleButtonClick` thay vì trong `useEffect`.
 
 Lưu ý rằng chúng ta thiết lập giá trị mặc định của `isLoading` là `false` vì nó chỉ bắt đầu tải khi người dùng nhấp vào nút. Chúng ta bắt đầu hiển thị trình tải bên trong `handleButtonClick` bằng `setIsLoading(true)`.
+
+### m. Fetch với async/await
+[:arrow_up: Fetch API](#1-fetch-api)
+
+[async/await](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#d-asyncawait) là cú pháp rút gọn cho promise, cho phép bạn biểu diễn logic của promise như một tập hợp các hoạt động chạy tuần tự theo từng dòng.
+
+_Ví dụ:_
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+        .then(response => response.json())
+        .then(data => {
+            setUsers(data);
+        });
+    }, []);
+}
+```
+
+Để sử dụng `async/await`, chúng ta cần đặt tiền tố `async` trước khai báo hàm để có thể sử dụng từ khóa `await`. Tuy nhiên, hàm `async` là một hàm trả về Promise.
+
+Chúng ta cần giữ `useEffect` như một hàm thông thường và tạo một hàm khác bên trong nó có thể được gọi ngay lập tức (còn gọi là Immediately Invoked Function Expression ([IIFE](https://github.com/CUNGVANTHANG/Front-end/tree/master/Javascript%20Theory#a-iife)):
+
+```jsx
+useEffect(() => {
+    (() => {
+        // this is a function that will execute immediately
+    })();
+});
+```
+
+Bây giờ chúng ta cần làm cho hàm mới trở thành hàm `async` bằng cách thêm từ khóa `async` vào đầu hàm:
+
+```jsx
+useEffect(() => {
+    (async () => {
+        // we can use await here ✅
+    })();
+});
+```
+
+Và cuối cùng, với mọi hàm trả về promise (ví dụ: `fetch` và `response.json()`), chúng ta có thể thêm từ khóa `await` vào trước và loại bỏ `.then()`.
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        (async () => {
+            const response = await fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+            const data = await response.json()
+            setUsers(data);
+        })();
+    }, []);
+}
+```
+
+**XỬ LÝ LỖI:**
+
+Khi sử dụng promise, chúng ta thường sử dụng `.catch` để xử lý lỗi. Với `async/await`, bạn cần đóng gói đoạn code sử dụng `await` bằng khối `try...catch`.
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+          try {
+            const response = await fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+            const data = await response.json();
+            setIsLoading(false)
+            setUsers(data);
+          } catch (error) {
+              console.log(error)
+              setIsLoading(false);
+          } 
+        })()
+    }, []);
+
+    return null
+}
+```
+
+Bạn cũng có thể sử dụng từ khóa `finally` để tái cấu trúc các câu lệnh chung giữa khối `try` và `catch`:
+
+```jsx
+import {useEffect, useState} from "react";
+
+function App() {
+    const [users, setUsers] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+          try {
+            const response = await fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+            const data = await response.json();
+            setUsers(data);
+          } catch (error) {
+              console.log(error)
+          } finally {
+            setIsLoading(false)
+          }
+        })()
+    }, []);
+
+    return null
+}
+```
+
