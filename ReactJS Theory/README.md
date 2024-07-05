@@ -3390,6 +3390,9 @@ Hook tùy chỉnh là một hàm JavaScript có tên bắt đầu bằng `use`. 
 
 Mục tiêu của hook tùy chỉnh là tái sử dụng hook trong nhiều component. Việc đặt chúng vào một file riêng cũng giúp mã nguồn dễ đọc và dễ quản lý hơn. 
 
+### 1. Custom hooks với useEffect
+[:arrow_up: Mục lục](#mục-lục)
+
 _Ví dụ:_
 
 ```jsx
@@ -3422,3 +3425,249 @@ Bạn cũng có thể đặt tên file là `useHelloWorld.hook.js` để chỉ r
 Quy tắc số 1: Chỉ gọi Hook từ các hàm React (component hoặc hook tùy chỉnh).
 
 Quy tắc số 2: Chỉ gọi Hook ở cấp độ trên cùng
+
+### 2. Custom hooks với useState
+[:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ:_
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [counter, setCounter] = useState(0);
+
+    function handleIncrementClick() {
+        setCounter(prevCounter => prevCounter + 1);
+    }
+
+    function handleDecrementClick() {
+        setCounter(prevCounter => {
+            // only decrement if it's bigger than 0
+            if (prevCounter > 0) {
+                return prevCounter - 1;
+            }
+            // don't let it go below 0
+            return 0;
+        });
+    }
+}
+```
+
+Tái sử dụng logic trên, chúng ta có thể tối ưu hóa nó thành một hook tùy chỉnh tên là useProductCounter.
+
+```jsx
+// useProductCounter.js
+import {useState} from "react";
+
+export default function useProductCounter() {
+    const [counter, setCounter] = useState(0);
+
+    function increment() {
+        setCounter(prevCounter => prevCounter + 1);
+    }
+
+    function decrement() {
+        setCounter(prevCounter => {
+            if (prevCounter > 0) {
+                return prevCounter - 1;
+            }
+            return 0;
+        });
+    }
+
+    return ; /* we need to return the counter and the two functions */
+}
+```
+
+Chúng ta di chuyển khai báo `useState` và hai hàm và đặt chúng vào hook tùy chỉnh mới. Chúng ta cũng đổi tên `handleIncrementClick` thành `increment` vì đây là một hàm tăng giá trị có thể tái sử dụng và nó không nhất thiết phải được gọi khi nhấp chuột. Tương tự với hàm `handleDecrementClick`, giờ được gọi là `decrement`.
+
+Bây giờ hook tùy chỉnh này cần trả về trạng thái `counter` cùng với các hàm `increment` và `decrement` để có thể sử dụng chúng bên ngoài component.
+
+Có hai cách tiếp cận:
+
+1. Array destructuring
+
+Phương pháp đầu tiên là tiếp tục trả về mảng như ta đã học, nhưng lần này mảng sẽ có ba phần tử:
+
+```jsx
+return [counter, increment, decrement];
+```
+
+Sau đó, bên trong component, bạn sẽ sử dụng array destructuring:
+
+```jsx
+const [counter, increment, decrement] = useProductCounter();
+```
+
+2. Object destructuring (Hay dùng)
+
+Phương pháp thứ hai là trả về một đối tượng chứa count và hai hàm:
+
+```jsx
+return {counter, increment, decrement};
+```
+
+Đây là cách sử dụng cú pháp rút gọn đối tượng ES2015. Nó tương đương với code dưới đây, nhưng ngắn hơn:
+
+```jsx
+return {
+    counter: counter,
+    increment: increment,
+    decrement: decrement
+};
+```
+
+Nhưng vì các khóa và giá trị có cùng tên, bạn chỉ cần viết là `return {counter, increment, decrement}`.
+
+Với phương pháp này, bạn có thể sử dụng object destructuring trong component App, tương tự như array destructuring nhưng cho đối tượng:
+
+```jsx
+const {counter, increment, decrement} = useProductCounter();
+```
+
+### 3. Custom hooks với useFetch
+[:arrow_up: Mục lục](#mục-lục)
+
+Bạn có thể nhận thấy rằng code `fetch` thường rất dài, điều này làm cho component phức tạp hơn mức cần thiết. Đó là một trong những lý do tại sao chúng ta sẽ tạo hook tùy chỉnh `useFetch` để đơn giản hóa logic `fetch`.
+
+Hook tùy chỉnh `useFetch` sẽ trả về một hàm `get` và một hàm `post`
+
+_Ví dụ 1:_ Bắt đầu với "get"
+
+Hàm `get` cho phép chúng ta thực hiện các yêu cầu `get`. Khi hook tùy chỉnh `useFetch` được xây dựng, đây là cách bạn sử dụng nó:
+
+Thay vì viết code dưới đây:
+
+```jsx
+useEffect(() => {
+    fetch("https://course-assets.tek4.vn/reactjs-assets/users.json")
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => console.log(error));
+}, []);
+```
+
+Bạn có thể viết code sau đây:
+
+```jsx
+const {get} = useFetch("https://course-assets.tek4.vn/reactjs-assets/users.json");
+
+useEffect(() => {
+    get("users.json")
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => console.log(error));
+}, []);
+```
+
+Lưu ý rằng:
+
+1. Hàm `useFetch` trả về một đối tượng với hàm `get`.
+
+Chúng ta sử dụng object destructuring để truy cập vào hàm get.
+
+2. Hàm `useFetch` nhận tham số `baseUrl`, cho phép ta gọi `get("users.json")` sau đó mà không cần lặp lại URL cơ sở dài.
+3. `get("users.json")` tự động chuyển đổi phản hồi thành JSON. Chúng ta không cần phải làm điều đó nữa vì chúng ta có thể ngay lập tức xử lý promise và đọc `data`.
+
+_Ví dụ 2:_ Bắt đầu với "post"
+
+Phương thức `post` hoạt động tương tự như phương thức `get` nhưng nó cũng cần nhận tham số `body` để được gửi trong yêu cầu `fetch`.
+
+Thay vì viết code dưới đây:
+
+```jsx
+fetch("https://course-api.tek4.vn/demo/react/grades", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({grade: 20})
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
+
+Bạn có thể viết code như sau:
+
+```jsx
+const {post} = useFetch("https://course-api.tek4.vn/demo/react/");
+
+post("grades", {
+    grade: 20
+})
+.then(data => {
+    console.log(data);
+})
+.catch(error => console.log(error));
+```
+
+Lưu ý rằng hàm post nhận hai tham số: `url` và `body` được gửi cùng với yêu cầu post.
+
+Yêu cầu `fetch` cũng nên thiết lập method là "post" và thiết lập các tiêu đề.
+
+Hàm `post` sẽ nhận `url` mà bạn muốn gửi yêu cầu `fetch` và `url` này sẽ được thêm vào `baseUrl` và thực hiện yêu cầu `fetch` với `post`.
+
+Hàm `post` cũng nhận tham số `body`, tham số này sẽ được chuyển thành chuỗi JSON và được gửi cùng với yêu cầu `fetch`.
+
+Phiên bản nâng cao của hook tùy chỉnh trả về một đối tượng chứa ba mục: hàm `get`; hàm `post`; trạng thái loading, sẽ là một giá trị `boolean`.
+
+```jsx
+import { useState } from "react";
+
+export default function useFetch(baseUrl) {
+  const [loading, setLoading] = useState(true);
+
+  function get(url) {
+    return new Promise((resolve, reject) => {
+      fetch(baseUrl + url)
+        .then(response => response.json())
+        .then(data => {
+          if (!data) {
+            setLoading(false);
+            return reject(data);
+          }
+          setLoading(false);
+          resolve(data);
+        })
+        .catch(error => {
+          setLoading(false);
+          reject(error);
+        });
+    });
+  }
+
+  function post(url, body) {
+    return new Promise((resolve, reject) => {
+      fetch(baseUrl + url, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (!data) {
+            setLoading(false);
+            return reject(data);
+          }
+          setLoading(false);
+          resolve(data);
+        })
+        .catch(error => {
+          setLoading(false);
+          reject(error);
+        });
+    });
+  }
+
+  return { get, post, loading };
+};
+```
+
