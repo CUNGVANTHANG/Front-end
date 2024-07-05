@@ -44,6 +44,8 @@
 - [V. Fetch](#v-fetch)
   - [1. Fetch API](#1-fetch-api)
   - [2. Fetch POST](#2-fetch-post)
+- [VI. Custom Hooks](#vi-custom-hooks)
+
 </details>
 
 ## I. SPA/MPA là gì?
@@ -2747,6 +2749,30 @@ const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-he
 - [h. XỬ LÝ LỖI HTTP](#h-xử-lý-lỗi-http)
 - [j. XỬ LÝ LỖI LIÊN QUAN ĐẾN MẠNG](#j-xử-lý-lỗi-liên-quan-đến-mạng)
 - [k. XỬ LÝ TẢI DỮ LIỆU BẰNG FETCH](#k-xử-lý-tải-dữ-liệu-bằng-fetch)
+- [l. Fetch khi click](#l-fetch-khi-click)
+- [m. Fetch với async/await](#m-fetch-với-asyncawait)
+
+Fetch API hay còn gọi là Fetch GET, chúng ta hay viết
+
+```jsx
+fetch("https://course-assets.tek4.vn/reactjs-assets/grades.json")
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
+
+tường minh hơn sẽ là như sau:
+
+```jsx
+fetch("https://course-assets.tek4.vn/reactjs-assets/grades.json", {
+    method: "GET" // this is a default
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
 
 #### a. XỬ LÝ PROMISE
 [:arrow_up: Fetch API](#1-fetch-api)
@@ -3283,3 +3309,81 @@ function App() {
 }
 ```
 
+### 2. Fetch POST
+[:arrow_up: Mục lục](#mục-lục)
+
+Để gửi một yêu cầu `POST`, chúng ta phải chỉ định method là `POST`.
+
+```jsx
+fetch("https://course-assets.tek4.vn/reactjs-assets/grades.json", {
+    method: "POST"
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
+
+Tuy nhiên, trong hầu hết các trường hợp, bạn sẽ cần gửi một số dữ liệu cùng với yêu cầu. 
+
+Trong ví dụ này, chúng ta cần gửi grade. Để làm điều đó, bạn cần thêm vào đối số thứ hai cặp khóa và giá trị sau: `JSON.stringify({grade: 10})` 
+
+Một khuyến nghị dành cho bạn là khi làm việc với các API trả về dữ liệu dưới định dạng JSON, hãy luôn chỉ định header sau: `Content-Type: "application/json"`.
+
+Nó giống như việc bạn đang thông báo cho API rằng: Tôi đang gửi cho bạn một số dữ liệu dưới định dạng JSON.
+
+Tóm lại, dưới đây là cú pháp của `fetch POST`:
+
+```jsx
+fetch("https://course-assets.tek4.vn/reactjs-assets/grades.json", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({grade: 50})
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+});
+```
+
+Cần chỉ định `method: "POST"` và thường phải gửi `body: JSON.stringify(dataObjectHere)`, header `"Content-Type": "application/json"`.
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [number, setNumber] = useState(0);
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        fetch("https://course-assets.tek4.vn/reactjs-assets/grades.json", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({grade: number})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Grade added");
+            console.log(data);
+        });
+    }
+
+    return <form onSubmit={handleFormSubmit}>
+        <input type="number" value={number} name="grade" onChange={event => setNumber(event.target.value)} placeholder="Enter the grade" />
+        <input type="submit" />
+        </form>
+    ;
+}
+```
+
+`fetch POST` thường được đặt trong hàm `handleFormSubmit`, trong đó bạn gửi một trong các biến state trong body.
+
+## VI. Custom Hooks
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook tùy chỉnh là một hàm JavaScript có tên bắt đầu bằng `use`. Ví dụ như `useHelloWorld`, `useAnalyticsEvent` ...
