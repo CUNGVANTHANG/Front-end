@@ -3387,3 +3387,38 @@ function App() {
 [:arrow_up: Mục lục](#mục-lục)
 
 Hook tùy chỉnh là một hàm JavaScript có tên bắt đầu bằng `use`. Ví dụ như `useHelloWorld`, `useAnalyticsEvent` ...
+
+Mục tiêu của hook tùy chỉnh là tái sử dụng hook trong nhiều component. Việc đặt chúng vào một file riêng cũng giúp mã nguồn dễ đọc và dễ quản lý hơn. 
+
+_Ví dụ:_
+
+```jsx
+// useHelloWorld.js
+import {useEffect} from "react";
+
+export default function useHelloWorld() {
+    useEffect(() => {
+        console.log("Hello World!");
+    });
+}
+```
+
+Bây giờ, quay trở lại component App, chúng ta có thể thêm nó vào như sau:
+
+```jsx
+import useHelloWorld from "./useHelloWorld.js";
+
+function App() {
+    useHelloWorld();
+
+    return <h1>My App</h1>;
+}
+```
+
+Bạn cũng có thể đặt tên file là `useHelloWorld.hook.js` để chỉ rõ rằng đây là một hook tùy chỉnh. Điều này phụ thuộc vào bạn.
+
+**Các quy tắc làm việc với hook vẫn áp dụng cho hook tùy chỉnh.**
+
+Quy tắc số 1: Chỉ gọi Hook từ các hàm React (component hoặc hook tùy chỉnh).
+
+Quy tắc số 2: Chỉ gọi Hook ở cấp độ trên cùng
