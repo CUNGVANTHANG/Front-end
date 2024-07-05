@@ -27,6 +27,7 @@
   - [6. Truyền props sử dụng toán tử Spread](#6-truyền-props-sử-dụng-toán-tử-spread)
   - [7. Trích xuất giá trị từ mảng với Destructuring](#7-trích-xuất-giá-trị-từ-mảng-với-destructuring)
   - [8. Ký hiệu dấu chấm](#8-ký-hiệu-dấu-chấm)
+  - [9. dangerouslySetInnerHTML](#9-dangerouslysetinnerhtml)
 - [III. Hook - useState](#iii-hook---usestate)
   - [1. useState](#1-usestate)
   - [2. Closures](#2-closures)
@@ -1120,6 +1121,55 @@ return (
 Cú pháp cũng được sử dụng trong các Thư viện Giao diện người dùng, trong đó thư viện sẽ xuất tất cả các nút trong một đối tượng duy nhất tên là `Buttons`, và sau đó bạn có thể chọn loại nút bằng cách sử dụng `Buttons.Default` hoặc `Buttons.Outline`.
 
 Cú pháp tương tự cũng được áp dụng cho `<React.StrictMode />`.
+
+### 9. dangerouslySetInnerHTML
+[:arrow_up: Mục lục](#mục-lục)
+
+Hãy xem xét component sau:
+
+```jsx
+function Footer() {
+    const text = "<strong>All rights reserved ©</strong>";
+
+    return <div>{text}</div>;
+}
+```
+
+Dự đoán sẽ hiển thị: All rights reserved © (in đậm)
+
+Kết quả thực tế là: <strong>All rights reserved &copy;</strong> không in đậm và ký hiệu bản quyền được hiển thị dưới dạng một thực thể HTML.
+
+React sẽ tự động thoát các thực thể HTML (chuyển đổi thực thể HTML thành ký tự an toàn). Đây là một tính năng bảo mật nhằm ngăn chặn `XSS injectio`
+
+**XSS Injection là gì?**
+
+Cross-Site Scripting (XSS) là một lỗ hổng bảo mật trong đó người dùng có thể chèn code của họ (HTML, CSS hoặc JavaScript) vào trang web của bạn. Giả sử bạn muốn gửi lời chúc mừng sinh nhật cho bạn bè trên mạng xã hội. Thay vì viết: **Happy Birthday**, bạn viết:
+
+```html
+<script>alert("You got hacked!")</script>
+```
+
+Nếu trang mạng xã hội cho phép bạn viết tập lệnh của riêng bạn và hiển thị trên trang, đây sẽ là một lỗ hổng bảo mật nghiêm trọng vì bạn có thể đọc cookie của người dùng, mạo danh người dùng, chuyển hướng đến các trang web khác và thực hiện nhiều hành vi khác.
+
+Để ngăn chặn XSS Injection, bạn cần thoát các phần tử HTML (nói một cách đơn giản).
+
+Vì vậy, đoạn code ở trên trở thành: `&lt;script&gt;alert("You got hacked!")&lt;/script&gt;`. Bằng cách thoát các ký tự `<` và `>`, trình duyệt sẽ hiểu đoạn code trên là văn bản thông thường thay vì một đoạn lệnh.
+
+**Biểu thức JSX được thoát:**
+
+Tuy nhiên, **có các tình huống mà bạn muốn ghi đè lên hành vi này và bỏ qua biện pháp phòng ngừa**. 
+
+```jsx
+function Footer() {
+    const text = "<strong>All rights reserved ©</strong>";
+
+    return <div dangerouslySetInnerHTML={{__html: text}}></div>;
+}
+```
+
+Để ý là chúng ta đã loại bỏ biểu thức `{text}` và thêm một prop tên là `dangerouslySetInnerHTML`, nó nhận đối tượng `{__html: text}` được đóng gói bởi biểu thức `{}` (vì vậy chúng ta có `{{}}`, một cho đối tượng và một cho biểu thức).
+
+Bên trong đối tượng này, bạn phải đặt khóa `__html` (hai dấu gạch dưới). Việc thiết kế `dangerouslySetInnerHTML` với cấu trúc phức tạp như vậy nhằm mục đích nhắc nhở bạn rằng việc sử dụng nó tiềm ẩn các rủi ro bảo mật.
 
 ## III. Hook - useState
 [:arrow_up: Mục lục](#mục-lục)
