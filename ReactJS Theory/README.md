@@ -3785,3 +3785,299 @@ Bạn phải nhớ rằng `inputRef.current` chỉ trả về phần tử DOM **
 ## VIII. Context
 [:arrow_up: Mục lục](#mục-lục)
 
+Trong lập trình, từ "context" có thể được hiểu là _thông tin liên quan_.
+
+Giả sử ứng dụng có sẵn giao diện chủ đề tối và chủ đề sáng. Chủ đề của ứng dụng có thể được biểu diễn bằng một biến trạng thái trong component cao nhất, component `App`. `theme` được định nghĩa là một biến trạng thái trong component App như sau:
+
+```jsx
+import {useState} from "react";
+
+function App() {
+    const [theme, setTheme] = useState("dark");
+
+    return <Nav />
+}
+
+function Nav() {
+    return <Button>Login</Button>;
+}
+
+function Button(props) {
+    return <button>{props.children}</button>;
+}
+```
+
+Tuy nhiên, chúng ta cần biết `theme` hiện tại trong component Button vì chúng ta sẽ hiển thị một lớp khác nhau dựa trên chủ đề. Do đó, chúng ta sẽ phải truyền chủ đề xuống như một `prop` từ App đến Nav và từ Nav đến Button như sau:
+
+```jsx
+import React, {useState} from "react";
+
+function App() {
+    const [theme, setTheme] = useState("dark");
+
+    return <Nav theme={theme} />
+}
+
+function Nav(props) {
+    return <Button theme={props.theme}>Login</Button>;
+}
+
+function Button(props) {
+    // render class depending on props.theme
+    return <button>{props.children}</button>;
+}
+```
+
+Để ý rằng mỗi component trong ứng dụng cần nhận `theme` như một `prop`. Điều này sẽ làm cho code trong các component **trở nên phức tạp và dài dòng.**
+
+Đây là ví dụ minh họa một trường hợp sử dụng Context. Trường hợp sử dụng lý tưởng cho Context là **khi bạn muốn làm cho dữ liệu toàn cục có thể truy cập được từ nhiều component trong ứng dụng**.
+
+### 1. Tạo Context
+[:arrow_up: Mục lục](#mục-lục)
+
+**Bước 1: Tạo Context**
+
+Bước đầu tiên là tạo một Context mới. Để làm điều đó, chúng ta cần thêm một named export: `createContext` từ gói React, ví dụ: `import {createContext} from "react"`.
+
+Sau đó, chúng ta cần gọi hàm `createContext()` và lưu kết quả trả về vào một biến.
+
+```jsx
+import React, {createContext} from "react";
+
+const ThemeContext = createContext();
+```
+
+**Bước 2: Tạo Provider**
+
+Mỗi **context đều cần một Provider**. Provider sẽ cung cấp dữ liệu cho context. Trong trường hợp này, chúng ta đang tạo `ThemeContext` và muốn cung cấp `theme` (ví dụ `"dark"` hoặc `"light"`).
+
+```jsx
+import { createContext } from "react";
+
+const ThemeContext = createContext();
+
+function ThemeProvider(props) {
+  const theme = "dark";
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+`ThemeProvider` là một component React nhận `props` và hiển thị `props.children` được đóng gói bởi `<ThemeContext.Provider>`.
+
+`ThemeContext.Provider` nhận một `value`, đó là **giá trị mà tất cả các component con sẽ nhận được**. `ThemeContext` là một đối tượng và `Provider` là một khóa trong đối tượng đó
+
+**Bước 3: Xuất Context & Provider**
+
+Cuối cùng, chúng ta cần xuất `ThemeContext` và `ThemeProvider` bằng `export {ThemeContext, ThemeProvider}`.
+
+```jsx
+import { createContext } from "react";
+
+const ThemeContext = createContext();
+
+function ThemeProvider(props) {
+  const theme = "dark";
+
+  return (
+    <ThemeContext.Provider value={theme}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+
+export { ThemeContext, ThemeProvider };
+```
+
+### 2. Sử dụng Context
+[:arrow_up: Mục lục](#mục-lục)
+
+**Bước 1. Đóng gói component với Provider**
+
+Để có thể sử dụng `context` trong ứng dụng, bạn phải đóng gói các component bằng `Provider`.
+
+Hãy xem xét component `App` hiển thị `<Nav />`:
+
+```jsx
+// index.js
+function App() {
+    return <Nav />;
+}
+```
+
+Đầu tiên, chúng ta cần thêm `ThemeProvider` và đóng gói tất cả các component trong nó:
+
+```jsx
+// index.js
+import {ThemeProvider} from "./ThemeContext.js";
+
+function App() {
+    return (<ThemeProvider>
+        <Nav />
+    </ThemeProvider>);
+}
+```
+
+Điều này cho phép tất cả các component được lồng trong `ThemeProvider` có quyền truy cập vào `context` được cung cấp bởi `ThemeProvider`.
+
+**Bước 2. Sử dụng context trong các component**
+
+Bất kỳ component nào được lồng trong `ThemeProvider` bây giờ có thể truy cập vào `context` bằng cách thêm `ThemeContext` và truyền nó vào hook `useContext()`. 
+
+```jsx
+// Button.js
+import {useContext} from "react";
+import {ThemeContext} from "./ThemeContext.js";
+
+function Button(props) {
+    const theme = useContext(ThemeContext);
+    console.log(theme); // "dark"
+    return <button>{props.children}</button>;
+}
+```
+
+Chúng ta đã thêm hook `useContext` và truyền `ThemeContext` cho nó. Điều này cho phép ta sử dụng `value` đã được truyền cho `provider` trong bước trên, trong ví dụ này là `"dark"`.
+
+Cách làm này có vẻ phức tạp và rườm rà, nhưng lợi ích của việc này là chúng ta không cần phải truyền `props.theme` từ component cao nhất xuống tất cả các component con.
+
+Vì vậy, chúng ta có thể tái cấu trúc chương trình trong bài học đầu chương như sau:
+
+```jsx
+import {useContext} from "react";
+import {ThemeContext, ThemeProvider} from "./ThemeContext.js";
+
+function App() {
+    return (<ThemeProvider>
+        <Nav />
+    </ThemeProvider>);
+}
+
+function Nav() {
+    return <Button>Login</Button>;
+}
+
+function Button(props) {
+    const theme = useContext(ThemeContext);
+    console.log(theme); // "dark"
+    return <button>{props.children}</button>;
+}
+```
+
+### 3. Giá trị Context
+[:arrow_up: Mục lục](#mục-lục)
+
+Ngoài trả về một giá trị chuỗi như sau:
+
+```jsx
+function ThemeProvider(props) {
+  const theme = "dark";
+
+  return (
+    <ThemeContext.Provider value={theme}> /* value is a string (in this example) */
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+Thì ta có thể định nghĩa context trả về một mảng hoặc đối tượng!
+
+```jsx
+import { createContext } from "react";
+
+const ThemeContext = createContext();
+
+function ThemeProvider(props) {
+  const theme = "dark";
+
+  function toggleTheme() {
+    // toggle the theme here
+  }
+
+  const value = {
+    theme: theme,
+    toggleTheme: toggleTheme
+  }
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+
+export { ThemeContext, ThemeProvider };
+```
+
+Lưu ý `<ThemeContext.Provider />` vẫn nhận cùng `value={}`, nhưng thay vì truyền một chuỗi, chúng ta bây giờ đang truyền một đối tượng.
+
+### 4. Cập nhật giá trị Context
+[:arrow_up: Mục lục](#mục-lục)
+
+Đôi khi chúng ta muốn thay đổi giá trị của `theme` tại một thời điểm nào đó, để làm điều đó, chúng ta cần tạo một biến trạng thái cho chủ đề thay vì sử dụng biến thông thường.
+
+Chúng ta có thể sử dụng hook `useState` bên trong Context:
+
+```jsx
+import { createContext, useState } from "react";
+
+const ThemeContext = createContext();
+
+function ThemeProvider(props) {
+  const [theme, setTheme] = useState("dark");
+
+  function toggleTheme() {
+    // toggle the theme here
+  }
+
+  const value = {
+    theme: theme,
+    toggleTheme: toggleTheme
+  }
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {props.children}
+    </ThemeContext.Provider>
+  );
+};
+
+export { ThemeContext, ThemeProvider };
+```
+
+Và bây giờ chúng ta có thể triển khai hàm `toggleTheme`:
+
+```jsx
+function toggleTheme() {
+    if (theme === "dark") {
+      setTheme("light")
+    } else {
+      setTheme("dark")
+    }
+}
+```
+
+hàm sẽ chuyển đổi `theme` từ `"dark"` sang `"light"` và ngược lại.
+
+Với `context` trên, chúng ta có thể cập nhật `theme` từ bất kỳ đâu trong ứng dụng, miễn là chúng ta sử dụng `ThemeContext`. Dưới đây là cách thực hiện:
+
+```jsx
+import {useContext} from "react";
+import {ThemeContext} from "./ThemeContext.js";
+
+function App() {
+    const context = useContext(ThemeContext);
+    console.log(context); // {theme: "dark", toggleTheme: Function}
+
+    return <button onClick={() => context.toggleTheme()}>Toggle Theme</button>;
+}
+```
+
+`useContext(ThemeContext)` bây giờ trả về một đối tượng chứa `theme` và hàm `toggleTheme`.
+
+Sau đó, chúng ta gọi hàm `context.toggleTheme()` khi nút được nhấp (`onClick`).
+
