@@ -57,6 +57,9 @@
   - [3. Giá trị Context](#3-giá-trị-context)
   - [4. Cập nhật giá trị Context](#4-cập-nhật-giá-trị-context)
 - [IX. React Router](#ix-react-router)
+  - [1. Điều hướng cơ bản](#1-điều-hướng-cơ-bản)
+  - [2. Tham số URL](#2-tham-số-url)
+  - [3. Hook - useParams](#3-hook---useparams)
 
 </details>
 
@@ -4298,3 +4301,101 @@ function App() {
 Component `<Link />` nhận một prop `to`. Khi người dùng nhấp vào liên kết, React Router sẽ chuyển hướng đến đường dẫn được cung cấp bởi prop `to`.
 
 Phần tử `<Link />` này sẽ hiển thị một phần tử `<a>`, nhưng một số trình xử lý sự kiện sẽ chỉ định React Router thực hiện chuyển hướng ngay lập tức thay vì chuyển hướng trang.
+
+### 2. Tham số URL
+[:arrow_up: Mục lục](#mục-lục)
+
+Bạn có một danh sách sản phẩm, bao gồm từ 2 sản phẩm cho đến hàng trăm (hoặc thậm chí nhiều hơn). Làm thế nào để tạo một trang riêng biệt cho từng sản phẩm?
+
+Ta có thể suy ra rằng tất cả các sản phẩm đều có cấu trúc trang giống nhau, chỉ có dữ liệu là khác nhau. Để làm điều đó, ta sử dụng tham số `URL` của React Router.
+
+Trước tiên hãy xem một ví dụ, sau đó ta sẽ phân tích cách nó hoạt động:
+
+```jsx
+<Route path="/products/:id" element={<Product />}>
+</Route>
+```
+
+Để ý đường dẫn được định nghĩa là `/products/:id`. `:id` là trình giữ chỗ cho một giá trị `id` mà chúng ta có thể sử dụng như một biến trong bài học tiếp theo.
+
+Dấu hai chấm (`:`) thông báo cho React Router biết rằng chúng ta không tìm kiếm `:id` chính xác mà là tìm kiếm bất kỳ văn bản nào xuất hiện sau `/products/`. Ví dụ, các route sau sẽ khớp với đường dẫn `/products/:id:`
+
+`/products/1` => `:id` là `1`
+`/products/2` => `:id` là `2`
+`/products/30` => `:id` là `30`
+`/products/abc` => `:id` là `abc`
+
+Tất cả các route này sẽ hiển thị component `<Product />`.
+
+Lưu ý rằng React Router sẽ nhận biết được bất kỳ chuỗi nào xuất hiện sau `/products/`, không chỉ giới hạn ở `id` (số).
+
+### 3. Hook - useParams
+[:arrow_up: Mục lục](#mục-lục)
+
+Chúng ta đã định nghĩa một route nhận một tham số `URL` và hiển thị component tương ứng, ví dụ như component `<Product />`.
+
+Nhưng làm thế nào component `Product` có thể biết tham số `URL` đó là gì?
+
+Cho route sau:
+
+```jsx
+<Route path="/products/:id" element={<Product />}>
+</Route>
+```
+
+Trong component `<Product />`, bạn có thể trích xuất tham số `:id` từ `URL` bằng cách sử dụng hook `useParams()`.
+
+Hook `useParams` là một hook mà chúng ta cần thêm từ `"react-router-dom"`. Hook này trả về một đối tượng chứa tất cả các tham số `URL` từ `URL`:
+
+```jsx
+// Product.js
+import {useParams} from "react-router-dom";
+
+function Product() {
+  const params = useParams();
+  console.log(params); // object containing params
+
+  return <h2>Product</h2>;
+}
+```
+
+Bắt đầu bằng việc thêm `useParams` dưới dạng named import từ `react-router-dom`. Sau đó, bạn gọi hook đó ở đầu component với `const params = useParams()`.
+
+Nó luôn trả về một đối tượng chứa tất cả các tham số `URL` từ `URL`. Sử dụng ví dụ hiện tại, giả sử người dùng truy cập trang: `/products/10`, khi đó đối tượng `params` sẽ chứa:
+
+```jsx
+{
+    id: "10"
+}
+```
+
+Điều này có nghĩa là nếu chúng ta muốn lấy `id` của sản phẩm từ `URL`, chúng ta sẽ truy cập `params.id`.
+
+- **Một điều quan trọng cần lưu ý là giá trị của các tham số URL luôn là chuỗi.**
+
+- **Nhiều tham số URL**
+
+Cho đến nay, tất cả các ví dụ chỉ có một tham số `URL`. Tuy nhiên, bạn có thể sử dụng nhiều hơn một tham số `URL`. Hãy xem một ví dụ:
+
+```jsx
+<Route path="/products/:type/:id" element={<Product />}>
+</Route>
+```
+
+Giả sử người dùng truy cập `URL` sau: `/products/food/42`, tham số `:type` tương ứng với `"food"` và tham số `:id` tương ứng với `"42"`.
+
+Chúng ta có thể cập nhật component để đọc cả hai tham số vì hook `useParams()` trả về một đối tượng chứa tất cả các tham số `URL` này:
+
+```jsx
+// Product.js
+import {useParams} from "react-router-dom";
+
+function Product() {
+  const params = useParams();
+  const id = params.id; // "42"
+  const type = params.type; // "food"
+
+  return <h2>Product</h2>;
+}
+```
+
