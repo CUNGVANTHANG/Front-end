@@ -56,6 +56,7 @@
   - [2. Sử dụng Context](#2-sử-dụng-context)
   - [3. Giá trị Context](#3-giá-trị-context)
   - [4. Cập nhật giá trị Context](#4-cập-nhật-giá-trị-context)
+- [IX. React Router](#ix-react-router)
 
 </details>
 
@@ -4180,3 +4181,120 @@ function App() {
 
 Sau đó, chúng ta gọi hàm `context.toggleTheme()` khi nút được nhấp (`onClick`).
 
+## IX. React Router
+[:arrow_up: Mục lục](#mục-lục)
+
+Tên gói cho React Router là `react-router-dom`
+
+Nhập gói:
+
+```jsx
+import {} from "react-router-dom";
+```
+
+Component phổ biến hay sử dụng `BrowserRouter`, `Routes`, `Route`, `Link`
+
+### 1. Điều hướng cơ bản
+[:arrow_up: Mục lục](#mục-lục)
+
+**1. BrowserRouter**
+
+Component `<BrowserRouter />` cho phép thay đổi `URL` của trang mà không kích hoạt hành vi làm mới trình duyệt
+
+Để `BrowserRouter` hoạt động, bạn cần đóng gói toàn bộ ứng dụng trong component đó:
+
+```jsx
+import {BrowserRouter} from "react-router-dom";
+
+function App() {
+    return <BrowserRouter>
+        <div>The rest of your app goes here</div>
+    </BrowserRouter>;
+}
+```
+
+**2. Route**
+
+Component `<Route />` sẽ hiển thị một component khi trường thuộc tính `path` khớp với `URL` hiện tại trong trình duyệt.
+
+Dưới đây là ví dụ về component `<Route />`:
+
+```jsx
+<Route path="/about" element={<About />}></Route>
+```
+
+Component `<About />`, được cung cấp cho Route thông qua trường thuộc tính `element`, chỉ được hiển thị khi `URL` của trình duyệt khớp với đường dẫn `/about`.
+
+Hãy xem ví dụ đầy đủ:
+
+```jsx
+import {BrowserRouter, Route} from "react-router-dom";
+
+function App() {
+    return <BrowserRouter>
+        <div>The rest of your app goes here</div>
+
+        {/*We still need to wrap these two Route components with a <Routes />. Keep reading for now.*/}
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/about" element={<About />}></Route>
+    </BrowserRouter>;
+}
+```
+
+Khi người dùng điều hướng đến `/`, component `<Home />` sẽ được hiển thị.
+
+Tương tự, khi người dùng điều hướng đến `/about`, component `<About />` sẽ được hiển thị.
+
+**3. Routes**
+
+Component `<Routes />` sẽ đóng gói nhiều component `<Route />` và chỉ hiển thị `<Route />` khớp với URL hiện tại trong trình duyệt.
+
+```jsx
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
+function App() {
+    return <BrowserRouter>
+        <div>The rest of your app goes here</div>
+
+        <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/about" element={<About />}></Route>
+        </Routes>
+    </BrowserRouter>;
+}
+```
+
+Điều quan trọng là phần tử `<Routes />` trực tiếp đóng gói các phần tử `<Route />`, tức là `<Route />` phải nằm trực tiếp bên trong trực tiếp `<Routes />`. Điều đó có nghĩa là bạn không nên có thành phần trung gian như `<div>` hoặc các phần tử khác ở giữa `<Routes />` và `<Route />`; nếu không, việc điều hướng có thể không hoạt động chính xác.
+
+**4. Link**
+
+Chúng ta thường sử dụng thẻ `anchor` để liên kết đến một trang mới. Ví dụ: `<a href="/about">About us</a>`. Tuy nhiên, liên kết này sẽ thực hiện điều hướng trang, điều đó có nghĩa là ứng dụng React sẽ phải khởi động lại. Điều này bởi vì trình duyệt nghĩ rằng chúng ta đang điều hướng đến một trang hoàn toàn mới, vì vậy nó thực hiện một yêu cầu HTTP tới `/about`, sau đó trình duyệt phải phân tích HTML và các đoạn mã script, v.v.
+
+Ưu điểm của React Router là chúng ta có thể thực hiện điều hướng ngay tức thì. Đó là lý do tại sao chúng ta cần thay thế liên kết `<a>` bằng component `<Link />` do React Router cung cấp. Dưới đây là cách thực hiện:
+
+```jsx
+import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
+
+function App() {
+  return (
+    <BrowserRouter>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Routes and Route goes here*/}
+    </BrowserRouter>
+  );
+}
+```
+
+Component `<Link />` nhận một prop `to`. Khi người dùng nhấp vào liên kết, React Router sẽ chuyển hướng đến đường dẫn được cung cấp bởi prop `to`.
+
+Phần tử `<Link />` này sẽ hiển thị một phần tử `<a>`, nhưng một số trình xử lý sự kiện sẽ chỉ định React Router thực hiện chuyển hướng ngay lập tức thay vì chuyển hướng trang.
