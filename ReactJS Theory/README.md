@@ -4399,3 +4399,188 @@ function Product() {
 }
 ```
 
+### 4. Nested routes
+[:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ trực quan:_ Thông thường trên một số trang web, khi chọn trang about (giới thiệu), bạn sẽ được chuyển hướng đến route `/about`, sau đó trang sẽ hiển thị ảnh bìa, tiêu đề `About`, và bạn có thể chọn một trong hai trang con:
+
+Chọn `About us` (Về chúng tôi) sẽ chuyển hướng bạn đến `/about/us/`
+
+Chọn `About the Team` (Về Đội ngũ) sẽ chuyển hướng bạn đến `/about/team/`
+
+Trang Về chúng tôi sẽ hiển thị nội dung giống như trang `/about` nhưng có thêm phần Về chúng tôi ở dưới nội dung hiện tại.
+
+Tương tự, trang Về Đội ngũ sẽ hiển thị nội dung giống như trang `/about` nhưng có thêm phần Về Đội ngũ ở dưới nội dung hiện tại.
+
+Đây là một ví dụ về các route lồng nhau (nested routes). Điều này là bởi vì trang `/about/us` đang hiển thị hai route cùng một lúc. Nó đang hiển thị nội dung từ route `/about` cũng như nội dung từ route `/about/us`.
+
+_Khái niệm:_ Các route lồng nhau cho phép bạn hiển thị nhiều route cùng một lúc. Ví dụ, `/about/us` sẽ hiển thị cả route `/about` và `/about/us` cùng một lúc.
+
+**Quá trình làm việc:**
+
+Quá trình làm việc với các route lồng nhau trong React Router bao gồm ba bước:
+
+1. Khai báo các `<Route />` lồng nhau.
+2. Sử dụng `<Outlet />` để xác định vị trí mà các route lồng nhau sẽ hiển thị trong component cha.
+3. Thêm các phần tử `<Link />` để xem và kiểm thử các route lồng nhau.
+
+Hãy bắt đầu bằng một ví dụ có component `<About />` được hiển thị trên `/about`:
+
+```jsx
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
+function About() {
+  return <>
+        <h1>About</h1>
+
+    </>;
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/about/" element={<About />}>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
+}
+```
+
+Chúng ta muốn làm cho component `<About />` hiển thị các route lồng nhau. Nghĩa là mỗi khi đường dẫn bắt đầu bằng `/about`, chúng ta muốn hiển thị component `<About />` cùng với một số component con. Điều này cho phép ta luôn hiển thị `<h1>About</h1>` trên các trang con như `/about/us` và `/about/team`.
+
+**1. Khai báo các `<Route />` lồng nhau**
+
+Đầu tiên, chúng ta cần định nghĩa hai route lồng nhau nằm trong route cha `/about`. Đó là `<Route path="us" />` và `<Route path="team" />`. Chú ý rằng các đường dẫn là tương đối vì chúng ta sẽ nhúng chúng trong `<Route path="/about/" />`. Hai component `<Route />` này trở thành component con của `<Route path="/about" />` như sau:
+
+```jsx
+<Route path="/about/" element={<About />}>
+    {/* about/us */}
+    <Route path="us" element={<h2>About us</h2>}>
+    </Route>
+    {/* about/team */}
+    <Route path="team" element={<h2>About the Team</h2>}>
+    </Route>
+</Route>
+```
+
+Comment ở trên cho thấy rằng `path="us"` được lồng trong `path="/about/"` tạo thành đường dẫn cuối cùng của route đó là `/about/us`. Tương tự, `path="team"` trở thành `/about/team`.
+
+**2. Sử dụng <Outlet />**
+
+Bây giờ, chúng ta cần chỉ định cho component `<About />` hiển thị các route lồng nhau. Để làm điều đó, chúng ta cần thêm component `Outlet` từ `react-router-dom` và sử dụng nó trong `<About />`. Điều này sẽ xác định vị trí mà các route lồng nhau sẽ hiển thị trong JSX:
+
+```jsx
+import {BrowserRouter, Routes, Route, Outlet} from "react-router-dom";
+
+function About() {
+  return <>
+        <h1>About</h1>
+
+        {/* Render nested routes for /about/... here */}
+        <Outlet />
+    </>;
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/about/" element={<About />}>
+                    {/* about/us */}
+                    <Route path="us" element={<h2>About us</h2>}>
+                    </Route>
+                    {/* about/team */}
+                    <Route path="team" element={<h2>About the Team</h2>}>
+                </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+    );
+}
+```
+
+Giả sử bạn đặt `<Outlet />` trước `<h1>About</h1>`. Trong trường hợp đó, nội dung của các route lồng nhau (`<h2>About us</h2>` hoặc `<h2>About the Team</h2>`) sẽ hiển thị **trước** `h1`.
+
+**3. Thêm các phần tử <Link />**
+
+Cuối cùng, chúng ta cần thêm các phần tử `<Link />` để xem và kiểm thử các route lồng nhau:
+
+```jsx
+import {BrowserRouter, Routes, Route, Outlet, Link} from "react-router-dom";
+
+function About() {
+  return <>
+      {/* Content always rendered when the URL starts with /about */}
+      <h1>About</h1>
+      <Link to="us">About us</Link> | 
+      <Link to="team">About the team</Link>
+
+      <Outlet />
+    </>;
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/about/" element={<About />}>
+                {/* about/us */}
+                <Route path="us" element={<h2>About us</h2>}>
+                </Route>
+                {/* about/team */}
+                <Route path="team" element={<h2>About the Team</h2>}>
+                </Route>
+            </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+    );
+}
+```
+
+### 5. Hook - useOutletContext
+[:arrow_up: Mục lục](#mục-lục)
+
+Có những tình huống mà chúng ta **cần truyền dữ liệu từ component cha chứa Outlet xuống cho các component con**. Hiện tại, chúng ta sẽ bắt đầu với một ví dụ cơ bản với biến `data`, chúng ta muốn truyền biến này cho các component con được hiển thị trong `<Outlet />`.
+
+```jsx
+function About() {
+    // we want to make this available to the <Outlet /> sub-components
+    const data = {
+        someValue: 123
+    };
+
+    return <>
+        {/* Content always rendered when the URL starts with /about */}
+        <h1>About</h1>
+        <Link to="us">About us</Link> | 
+        <Link to="team">About the team</Link>
+
+        <Outlet />
+    </>;
+}
+```
+
+Để làm điều đó, chúng ta có thể sử dụng thuộc tính `context` trên component `<Outlet />`, nó sẽ tự động tạo ra `context`. Đây là một trường hợp sử dụng phổ biến, vì vậy nhóm React Router đã tích hợp tính năng này vào thư viện.
+
+```jsx
+function About() {
+    // we want to make this available to the <Outlet /> sub-components
+    const data = {
+        someValue: 123
+    };
+
+    return <>
+        {/* Content always rendered when the URL starts with /about */}
+        <h1>About</h1>
+        <Link to="us">About us</Link> | 
+        <Link to="team">About the team</Link>
+
+        // pass it to Outlet as a context
+        <Outlet context={data} />
+    </>;
+}
+```
+
