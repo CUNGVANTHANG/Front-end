@@ -60,7 +60,12 @@
   - [1. Điều hướng cơ bản](#1-điều-hướng-cơ-bản)
   - [2. Tham số URL](#2-tham-số-url)
   - [3. Hook - useParams](#3-hook---useparams)
-
+  - [4. Nested routes](#4-nested-routes)
+  - [5. Hook - useOutletContext](#5-hook---useoutletcontext)
+  - [6. Xử lý lỗi 404](#6-xử-lý-lỗi-404)
+  - [7. Trang hoạt động NavLink](#7-trang-hoạt-động-navlink)
+  - [8. Hook - useNavigate](#8-hook---usenavigate)
+  - [9. Hook - useLocation](#9-hook---uselocation)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -4625,7 +4630,7 @@ Bây giờ khi người dùng truy cập vào `/`, họ sẽ thấy Landing page
 
 Tại sao lại như vậy? Đó là vì `<Route>` mà chúng ta đã tạo cho trang 404 có trường thuộc tính path được đặt thành `*`. React Router sẽ kích hoạt route này chỉ **khi không có route nào khớp với URL hiện tại**.
 
-### 7. Trang hoạt động
+### 7. Trang hoạt động NavLink
 [:arrow_up: Mục lục](#mục-lục)
 
 Giả sử bạn có một menu điều hướng với hai liên kết:
@@ -4670,3 +4675,117 @@ Bạn có thể nhận thấy là ở đây chúng ta đang sử dụng `NavLink
 
 Một lỗi phổ biến là **sử dụng ClassName với định nghĩa hàm trên component** `<Link />`, nhưng điều đó sẽ làm **code không hoạt động**!
 
+### 8. Hook - useNavigate
+[:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ_: bạn gửi một yêu cầu `fetch` và dựa trên kết quả đó, bạn muốn chuyển hướng người dùng đến một trang cụ thể.
+
+Sau đây là một số ví dụ khác:
+
+1. Chuyển hướng người dùng đến trang `/login` nếu họ chưa đăng nhập.
+2. Chuyển hướng người dùng đến trang `/dashboard` sau khi yêu cầu `fetch()` cho đăng nhập thành công.
+
+Để làm điều đó, bạn cần sử dụng hook `useNavigate()`, nó trả về một phương thức mà bạn có thể gọi để điều hướng đến một route mới một cách tự động. Hãy xem ví dụ sau:
+
+```jsx
+import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+
+function HelpPage() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLoggedIn = window.localStorage.getItem("isLoggedIn");
+        if (!isLoggedIn) {
+            navigate("/login");
+        }
+    }, []);
+
+    return <h2>Help page</h2>;
+}
+```
+
+Trong ví dụ này, chúng ta kiểm tra xem `localStorage` có chứa giá trị cho khóa `isLoggedIn` hay không. Nếu không, chúng ta điều hướng người dùng trở lại trang `/login` bằng cách gọi `navigate("/login")`.
+
+**Hook `useNavigate` chỉ hoạt động trong `BrowserRouter`**
+
+Bạn cần gọi hook `useNavigate()` **trong một component được lồng** trong `<BrowserRouter />`, nếu không, hook sẽ không hoạt động.
+
+Do đó đoạn code dưới đây SẼ KHÔNG hoạt động:
+
+```jsx
+import React from "react";
+import {BrowserRouter, useNavigate} from "react-router-dom";
+
+function App() {
+    // ❌ This breaks because the component was not wrapped by BrowserRouter, but its children are.
+    const history = useNavigate();
+
+    return <BrowserRouter>
+        {/* ... */}
+    </BrowserRouter>;
+}
+```
+
+Như bạn thấy, hook `useNavigate()` sẽ không hoạt động trong component `App()` vì nó không được đóng gói bởi `<BrowserRouter/>`. Tuy nhiên, tất cả các component con bên trong App sẽ được đóng gói bởi `<BrowserRouter />`, vì vậy bạn có thể sử dụng `useNavigate()` trong các component con đó.
+
+### 9. Hook - useLocation
+[:arrow_up: Mục lục](#mục-lục)
+
+Nếu bạn **muốn chạy một đoạn code mỗi khi React Router điều hướng đến một URL mới** thì bạn sẽ làm như thế nào?
+
+Bạn có thể làm điều đó bằng cách sử dụng hook `useLocation`.
+
+Hook `useLocation` trả về thông tin liên quan đến route hiện đang hoạt động.
+
+Dưới đây là cách bạn sử dụng hook `useLocation`:
+
+```jsx
+import {BrowserRouter, Routes, Route, useLocation} from "react-router-dom";
+import {createRoot} from "react-dom/client";
+
+function App() {
+    const location = useLocation();
+    console.log(location.pathname);
+
+    return <Routes>
+        {/* routes here... */}
+    </Routes>
+}
+
+createRoot(document.querySelector("#react-root")).render(<BrowserRouter><App /></BrowserRouter>);
+```
+
+Biến `location` sẽ là một đối tượng chứa `pathname`.
+
+Sau đó, bạn có thể sử dụng `location.pathname` để biết **route hiện tại mà người dùng đang duyệt**. Ví dụ: `/` hoặc `/about`, v.v., tùy thuộc vào các route hiện có.
+
+Giống như hook `useNavigate`, bạn cần đảm bảo rằng code **được chạy trong một component được đóng gói bởi** `<BrowserRouter />`, nếu không, hook sẽ không hoạt động.
+
+**Thay đổi vị trí**
+
+Bằng cách sử dụng `useLocation` và cách lấy `pathname` hiện tại, bạn có thể chạy một đoạn code mỗi khi React Router điều hướng đến một `URL` mới bằng cách đóng gói code bằng `useEffect` với một phụ thuộc trên `location`. Cách triển khai như sau:
+
+```jsx
+import React, {useEffect} from "react";
+import {BrowserRouter, Routes, Route, useLocation} from "react-router-dom";
+import {createRoot} from "react-dom/client";
+
+function App() {
+    const location = useLocation();
+
+    // run a piece of code on location change
+    useEffect(() => {
+        console.log(location.pathname);
+        // send it to analytic, or do some conditional logic here
+    }, [location]);
+
+    return <Routes>
+        {/* routes here... */}
+    </Routes>
+}
+
+createRoot(document.querySelector("#react-root")).render(<BrowserRouter><App /></BrowserRouter>);
+```
+
+Code trong hook `useEffect` sẽ chạy mỗi khi đối tượng `location` thay đổi, điều này xảy ra mỗi khi người dùng điều hướng đến một route mới.
