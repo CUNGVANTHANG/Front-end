@@ -4584,3 +4584,89 @@ function About() {
 }
 ```
 
+**Hook useOutletContext**
+
+Đây là lúc hook `useOutletContext` trở nên hữu ích. Chúng ta có thể sử dụng nó trong bất kỳ component nào cần được hiển thị bên trong `<Outlet />`. Ví dụ, trong component `AboutUs`:
+
+```jsx
+import {useOutletContext} from "react-router-dom";
+
+function AboutUs() {
+    const context = useOutletContext();
+    console.log(context); // {someValue: 123}
+    console.log(context.someValue); // 123
+
+    // ...
+}
+```
+
+### 6. Xử lý lỗi 404
+[:arrow_up: Mục lục](#mục-lục)
+
+Đối với các dự án lớn, việc xử lý các route không tồn tại là rất quan trọng. Đôi khi chúng được gọi là “404 route” vì mã trạng thái HTTP 404 được trả về khi không tìm thấy tài liệu trên máy chủ. 
+
+Khi không có route nào khớp với `URL` hiện tại của trình duyệt, chúng ta sẽ tạo một route đại diện cho các trường hợp không khớp như sau:
+
+```jsx
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
+function App() {
+    return <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<p>Landing page here</p>}></Route>
+            <Route path="/products" element={<p>Products page here</p>}></Route>
+            <Route path="*" element={<p>404 page here</p>}></Route>
+        </Routes>
+    </BrowserRouter>
+}
+```
+
+Bây giờ khi người dùng truy cập vào `/`, họ sẽ thấy Landing page here. Tương tự, khi họ truy cập vào `/products`, họ sẽ thấy `Products page here`. Và đối với tất cả các liên kết khác, họ sẽ thấy `404 page here`.
+
+Tại sao lại như vậy? Đó là vì `<Route>` mà chúng ta đã tạo cho trang 404 có trường thuộc tính path được đặt thành `*`. React Router sẽ kích hoạt route này chỉ **khi không có route nào khớp với URL hiện tại**.
+
+### 7. Trang hoạt động
+[:arrow_up: Mục lục](#mục-lục)
+
+Giả sử bạn có một menu điều hướng với hai liên kết:
+
+1. `Home` chuyển hướng người dùng đến `/`
+2. `About` chuyển hướng người dùng đến `/about`
+
+Bạn có thể tự động làm nổi bật liên kết `About` với React Router khi người dùng đang truy cập route `/about`. Tương tự, bạn có thể làm nổi bật liên kết `Home` khi người dùng đang truy cập route `/`.
+
+```jsx
+import {NavLink} from "react-router-dom";
+
+function getClassName({isActive}) {
+    if (isActive) {
+        return "active"; // CSS class
+    }
+}
+
+function App() {
+    return <ul>
+        <li>
+            <NavLink to="/" className={getClassName}>Home</NavLink>
+        </li>
+        <li>
+            <NavLink to="/about" className={getClassName}>About</NavLink>
+        </li>
+    </ul>
+}
+```
+
+Đoạn code trên yêu cầu viết một số code CSS cho lớp `active`. Hãy làm cho liên kết của trang hiện tại trong menu được làm nổi bật bằng chữ đậm:
+
+```css
+.active {
+    font-weight: bold;
+}
+```
+
+Bạn có thể nhận thấy là ở đây chúng ta đang sử dụng `NavLink` thay vì `Link`.
+
+Điều này rất quan trọng vì component `<Link />` **không hỗ trợ truyền một định nghĩa hàm vào trường thuộc tính** `className`.
+
+Một lỗi phổ biến là **sử dụng ClassName với định nghĩa hàm trên component** `<Link />`, nhưng điều đó sẽ làm **code không hoạt động**!
+
