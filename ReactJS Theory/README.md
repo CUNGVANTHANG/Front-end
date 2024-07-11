@@ -796,6 +796,64 @@ createRoot(root).render(<App />);
 
 Ngoài ra, đoạn code hiển thị Footer hai lần bằng cách sử dụng component hai lần trong component App.
 
+**Class Component:**
+
+Functional component sau đây:
+
+```jsx
+import {createRoot} from "react-dom/client";
+
+function App() {
+    return (<h1>Hello World</h1>);
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
+Có thể được viết dưới dạng lớp:
+
+```jsx
+import React from "react";
+import {createRoot} from "react-dom/client";
+
+class App extends React.Component {
+    render() {
+        return (<h1>Hello World</h1>);
+    }
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
+Để ý là phần `react-dom` không thay đổi chút nào. Điểm khác biệt duy nhất là chúng ta **định nghĩa một lớp thay vì hàm**.
+
+**Class... kế thừa từ React.Component**
+
+Thêm một chi tiết nữa: lớp phải mở rộng (kế thừa) từ `React.Component`.
+
+Điều này sẽ cho phép component kế thừa tất cả các chức năng cần thiết từ thư viện React.
+
+Bạn có thể thấy cú pháp `React.Component` hơi khó hiểu vì những lý do sau:
+
+- React là một đối tượng.
+- Component là một trường thuộc tính trên đối tượng React mà bạn truy cập bằng `React.Component`.
+- `React.Component` là một lớp nên chúng ta có thể kế thừa từ nó.
+
+Nếu muốn, bạn cũng có thể thêm trực tiếp Component từ một file khác trong React, sau đó code trở thành:
+
+```jsx
+import {Component} from "react"; // this changed
+import {createRoot} from "react-dom/client";
+
+class App extends Component { // this changed
+    render() {
+        return (<h1>Hello World</h1>);
+    }
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
 ### 3. Props
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -887,6 +945,78 @@ Trong ví dụ này, `props.children` là một mảng chứa 3 mục:
 <HeroTitle>Welcome!</HeroTitle>
 <div>Some content</div>
 <p>Another content</p>
+```
+
+**Props trong class Component:**
+
+Trong class component, các `props` được nhận bởi `constructor` của lớp `React.Component` và được lưu trữ như các biến thực thể `this.props`.
+
+Vì vậy, nếu bạn muốn truy cập vào `props` từ bất kỳ đâu bên trong component, bạn cần sử dụng `this.props`. Ví dụ:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    render() {
+        console.log(this.props); // {size: "large"}
+        return (<h1>Hello World</h1>);
+    }
+}
+
+const element = <App size="large" />;
+```
+
+Bạn có thể **truy cập** vào `props` **ở bất kỳ đâu** trong lớp bằng cách sử dụng `this.props`.
+
+**Ghi đè constructor (cách cũ)**
+
+Chúng ta có thể sẽ cần ghi đè `constructor` để xử lý sự kiện. Trong trường hợp đó, bạn cần cẩn thận và đảm bảo truyền `props` cho `constructor` cha bằng `super(props)`.
+
+Vì lớp kế thừa từ `React.Component` và bạn đang ghi đè `constructor()`, điều này có nghĩa là `constructor()` của `React.Component` sẽ không được thực thi nữa.
+
+Vì vậy, bạn sẽ phải gọi `super(props)`, điều này sẽ truyền `props` cho `constructor` của `React.Component`. Sau đây là cú pháp:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    constructor(props) {
+        super(props); // has to be the first line inside the constructor
+        // the rest of your constructor code can go here
+        this.state = {};
+    }
+
+    render() {
+        console.log(this.props); // {...}
+        return (<h1>Hello World</h1>);
+    }
+}
+```
+
+Ở trên, `constructor()` nhận `props` và sau đó truyền chúng cho `constructor` của lớp cha (`React.Component`) bằng cách sử dụng `super(props)`.
+
+Nhắc lại kiến thức cũ, `super` là một từ khóa JavaScript cho phép bạn truy cập vào các phương thức trên lớp cha.
+
+`super(props)` phải là dòng đầu tiên trong `constructor`. Và sau đó, trong `constructor` đó, bạn có thể truy cập `props` bằng `this.props` hoặc `props`. Hãy nhớ rằng không bao giờ thay đổi giá trị của `props`.
+
+**Sử dụng public class fields (cách mới)**
+
+Bạn nên sử dụng cú pháp mới này vì nó đơn giản hơn. Bạn không cần ghi đè `constructor` hoặc gọi `super`.
+
+Sử dụng cú pháp `public class fields` của JavaScript, bạn có thể định nghĩa biến trạng thái như sau:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    // public class fields
+    state = {};
+
+    render() {
+        console.log(this.props); // {...}
+        return (<h1>Hello World</h1>);
+    }
+}
 ```
 
 ### 4. Cách viết hàm chuẩn
