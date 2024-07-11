@@ -1475,6 +1475,53 @@ const Counter = () => {
 };
 ```
 
+**State trong class Component:**
+
+Với class component, trạng thái được khai báo như một biến thực thể tên là `state`. Do đó, bạn có thể truy cập vào nó bằng `this.state`.
+
+Vì vậy, functional component sau đây:
+
+```jsx
+import {useState} from "react";
+
+function Button() {
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    return <button disabled={isDisabled}>Button text</button>;
+}
+```
+
+có thể được viết lại thành một class component:
+
+```jsx
+class Button extends React.Component {
+    state = {
+        isDisabled: false
+    };
+
+    render() {
+        return <button disabled={this.state.isDisabled}>Button text</button>;
+    }
+}
+```
+
+**Cập nhật trạng thái**
+
+Tương tự như với hook, việc cập nhật trạng thái trực tiếp không được phép. Thay vào đó, bạn phải sử dụng một phương thức đặc biệt. Trong class component, bạn có sẵn phương thức thực thể `this.setState()` được thừa kế từ `React.Component`.
+
+**Nhiều trạng thái**
+
+Chúng ta cũng có thể định nghĩa nhiều trạng thái trong cùng một class component. Biến thực thể `state` là một đối tượng, vì vậy bạn có thể thêm nhiều prop `key/value`. Ví dụ:
+
+```jsx
+// inside the constructor
+this.state = {
+    isDisabled: false,
+    grades: [10, 20],
+    counter: 0
+}
+```
+
 ### 2. Closures
 [:arrow_up: Mục lục](#mục-lục)
 
