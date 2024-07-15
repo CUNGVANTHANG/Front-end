@@ -70,6 +70,9 @@
   - [1. Redux là gì](#1-redux-là-gì)
   - [2. State, Store và Reducer](#2-state-store-và-reducer)
   - [3. Thực hiện dispatch một action](#3-thực-hiện-dispatch-một-action)
+- [XI. Redux Toolkit](#xi-redux-toolkit)
+  - [1. Slices](#1-slices)
+  - [2. Actions & payloads](#2-actions--payloads)
 
 </details>
 
@@ -5175,3 +5178,189 @@ addButton.addEventListener("click", () => {
     store.dispatch({ type: "counter/increment" });
 });
 ```
+
+## XI. Redux Toolkit
+[:arrow_up: Mục lục](#mục-lục)
+
+Mặc dù tên gói redux là `redux` nhưng tên gói Redux Toolkit là `@reduxjs/toolkit`.
+
+**Tính bất biến với immer**
+
+**immer** là một thư viện JavaScript cho phép bạn **cập nhật trạng thái theo cách bất biến** trong khi vẫn viết code JavaScript theo cách truyền thống.
+
+Điều này làm cho cú pháp trở nên đơn giản hơn khi làm việc với các cấu trúc dữ liệu phức tạp như đối tượng, mảng và mảng đối tượng.
+
+### 1. Slices
+[:arrow_up: Mục lục](#mục-lục)
+
+Khi bạn cấu hình một Redux store mới, đôi khi quá trình này có thể hơi phức tạp, đặc biệt khi store mở rộng để chứa nhiều hơn một loại hành động. Tuy nhiên, việc xử lý thêm các hành động cho app có thể làm cho quá trình trở nên phức tạp hơn. Đó là lý do tại sao Redux Toolkit giới thiệu khái niệm `slice`.
+
+Redux Slice là một tập hợp **các reducer và hành động** liên quan đến một tính năng cụ thể của ứng dụng.
+
+_Ví dụ:_ Chúng ta có slice `counter` và sau đó là slice `app`. Hai slice này sẽ được cấu hình riêng biệt nhưng được cung cấp cho cùng một store.
+
+Hãy xem cách tạo một slice và cấu hình store trong Redux Toolkit:
+
+```jsx
+import { createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // TODO: write reducer code here
+    }
+  },
+});
+```
+
+Chúng ta đã thêm hàm `createSlice` từ `@reduxjs/toolkit` và sau đó gọi hàm này và cung cấp `name`, `initialState` và `reducers`.
+
+Chúng ta không cần thêm tiền tố `counter/` cho reducer như đã làm trước đây (ví dụ: `counter/increment`, `counter/decrement`, vv). Điều này bởi vì `slice` này chỉ cung cấp các hành động liên quan đến `counter` mà ta đã cung cấp trong `name`.
+
+- **Viết reducer (và sử dụng immer)**
+
+Trong đoạn code trên, chúng ta đã tạo một hàm reducer gọi là `increment`. Trong hàm reducer này, chúng ta được phép viết code như thể ta đang thay đổi trạng thái trực tiếp. Điều này bởi vì Redux Toolkit đã tải **immer**. Trong đoạn code trên, dù có vẻ như chúng ta đang thay đổi trực tiếp trạng thái, thực tế là code này đang **chạy theo cách bất biến**
+
+**Immer** tạo ra một **phiên bản tạm thời** của **trạng thái hiện tại từ các thay đổi** và sau đó **tạo ra một trạng thái bất biến** hoàn toàn mới **dựa trên những thay đổi** đó.
+
+Vì vậy, code reducer `increment` sẽ trông như sau:
+
+```jsx
+// ...
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    }
+  },
+  // ...
+```
+
+- **Cấu hình store**
+
+Để tạo `store`, bạn phải thêm hàm `configureStore` và truyền reducer cho hàm:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+```
+
+Để ý chúng ta đã truyền `counterSlice.reducer` (không phải `reducers`). Nó khác với `reducers` mà bạn đã định nghĩa trong hàm `createSlice()`.
+
+### 2. Actions & payloads
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Hành động (Action)**
+
+Trước đây với `redux`, chúng ta gửi một hành động bằng cách sử dụng code sau:
+
+```jsx
+store.dispatch({type: "counter/increment"});
+```
+
+Với Redux Toolkit, chúng ta nhận được một hàm mà chúng ta có thể trích xuất từ `slice.actions`. Sau đó, chúng ta có thể sử dụng hàm này kết hợp với `store.dispatch()`. Hãy cùng xem cách thức hoạt động.
+
+Chúng ta bắt đầu với đoạn code trong bài học trước và mở rộng bằng code `dispatch`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+// extract the increment function from counterSlice.actions
+const { increment } = counterSlice.actions;
+
+document.querySelector("#add").addEventListener("click", () => {
+  // dispatch an increment() action
+  store.dispatch(increment());
+});
+```
+
+Hàm `increment` có thể được truy cập bên trong `counterSlice.actions`. **Tên** của nó **trùng khớp** với tên của hàm mà ta đã cung cấp trong **reducers** ở trên.
+
+Bạn có thể sử dụng **object destructuring** như trong ví dụ trên hoặc truy cập hàm bằng cách sử dụng `counterSlice.actions.increment`.
+
+Nếu bạn có nhiều hàm (có nhiều reducers trong slice), bạn có thể trích xuất chúng theo cùng một cách:
+
+```jsx
+const { increment, decrement } = counterSlice.actions;
+```
+
+- **Cung cấp payload**
+
+Cho đến nay, chúng ta chủ yếu làm việc với các hành động không nhận bất kỳ payload nào. Chúng luôn thực hiện cùng một hành động (ví dụ: tăng 1 hoặc giảm 1).
+
+Tuy nhiên, đôi khi, bạn muốn tạo một hành động mà **giá trị** của nó **tăng theo số đơn vị cụ thể** (có thể là 1, 5 hoặc một số khác). Giá trị này được gọi là **payload**.
+
+Mọi reducer đều **nhận một đối số thứ 2** gọi là `action`. Bạn có thể truy cập `action.payload` để có quyền truy cập vào giá trị đã được truyền cho `action` khi nó được gọi. Hãy xem một ví dụ triển khai tính năng `incrementBy(value)`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    incrementBy: (state, action) => {
+        console.log(action.payload); // visualize payload
+        state.value += action.payload;
+    }
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+const { incrementBy } = counterSlice.actions;
+
+document.querySelector("#add").addEventListener("click", () => {
+  // the payload is 1
+  store.dispatch(incrementBy(1));
+});
+
+document.querySelector("#add-five").addEventListener("click", () => {
+  // the payload is 5
+  store.dispatch(incrementBy(5));
+});
+```
+
+Chúng ta có thể gọi `incrementBy(1)`, `incrementBy(5)` hoặc bất kỳ giá trị nào khác ở đây. Giá trị này sẽ được nhận dưới dạng `action.payload` mà bạn sau đó có thể sử dụng để cập nhật trạng thái.
+
