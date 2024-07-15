@@ -29,6 +29,58 @@
 <details>
   <summary>III. Kiểu Generic</summary>
 
+- [1. Kiểu Generic](#1-kiểu-generic)
+- [2. Ràng buộc kiểu Generic](#2-ràng-buộc-kiểu-generic)
+
+</details>
+
+<details>
+  <summary>III. Hàm</summary>
+
+</details>
+
+<details>
+  <summary>IV. Kiểu dẫn xuất</summary>
+
+</details>
+
+<details>
+  <summary>V. Đối tượng</summary>
+
+</details>
+
+<details>
+  <summary>VI. Ký hiệu chỉ số</summary>
+
+</details>
+
+<details>
+  <summary>VII. Sử dụng biến nâng cao</summary>
+
+</details>
+
+<details>
+  <summary>VIII. Ngoại lệ</summary>
+
+</details>
+
+<details>
+  <summary>IX. Bí danh</summary>
+
+</details>
+
+<details>
+  <summary>X. Kiểm tra kiểu</summary>
+
+</details>
+
+<details>
+  <summary>XI. Thao tác đối tượng và mảng</summary>
+
+</details>
+
+<details>
+  <summary>XII. Chia sẻ mã nguồn</summary>
 
 </details>
 
@@ -1023,4 +1075,42 @@ Generic cho phép bạn **làm việc với nhiều kiểu dữ liệu** một c
 
 ### 2. Ràng buộc kiểu Generic
 [:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ:_
+
+```ts
+interface MyType { // Type that has a single field
+    id: number;
+}
+interface AnotherType extends MyType {} // Another type that has all the field from MyType
+function genericFunction<T extends MyType>(p1: T) {} // A function that take a generic type that must at least have the fields of MyType
+
+const arg: AnotherType = { id: 1 }; // Create an object that is not "MyType"
+genericFunction(arg); // This is legit  because AnotherType extend MyType, thus has all the required fields
+
+genericFunction({ id: 123 }); // This is legit as well since id is the only required field from MyType
+
+// genericFunction("doesn't compile") // Doest not compile, not legit.
+```
+
+**Dòng 12** đã được chuyển thành comment. Đối số được truyền vào không có thành viên id: nó là một chuỗi. Do đó, TypeScript nhận ra rằng kiểu của đối số này không hợp lệ và gây ra **lỗi** trong quá trình biên dịch.
+
+Kiểu generic **giúp tránh gặp lỗi khi chuyển đổi kiểu và tránh việc truy cập vào các thành viên không tồn tại**. Nó cũng cho phép truy cập vào các thành viên đã được định nghĩa bên trong hàm generic.
+
+```ts
+interface MyType {
+    id: number; // id is available
+    id2: number;
+}
+interface AnotherType {
+    id: number; // id is available
+}
+function genericFunction<T extends AnotherType>(p1: T) {  // Any type that has all fields from AnotherType
+    console.log("Inside generic:" + p1.id);
+}
+
+genericFunction({ id: 123, id2: 99999 }); // This is legit because we have id (and more)
+```
+
+_Kết quả_: `Inside generic:123`
 
