@@ -66,6 +66,11 @@
   - [7. Trang hoạt động NavLink](#7-trang-hoạt-động-navlink)
   - [8. Hook - useNavigate](#8-hook---usenavigate)
   - [9. Hook - useLocation](#9-hook---uselocation)
+- [X. Redux](#x-redux)
+  - [1. Redux là gì](#1-redux-là-gì)
+  - [2. State, Store và Reducer](#2-state-store-và-reducer)
+  - [3. Thực hiện dispatch một action](#3-thực-hiện-dispatch-một-action)
+
 </details>
 
 ## I. SPA/MPA là gì?
@@ -4966,3 +4971,207 @@ createRoot(document.querySelector("#react-root")).render(<BrowserRouter><App /><
 ```
 
 Code trong hook `useEffect` sẽ chạy mỗi khi đối tượng `location` thay đổi, điều này xảy ra mỗi khi người dùng điều hướng đến một route mới.
+
+## X. Redux
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. Redux là gì
+[:arrow_up: Mục lục](#mục-lục)
+
+Lí do dùng Redux:
+
+  - Nhiều thành viên tham gia vào dự án.
+
+  - Bạn có nhiều biến state đang được sử dụng trong nhiều component.
+
+  - Bạn đã rất quen thuộc với Redux và việc sử dụng nó sẽ giúp tăng năng suất thay vì gây trở ngại.
+
+  - Ứng dụng có nhiều trạng thái cần cập nhật nhiều lần (liên quan đến trạng thái được sử dụng trong nhiều component).
+
+- **Redux so với Chuyển trạng thái lên trên**
+
+**Việc chuyển trạng thái** lên cấp độ cao hơn có thể nhanh chóng trở nên phức tạp khi số biến lượng trạng thái cần di chuyển ngày càng tăng lên. Đôi khi, bạn cần chuyển trạng thái qua nhiều cấp component (5 cấp độ), quá trình này càng trở nên cồng kềnh và phức tạp.
+
+Bạn sẽ không gặp vấn đề này với `redux`, vì mỗi component sẽ lựa chọn dữ liệu cụ thể mà nó cần và cập nhật trạng thái.
+
+- **Redux so với Context**
+
+Đối với các cập nhật trạng thái toàn cục diễn ra thường xuyên, việc sử dụng Context **sẽ gây ra vấn đề về hiệu suất**. Trong trường hợp này, việc sử dụng Redux sẽ hợp lý hơn. Ngoài ra, với số lượng lớn trạng thái được cập nhật, Redux **giúp dễ dàng theo dõi** các thay đổi và quản lý mọi thứ.
+
+Nhìn chung, ứng dụng **càng nhỏ/đơn giản thì bạn càng ít cần sử dụng Redux.**
+
+### 2. State, Store và Reducer
+[:arrow_up: Mục lục](#mục-lục)
+
+#### 1. Trạng thái (State)
+
+Trong React, chúng ta có thể tạo một trạng thái lưu trữ giá trị **boolean, số, chuỗi, v.v.**
+
+Tuy nhiên trong Redux, trạng thái luôn luôn là **một đối tượng**
+
+_Ví dụ:_ Đối với ứng dụng đếm, ta sẽ tạo đối tượng trạng thái sau:
+
+```jsx
+const state = {
+    value: 0 // starting value of the counter
+};
+```
+
+Tên của biến không quan trọng. Điều quan trọng là `state` **là một đối tượng**. Và trong trường hợp này, đối tượng có **khóa** `value` với **giá trị** ban đầu là `0`.
+
+#### 2. Reducer
+
+Reducer là một hàm nhận 2 tham số: **trạng thái hiện tại** và **một hành động (action)**
+
+Dựa vào hành động nhận được, nó có thể trả về một trạng thái mới. Nếu không, nó sẽ trả về trạng thái hiện tại mà không thay đổi gì.
+
+_Ví dụ 1:_ Hãy xem xét ví dụ chưa hoàn chỉnh sau đây:
+
+```jsx
+const initialState = {
+    value: 0,
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  return state; // return the state as is
+};
+```
+
+Đây là reducer cơ bản nhất. Nó nhận trạng thái hiện tại và trả về chính xác trạng thái đó như nó đã nhận. Để ý tham số `state = initialState`. Điều này có nghĩa là nếu chúng ta gọi `counterReducer` mà không có tham số nào, nó sẽ mặc định là `initialState`. Điều này sẽ xảy ra vào lần đầu tiên chúng ta gọi reducer này.
+
+Sử dụng code trên, dưới đây là cách chúng ta sử dụng reducer này:
+
+```jsx
+const state = counterReducer(); // state will default to initialState
+console.log(state); // {value: 0}
+```
+
+_Ví dụ 2:_ 
+
+Bây giờ, hãy cùng **tăng giá trị của bộ đếm**. Để làm điều đó, chúng ta sẽ **truyền một hành động** là `{type: "counter/increment"}`. Action (hành động) là một **đối tượng** được **sử dụng** để thực hiện **thay đổi trạng thái**.
+
+Vì vậy, chúng ta cần cập nhật reducer để xử lý hành động này với `if (action.type === "counter/increment")`:
+
+```jsx
+const initialState = {
+    value: 0,
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  if (action.type === "counter/increment") {
+    return {
+        value: state.value + 1 // important: do NOT mutate the state.
+    };
+  }
+
+  return state; // return the state as is (in all other cases)
+};
+```
+
+Dưới đây là cách sử dụng reducer này:
+
+```jsx
+const state = counterReducer(); // state will default to initialState
+console.log(state); // {value: 0}
+const newState = counterReducer(state, {type: "counter/increment"});
+console.log(newState); // {value: 1}
+```
+
+#### 3. Cửa hàng (Store)
+
+Cửa hàng là một **đối tượng chứa reducer và trạng thái (state)**. 
+
+Muốn cập nhật trạng thái, chúng ta sẽ phải **yêu cầu cửa hàng** thực hiện cập nhật (**gửi hành động**).
+
+Cửa hàng sau đó sẽ sử dụng phương thức reducer để tính toán trạng thái mới.
+
+Giả sử chúng ta có hàm `counterReducer` như ở trên, dưới đây là cách tạo một cửa hàng trong Redux:
+
+```jsx
+import { createStore } from "redux";
+
+const store = createStore(counterReducer);
+```
+
+**Chương trình hoàn chỉnh:**
+
+```jsx
+import { createStore } from "redux";
+
+const initialState = {
+    value: 0
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  if (action.type === "counter/increment") {
+    return {
+        value: state.value + 1 // important: do NOT mutate the state.
+    };
+  }
+
+  return state; // return the state as is (in all other cases)
+};
+
+const store = createStore(counterReducer);
+```
+
+### 3. Thực hiện dispatch một action
+[:arrow_up: Mục lục](#mục-lục)
+
+Chúng ta **không được phép thay đổi trạng thái** được lưu trữ trong cửa hàng bằng cách **thủ công**. Thay vào đó, chúng ta phải **yêu cầu** cửa hàng **thực hiện thay đổi** bằng cách gửi một **hành động**.
+
+Chúng ta đã học rằng các hành động là các đối tượng với cấu trúc sau:
+
+```jsx
+{
+    type: "counter/increment", // example of an action
+}
+```
+
+Để gửi hành động, bạn phải sử dụng hàm `store.dispatch(action)`:
+
+```jsx
+store.dispatch({type: "counter/increment"});
+// another example
+store.dispatch({type: "counter/reset"});
+```
+
+Gọi phương thức `store.dispatch()` sẽ **yêu cầu** cửa hàng gọi reducer để tính toán trạng thái mới. Nếu trạng thái **đã thay đổi**, giao diện người dùng sẽ được kích hoạt để **cập nhật**
+
+**Gửi hành động khi nhấp chuột**
+
+Bạn có thể **gửi hành động ở bất kỳ đâu** trong code. Một trường hợp sử dụng phổ biến là gửi hành động khi nhấp chuột vào nút. Đây là điều mà chúng ta đã làm trong ứng dụng đếm:
+
+```jsx
+const addButton = document.querySelector("#add-button");
+
+addButton.addEventListener("click", () => {
+    store.dispatch({ type: "counter/increment" });
+});
+```
+
+_Ví dụ:_ Chương trình hoàn chỉnh
+
+```jsx
+import { createStore } from "redux";
+
+const initialState = { value: 0 };
+
+const counterReducer = (state = initialState, action) => {
+    if (action.type === "counter/increment") {
+        return {
+            value: state.value + 1 // important: do NOT mutate the state.
+        };
+    }
+
+    return state; // return the state as is (in all other cases)
+};
+
+const store = createStore(counterReducer);
+
+const addButton = document.querySelector("#add-button");
+
+addButton.addEventListener("click", () => {
+    store.dispatch({ type: "counter/increment" });
+});
+```
