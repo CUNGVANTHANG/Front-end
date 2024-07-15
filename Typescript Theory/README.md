@@ -22,6 +22,14 @@
 <details>
   <summary>II. Enum</summary>
 
+- [1. Enum có giá trị và Enum không có giá trị](#1-enum-có-giá-trị-và-enum-không-có-giá-trị)
+- [2. Truy cập giá trị Enum](#2-truy-cập-giá-trị-enum)
+</details>
+
+<details>
+  <summary>III. Kiểu Generic</summary>
+
+
 </details>
 
 ## I. Các kiến thức cơ bản về biến
@@ -943,6 +951,9 @@ Orientation.yourFunction();
 ## III. Kiểu Generic
 [:arrow_up: Mục lục](#mục-lục)
 
+### 1. Kiểu Generic
+[:arrow_up: Mục lục](#mục-lục)
+
 Kiểu `generic` giúp tăng **khả năng tái sử dụng của mã nguồn bằng cách tham số hóa một kiểu bằng kiểu khác**.
 
 ```ts
@@ -980,4 +991,36 @@ const component2: MyComponent<Props2> = {
 console.log(component1);
 console.log(component2);
 ```
+
+- **Generic và danh sách**
+
+Một trong những trường hợp **sử dụng generic phổ biến là tạo danh sách**. Với kiểu generic, bạn có thể định nghĩa một biến là một **danh sách chứa các phần tử có cùng kiểu dữ liệu**, ví dụ: danh sách số
+
+Trong JavaScript và trước khi TypeScript triển khai khái niệm Generic, bạn có thể sử dụng kiểu lỏng lẻo `any` để thực hiện các tác vụ tương tự như Generic:
+
+```ts
+let list1: number[] = [1, 2, 3];
+list1.push(4); // Can only push number
+console.log(list1);
+
+let list2: any[] = [1, 2, 3];
+list2.push("Here_is_a_string");
+console.log(list2); // You can push any type of value
+```
+
+Nhược điểm của `any` là bạn **không thể ràng buộc kiểu được truyền vào lớp** để có một định nghĩa tối thiểu và bạn **sẽ phải chuyển đổi lại kiểu sau khi dữ liệu được trích xuất từ lớp**.
+
+- **Generic khác gì `any`**
+
+Generic cho phép bạn **làm việc với nhiều kiểu dữ liệu** một cách an toàn và linh hoạt trong thời gian biên dịch.
+
+`any` **loại bỏ sự kiểm tra kiểu dữ liệu** và **cho phép biến chứa bất kỳ giá trị nào**, không quan tâm đến kiểu dữ liệu của nó, nhưng đồng thời không đảm bảo tính đúng đắn và an toàn trong mã.
+
+| | Generic | any |
+| :--: | :--: | :--: |
+| Kiểm tra kiểu dữ liệu | Generic cho phép bạn xác định và sử dụng các kiểu dữ liệu cụ thể một cách an toàn và linh hoạt trong thời gian biên dịch | `any` loại bỏ sự kiểm tra kiểu dữ liệu tại thời điểm biên dịch, không đảm bảo tính đúng đắn và an toàn trong mã. |
+| Tính tái sử dụng | Generic cho phép bạn viết mã một lần và tái sử dụng với nhiều kiểu dữ liệu khác nhau một cách an toàn | `any` không đảm bảo tính tái sử dụng vì nó loại bỏ sự kiểm tra kiểu dữ liệu và có thể dẫn đến lỗi runtime nếu sử dụng không đúng cách. |
+
+### 2. Ràng buộc kiểu Generic
+[:arrow_up: Mục lục](#mục-lục)
 
