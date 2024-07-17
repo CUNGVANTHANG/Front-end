@@ -35,52 +35,47 @@
 </details>
 
 <details>
-  <summary>III. Hàm</summary>
-
-</details>
-
-<details>
   <summary>IV. Kiểu dẫn xuất</summary>
 
 </details>
 
 <details>
-  <summary>V. Đối tượng</summary>
+  <summary>VI. Đối tượng</summary>
 
 </details>
 
 <details>
-  <summary>VI. Ký hiệu chỉ số</summary>
+  <summary>VII. Ký hiệu chỉ số</summary>
 
 </details>
 
 <details>
-  <summary>VII. Sử dụng biến nâng cao</summary>
+  <summary>VIII. Sử dụng biến nâng cao</summary>
 
 </details>
 
 <details>
-  <summary>VIII. Ngoại lệ</summary>
+  <summary>IX Ngoại lệ</summary>
 
 </details>
 
 <details>
-  <summary>IX. Bí danh</summary>
+  <summary>XI. Bí danh</summary>
 
 </details>
 
 <details>
-  <summary>X. Kiểm tra kiểu</summary>
+  <summary>XII. Kiểm tra kiểu</summary>
 
 </details>
 
 <details>
-  <summary>XI. Thao tác đối tượng và mảng</summary>
+  <summary>XIII. Thao tác đối tượng và mảng</summary>
 
 </details>
 
 <details>
-  <summary>XII. Chia sẻ mã nguồn</summary>
+  <summary>XIV. Chia sẻ mã nguồn</summary>
 
 </details>
 
@@ -842,7 +837,7 @@ console.log(person[UNIQUE_ID]); // Output: 123
 ## II. Enum
 [:arrow_up: Mục lục](#mục-lục)
 
-`enum` (viết tắt của "**enumeration**") được sử dụng để định nghĩa một tập hợp các hằng số có tên, giúp mã dễ đọc và bảo trì hơn.
+`enum` (viết tắt của "**enumeration**") được sử dụng để định nghĩa một **tập hợp các hằng số có tên**, giúp mã dễ đọc và bảo trì hơn.
 
 ### 1. Enum có giá trị và Enum không có giá trị
 [:arrow_up: Mục lục](#mục-lục)
@@ -1113,4 +1108,523 @@ genericFunction({ id: 123, id2: 99999 }); // This is legit because we have id (a
 ```
 
 _Kết quả_: `Inside generic:123`
+
+
+## IV. Kiểu dẫn xuất
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Kiểu dẫn xuất là gì?**
+
+Kiểu dẫn xuất (mapped type) cho phép **tạo một kiểu dữ liệu mới từ kiểu hiện có**. Thuật ngữ map (ánh xạ) có nghĩa là trỏ các thành viên hiện có của một kiểu tới một kiểu mới thông qua một logic tùy chỉnh dành riêng cho triển khai của đối tượng ánh xạ.
+
+Một ví dụ điển hình là tạo một interface lưu trữ tất cả các thành viên cùng tên, nhưng các thành viên là tùy chọn hoặc chỉ đọc.
+
+### 1. Kiểu Readonly
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Readonly` bảo vệ dữ liệu **bằng cách ngăn không cho phép thay đổi các thuộc tính** của một đối tượng sau khi nó được khởi tạo
+
+_Ví dụ:_
+
+Khi ta chưa sử dụng kiểu `Readonly`
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+```
+
+```ts
+const user: User = {
+  id: 1,
+  name: "Alice",
+  email: "alice@example.com"
+};
+```
+
+Với đối tượng này, bạn có thể dễ dàng thay đổi các thuộc tính của nó:
+
+```ts
+user.name = "Bob"; // Điều này hợp lệ và sẽ thay đổi name thành "Bob"
+user.email = "bob@example.com"; // Điều này cũng hợp lệ và sẽ thay đổi email
+```
+
+Bây giờ, nếu bạn muốn đảm bảo rằng đối tượng `user` không bị thay đổi sau khi được khởi tạo, bạn có thể sử dụng kiểu `Readonly`:
+
+```ts
+const readonlyUser: Readonly<User> = {
+  id: 1,
+  name: "Alice",
+  email: "alice@example.com"
+};
+```
+
+```ts
+readonlyUser.name = "Bob"; // Lỗi: Cannot assign to 'name' because it is a read-only property.
+readonlyUser.email = "bob@example.com"; // Lỗi: Cannot assign to 'email' because it is a read-only property.
+```
+
+### 2. Kiểu Partial
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Partial` giúp **tạo ra các kiểu mới từ các kiểu hiện có**, nhưng với tất cả các thuộc tính là tùy chọn (optional).
+
+_Ví dụ:_
+
+Giả sử bạn có một interface `User` như sau:
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+```
+
+Thông thường, khi tạo một đối tượng kiểu `User`, bạn phải cung cấp giá trị cho tất cả các thuộc tính:
+
+```ts
+const user: User = {
+  id: 1,
+  name: "Alice",
+  email: "alice@example.com"
+};
+```
+
+Tuy nhiên, nếu bạn muốn tạo một đối tượng với chỉ một số thuộc tính của `User`, bạn có thể sử dụng kiểu `Partial`:
+
+```ts
+const partialUser: Partial<User> = {
+  name: "Bob"
+};
+```
+
+Trong ví dụ này, `partialUser` chỉ có thuộc tính `name` và bỏ qua các thuộc tính khác (`id` và `email`). Điều này hợp lệ vì tất cả các thuộc tính của kiểu `Partial<User>` đều là **tùy chọn**.
+
+### 3. Kiểu Nullable
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Nullable` dùng để tạo kiểu mà các thuộc tính có thể nhận giá trị `null` hoặc `undefined` (muốn một số thuộc tính của đối tượng có thể không có giá trị).
+
+Tạo kiểu `Nullable` bằng cách sử dụng Union Types (`|`) để kết hợp kiểu gốc với `null` và/hoặc `undefined`
+
+_Ví dụ 1:_
+
+Bạn có thể tạo một kiểu mà các thuộc tính có thể là giá trị **gốc** hoặc `null`:
+
+```ts
+interface User {
+  id: number;
+  name: string | null;
+  email: string | null;
+}
+```
+
+Trong ví dụ này, cả `name` và `email` có thể nhận giá trị `null`:
+
+```ts
+const user: User = {
+  id: 1,
+  name: null,
+  email: null
+};
+```
+
+_Ví dụ 2:_ **Tạo kiểu Nullable cho toàn bộ đối tượng**
+
+Nếu bạn muốn tạo kiểu `Nullable` cho toàn bộ đối tượng, bạn có thể viết một utility type để làm điều này:
+
+```ts
+type Nullable<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
+// Sử dụng kiểu Nullable
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+type NullableUser = Nullable<User>;
+
+const user: NullableUser = {
+  id: 1,
+  name: null,
+  email: null
+};
+```
+
+### 4. Kiểu Pick
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Pick` cho phép bạn chọn một số trường thuộc tính cụ thể từ kiểu để tạo một kiểu động.
+
+_Ví dụ:_
+
+Giả sử bạn có một interface `User` như sau:
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+}
+```
+
+Nếu bạn chỉ muốn làm việc với các thuộc tính `id` và `name` của `User`, bạn có thể sử dụng `Pick` để tạo ra một kiểu mới:
+
+```ts
+type UserIdAndName = Pick<User, 'id' | 'name'>;
+
+const user: UserIdAndName = {
+  id: 1,
+  name: "Alice"
+};
+```
+
+Trong ví dụ này, kiểu `UserIdAndName` chỉ bao gồm hai thuộc tính `id` và `name` từ kiểu `User`.
+
+_Ví dụ 2:_
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+}
+
+type UserContactInfo = Pick<User, 'email' | 'name'>;
+
+function printContactInfo(user: UserContactInfo): void {
+  console.log(`Name: ${user.name}, Email: ${user.email}`);
+}
+
+const user: UserContactInfo = {
+  name: "Bob",
+  email: "bob@example.com"
+};
+
+printContactInfo(user);
+```
+
+Trong ví dụ này, hàm `printContactInfo` chỉ quan tâm đến các thuộc tính `name` và `email` của đối tượng `User`. Việc sử dụng `Pick` giúp đảm bảo rằng chỉ những thuộc tính cần thiết được truyền vào hàm.
+
+### 5. Kiểu Omit
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Omit` là phiên bản đảo ngược của `Pick`. `Pick` chọn một thành viên của kiểu, còn `Omit` lấy tất cả các thành viên của kiểu trừ thành viên được chọn.
+
+_Ví dụ:_
+
+Giả sử bạn có một interface `User` như sau:
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+}
+```
+
+Nếu bạn muốn làm việc với tất cả các thuộc tính của `User` ngoại trừ `email` và `age`, bạn có thể sử dụng `Omit` để tạo ra một kiểu mới:
+
+```ts
+type UserWithoutEmailAndAge = Omit<User, 'email' | 'age'>;
+
+const user: UserWithoutEmailAndAge = {
+  id: 1,
+  name: "Alice"
+};
+```
+
+Trong ví dụ này, kiểu `UserWithoutEmailAndAge` bao gồm tất cả các thuộc tính của `User` **ngoại trừ** `email` và `age`.
+
+### 6. Kiểu Record
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Record` cho phép tạo ra một **đối tượng** có các cặp **key-value** mà các **key đều có cùng một kiểu** và các **value đều có cùng một kiểu**
+
+_Ví dụ:_
+
+Giả sử bạn muốn tạo một đối tượng để lưu trữ các thông tin về một nhóm người dùng, với mỗi người dùng được xác định bằng một ID duy nhất, và thông tin của họ bao gồm tên và email. Bạn có thể sử dụng `Record` để định nghĩa kiểu này.
+
+```ts
+type User = {
+  name: string;
+  email: string;
+};
+
+type UserRecord = Record<number, User>;
+
+const users: UserRecord = {
+  1: { name: "Alice", email: "alice@example.com" },
+  2: { name: "Bob", email: "bob@example.com" },
+  3: { name: "Charlie", email: "charlie@example.com" }
+};
+```
+
+Trong ví dụ này, `UserRecord` là một `Record` có `key` là kiểu `number` và `value` là kiểu `User`. Điều này cho phép bạn tạo ra một đối tượng `users` mà các `key` là các **số nguyên** và các `value` là các **đối tượng** `User`.
+
+### 7. Kiểu Extract
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Extract` là một utility type dùng để lấy ra các kiểu con từ một union type. Cụ thể, `Extract<T, U>` sẽ **tạo ra một kiểu mới** **bao gồm tất cả** các thành viên của `T` mà cũng **tồn tại** trong `U`. Điều này rất hữu ích khi bạn muốn **lọc một union type** để chỉ **giữ lại các kiểu nhất định.**
+
+_Ví dụ 1:_
+
+Giả sử bạn có một union type `Animal` như sau:
+
+```ts
+type Animal = 'dog' | 'cat' | 'bird' | 'fish';
+```
+
+Nếu bạn muốn tạo một kiểu chỉ bao gồm `dog` và `cat`, bạn có thể sử dụng `Extract`:
+
+```ts
+type Mammal = Extract<Animal, 'dog' | 'cat'>;
+```
+
+Trong ví dụ này, kiểu `Mammal` sẽ chỉ bao gồm `'dog' | 'cat'`.
+
+_Ví dụ 2:_
+
+```ts
+interface Dog {
+  type: 'dog';
+  breed: string;
+}
+
+interface Cat {
+  type: 'cat';
+  color: string;
+}
+
+interface Bird {
+  type: 'bird';
+  canFly: boolean;
+}
+
+type Pet = Dog | Cat | Bird;
+```
+
+Nếu bạn muốn tạo một kiểu chỉ bao gồm `Dog` và `Cat`, bạn có thể sử dụng `Extract` dựa trên thuộc tính `type`:
+
+```ts
+type Mammal = Extract<Pet, { type: 'dog' | 'cat' }>;
+
+const pet1: Mammal = { type: 'dog', breed: 'Labrador' }; // Hợp lệ
+const pet2: Mammal = { type: 'cat', color: 'black' };    // Hợp lệ
+const pet3: Mammal = { type: 'bird', canFly: true };     // Lỗi: 'bird' không thuộc 'dog' | 'cat'
+```
+
+Trong ví dụ này, kiểu `Mammal` chỉ bao gồm các đối tượng `Dog` và `Cat`.
+
+_Ví dụ 3:_
+
+```ts
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: 'admin' | 'editor' | 'viewer';
+};
+
+type AdminOrEditor = Extract<User['role'], 'admin' | 'editor'>;
+
+const role1: AdminOrEditor = 'admin';  // Hợp lệ
+const role2: AdminOrEditor = 'editor'; // Hợp lệ
+const role3: AdminOrEditor = 'viewer'; // Lỗi: 'viewer' không thuộc 'admin' | 'editor'
+```
+
+Trong ví dụ này, kiểu `AdminOrEditor` chỉ bao gồm `'admin' và 'editor'`, dựa trên thuộc tính `role` của kiểu `User`.
+
+### 8. Kiểu Exclude
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `Exclude` là một utility type dùng để **tạo ra một kiểu mới** bằng cách **loại bỏ** các thành viên của một union type mà **tồn tại** trong một kiểu khác. Cụ thể, `Exclude<T, U>` sẽ **tạo ra một kiểu mới** bao gồm **tất cả** các thành viên của `T` mà **không tồn tại** trong `U`
+
+_Ví dụ 1:_
+
+```ts
+type Animal = 'dog' | 'cat' | 'bird' | 'fish';
+```
+
+Nếu bạn muốn tạo một kiểu loại bỏ `bird` và `fish`, bạn có thể sử dụng `Exclude`:
+
+```ts
+type LandAnimal = Exclude<Animal, 'bird' | 'fish'>;
+```
+
+Trong ví dụ này, kiểu `LandAnimal` sẽ bao gồm `'dog' | 'cat'`.
+
+_Ví dụ 2:_
+
+```ts
+interface Dog {
+  type: 'dog';
+  breed: string;
+}
+
+interface Cat {
+  type: 'cat';
+  color: string;
+}
+
+interface Bird {
+  type: 'bird';
+  canFly: boolean;
+}
+
+type Pet = Dog | Cat | Bird;
+```
+
+Nếu bạn muốn tạo một kiểu loại bỏ `Bird`, bạn có thể sử dụng `Exclude`:
+
+```ts
+type Mammal = Exclude<Pet, { type: 'bird' }>;
+
+const pet1: Mammal = { type: 'dog', breed: 'Labrador' }; // Hợp lệ
+const pet2: Mammal = { type: 'cat', color: 'black' };    // Hợp lệ
+const pet3: Mammal = { type: 'bird', canFly: true };     // Lỗi: 'bird' đã bị loại bỏ
+```
+
+Trong ví dụ này, kiểu `Mammal` sẽ bao gồm các đối tượng `Dog` và `Cat`, nhưng không bao gồm `Bird`.
+
+_Ví dụ 3:_
+
+```ts
+type UserRole = 'admin' | 'editor' | 'viewer' | 'guest';
+
+type NonGuestRole = Exclude<UserRole, 'guest'>;
+
+const role1: NonGuestRole = 'admin';  // Hợp lệ
+const role2: NonGuestRole = 'editor'; // Hợp lệ
+const role3: NonGuestRole = 'viewer'; // Hợp lệ
+const role4: NonGuestRole = 'guest';  // Lỗi: 'guest' đã bị loại bỏ
+```
+
+Trong ví dụ này, kiểu `NonGuestRole` sẽ bao gồm tất cả các thành viên của `UserRole` **ngoại trừ** `'guest'`
+
+### 9. Kiểu ReturnType
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu `ReturnType` là một utility type được sử dụng để **trích xuất kiểu** của **giá trị trả về từ một hàm**. Điều này có nghĩa là `ReturnType<T>` sẽ lấy kiểu của giá trị mà **hàm** `T` trả về.
+
+_Ví dụ 1:_
+
+```ts
+function greet(): string {
+  return "Hello, TypeScript!";
+}
+
+type GreetReturnType = ReturnType<typeof greet>;
+
+// GreetReturnType sẽ là kiểu string, vì hàm greet trả về một chuỗi (string)
+```
+
+Trong ví dụ này:
+
+- Hàm `greet` trả về một chuỗi (`string`).
+- `ReturnType<typeof greet>` sử dụng `typeof greet` để **lấy kiểu** của hàm `greet`.
+- `GreetReturnType` sẽ là `string`, vì vậy nó tương đương với `type GreetReturnType = string;`
+
+_Ví dụ 2:_
+
+```ts
+function processNumber(num: number): { original: number; squared: number } {
+  return {
+    original: num,
+    squared: num * num
+  };
+}
+
+type ProcessNumberReturnType = ReturnType<typeof processNumber>;
+
+// ProcessNumberReturnType sẽ là kiểu { original: number; squared: number; }
+```
+
+Trong ví dụ này:
+
+- Hàm `processNumber` nhận vào một số nguyên (`num`) và trả về một đối tượng với hai thuộc tính `original` (số nguyên ban đầu) và `squared` (bình phương của số nguyên đó).
+- `ReturnType<typeof processNumber>` trả về kiểu `{ original: number; squared: number; }`.
+- `ProcessNumberReturnType` sẽ là kiểu `{ original: number; squared: number; }`, do đó tương đương với `type ProcessNumberReturnType = { original: number; squared: number; };`.
+
+### 10. Kiểu dẫn xuất tùy chỉnh
+[:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ 1:_ **Dẫn xuất tùy chỉnh từ một Union Type**
+
+Giả sử bạn có một Union Type đại diện cho các loại hình học đơn giản như sau:
+
+```ts
+type Shape = "circle" | "square" | "rectangle";
+```
+
+Bạn muốn tạo ra các kiểu dữ liệu phức tạp hơn dựa trên loại hình học này, bạn có thể sử dụng Union Type để định nghĩa các kiểu dữ liệu mới:
+
+```ts
+type Circle = { type: "circle"; radius: number };
+type Square = { type: "square"; sideLength: number };
+type Rectangle = { type: "rectangle"; width: number; height: number };
+
+type ComplexShape = Circle | Square | Rectangle;
+```
+
+Trong ví dụ này:
+
+- `Circle`, `Square`, và `Rectangle` là các kiểu dữ liệu được định nghĩa tùy chỉnh dựa trên `Shape`.
+- `ComplexShape` là một Union Type mới chứa các kiểu dữ liệu phức tạp hơn từ các loại hình học đơn giản.
+
+_Ví dụ 2:_ **Dẫn xuất tùy chỉnh từ một kiểu dữ liệu hiện có**
+
+Nếu bạn có một kiểu dữ liệu như sau:
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+```
+
+Bạn có thể tạo ra các kiểu dữ liệu dẫn xuất tùy chỉnh bằng cách sử dụng Intersection Types hoặc các kỹ thuật khác:
+
+**Tạo ra một kiểu User có quyền quản trị (Admin)**
+
+```ts
+type AdminUser = User & { isAdmin: true };
+```
+
+**Tạo ra một kiểu User không có quyền quản trị (Non-admin)**
+
+```ts
+type NonAdminUser = Omit<User, 'isAdmin'> & { isAdmin: false };
+```
+
+Trong ví dụ này:
+
+- `AdminUser` là một Intersection Type của `User` và `{ isAdmin: true }`.
+- `NonAdminUser` sử dụng `Omit` để loại bỏ thuộc tính `isAdmin` từ `User`, sau đó thêm `{ isAdmin: false }`.
+
+_Ví dụ 3:_ **Sử dụng Conditional Types để dẫn xuất tùy chỉnh**
+
+Bạn có thể sử dụng Conditional Types để tạo ra các kiểu dữ liệu dẫn xuất dựa trên điều kiện:
+
+```ts
+type IsString<T> = T extends string ? true : false;
+
+type StringTypeCheck = IsString<string>; // true
+type NumberTypeCheck = IsString<number>; // false
+```
+
+Trong ví dụ này:
+
+- `IsString<T>` kiểm tra xem kiểu `T` có phải là `string` hay không và trả về `true` nếu đúng, ngược lại trả về `false`.
 
