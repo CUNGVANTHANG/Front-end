@@ -37,45 +37,58 @@
 <details>
   <summary>IV. Kiểu dẫn xuất</summary>
 
+- [1. Kiểu Readonly](#1-kiểu-readonly)
+- [2. Kiểu Partial](#2-kiểu-partial)
+- [3. Kiểu Nullable](#3-kiểu-nullable)
+- [4. Kiểu Pick](#4-kiểu-pick)
+- [5. Kiểu Omit](#5-kiểu-omit)
+- [6. Kiểu Record](#6-kiểu-record)
+- [7. Kiểu Extract](#7-kiểu-extract)
+- [8. Kiểu Exclude](#8-kiểu-exclude)
+- [9. Kiểu ReturnType](#9-kiểu-returntype)
+- [10. Kiểu dẫn xuất tùy chỉnh](#10-kiểu-dẫn-xuất-tùy-chỉnh)
 </details>
 
 <details>
-  <summary>VI. Đối tượng</summary>
+  <summary>V. Đối tượng</summary>
 
-</details>
-
-<details>
-  <summary>VII. Ký hiệu chỉ số</summary>
-
-</details>
-
-<details>
-  <summary>VIII. Sử dụng biến nâng cao</summary>
-
-</details>
-
-<details>
-  <summary>IX Ngoại lệ</summary>
-
-</details>
-
-<details>
-  <summary>XI. Bí danh</summary>
+- [1. object và Object](#1-object-và-object)
 
 </details>
 
 <details>
-  <summary>XII. Kiểm tra kiểu</summary>
+  <summary>VI. Ký hiệu chỉ số</summary>
+
+- [1. Định nghĩa và sử dụng](#1-định-nghĩa-và-sử-dụng)
+</details>
+
+<details>
+  <summary>VII. Sử dụng biến nâng cao</summary>
 
 </details>
 
 <details>
-  <summary>XIII. Thao tác đối tượng và mảng</summary>
+  <summary>VIII. Ngoại lệ</summary>
 
 </details>
 
 <details>
-  <summary>XIV. Chia sẻ mã nguồn</summary>
+  <summary>IX. Bí danh</summary>
+
+</details>
+
+<details>
+  <summary>X. Kiểm tra kiểu</summary>
+
+</details>
+
+<details>
+  <summary>XI. Thao tác đối tượng và mảng</summary>
+
+</details>
+
+<details>
+  <summary>XII. Chia sẻ mã nguồn</summary>
 
 </details>
 
@@ -1628,3 +1641,214 @@ Trong ví dụ này:
 
 - `IsString<T>` kiểm tra xem kiểu `T` có phải là `string` hay không và trả về `true` nếu đúng, ngược lại trả về `false`.
 
+## V. Đối tượng
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. object và Object
+[:arrow_up: Mục lục](#mục-lục)
+
+| object | Object |
+| :--: | :--: |
+| Nó đại diện cho các đối tượng không phải là nguyên thủy như `arrays`, `functions`, `objects`, và `classes`. | Đại diện cho mọi đối tượng |
+
+_Ví dụ:_ Với object
+
+```ts
+let obj: object;
+
+obj = {}; // Hợp lệ
+obj = [] // Hợp lệ
+obj = new Date(); // Hợp lệ
+obj = "Hello"; // Lỗi: không phải là đối tượng
+```
+
+_Ví dụ:_ Với Object
+
+```
+let obj: Object;
+
+obj = {}; // Hợp lệ
+obj = []; // Hợp lệ
+obj = new Date(); // Hợp lệ
+obj = "Hello"; // Hợp lệ: vì mọi đối tượng đều là một thể hiện của Object
+```
+
+## VI. Ký hiệu chỉ số
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. Định nghĩa và sử dụng
+[:arrow_up: Mục lục](#mục-lục)
+
+"index signature" (ký hiệu chỉ số) là cách để định nghĩa kiểu dữ liệu của các thành phần trong một đối tượng khi chúng có thể được **truy cập** bằng các chỉ mục (**index**) là các **chuỗi** hoặc **số**.
+
+- **Cú pháp của index signature**
+
+Index signature được định nghĩa bằng cách sử dụng `[]` trong khai báo kiểu của một đối tượng. Cú pháp chung như sau:
+
+```ts
+{
+  [index: type]: returnType;
+}
+```
+
+Trong đó:
+
+- `index`: Là tên của chỉ mục (`index`), có thể là kiểu `string` hoặc `number`.
+- `type`: Là kiểu dữ liệu của chỉ mục (`index`).
+- `returnType`: Là kiểu dữ liệu của giá trị được trả về khi truy cập vào đối tượng bằng chỉ mục (`index`).
+
+_Ví dụ 1:_ **Index signature với chỉ mục là số**
+
+```ts
+interface NumberDictionary {
+  [index: number]: string;
+}
+
+let numDict: NumberDictionary = {
+  1: 'One',
+  2: 'Two',
+  3: 'Three',
+};
+
+console.log(numDict[2]); // Output: 'Two'
+```
+
+Trong ví dụ này:
+
+- `NumberDictionary` là một interface có index signature.
+- Chỉ mục (`index`) là số (`number`), và giá trị tương ứng với mỗi chỉ mục là một chuỗi (`string`).
+- Biến `numDict` có thể chứa các cặp `key-value` trong đó `key` là số và `value` là chuỗi.
+
+_Ví dụ 2:_ **Index signature với chỉ mục là chuỗi**
+
+```ts
+interface StringDictionary {
+  [index: string]: number;
+}
+
+let strDict: StringDictionary = {
+  'one': 1,
+  'two': 2,
+  'three': 3,
+};
+
+console.log(strDict['three']); // Output: 3
+```
+
+Trong ví dụ này:
+
+- `StringDictionary` là một interface khác có index signature.
+- Chỉ mục (`index`) là chuỗi (`string`), và giá trị tương ứng với mỗi chỉ mục là một số (`number`).
+- Biến `strDict` có thể chứa các cặp `key-value` trong đó `key` là chuỗi và `value` là số.
+
+## VII. Sử dụng biến nâng cao
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. Kết hợp các Kiểu dữ liệu, Interface và Kiểu Generic
+[:arrow_up: Mục lục](#mục-lục)
+
+Trong TypeScript, bạn có thể **thao tác với các kiểu dữ liệu** bằng cách **kết hợp chúng lại** với nhau theo một số cách khác nhau. 
+
+Cách đầu tiên là chỉ định một kiểu là **intersection** sử dụng toán tử `&`
+
+```ts
+type T1 = { x: string };
+type T2 = { y: number };
+type T3 = { z: boolean };
+type IntersectType1 = T1 & T2 & T3;
+type IntersectType2 = T1 & T2;
+type IntersectType3 = T3 & T1;
+const inter1: T1 = { x: "x1", y: 2 }; // Won't compile: y does not exist in T1
+const inter2: T1 & T2 = { x: "x1", y: 2 }; // Compile
+const inter3: IntersectType2 = { x: "x1", y: 2 }; // Compile
+```
+
+Các interface cũng có thể được kết hợp bằng cách sử dụng kiểu **intersection**.
+
+```ts
+interface I1 {
+    x: string;
+}
+interface I2 {
+    y: number;
+}
+interface I3 {
+    z: boolean;
+}
+type IntersectWithInterface = I1 & I2 & I3;
+const with3Interfaces: IntersectWithInterface = { x: "1", y: 1, z: true };
+```
+
+Kiểu intersection và kiểu generic có thể kết hợp để tạo ra sự linh hoạt. Trong ví dụ sau, hàm là kiểu generic và kết hợp hai kiểu generic trong kiểu trả về.
+
+```ts
+function intersectGeneric<TT1, TT2>(t1: TT1, t2: TT2): TT1 & TT2 {
+    const returnValue = <TT1 & TT2>{};
+    for (let index in t1) {
+        (returnValue as TT1)[index] = t1[index];
+    }
+    for (let index in t2) {
+        (returnValue as TT2)[index] = t2[index];
+    }
+    return returnValue;
+}
+```
+
+### 2. Kiểu literal
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu hằng thiết lập một giá trị duy nhất cho kiểu của biến. Ban đầu, kiểu hằng chỉ hỗ trợ chuỗi. Hiện nay, kiểu hằng có thể là **Boolean, số hoặc enum**.
+
+```ts
+let x : "test";
+let y : 123;
+let z : true;
+```
+
+Kiểu literal trong TypeScript được sử dụng để chỉ định chính xác một giá trị cụ thể mà biến hoặc thuộc tính có thể có. Điều này giúp bạn **hạn chế các giá trị có thể gán cho biến** chỉ vào các giá trị cụ thể đã được xác định từ trước, thay vì là một loạt các giá trị có thể có.
+
+_Ví dụ 1:_ **Literal strings (Chuỗi literal)**: Đây là chuỗi với một giá trị cụ thể. 
+
+```ts
+let direction: 'left' | 'right' | 'up' | 'down';
+
+direction = 'left'; // Hợp lệ
+direction = 'right'; // Hợp lệ
+direction = 'up'; // Hợp lệ
+direction = 'down'; // Hợp lệ
+direction = 'diagonal'; // Lỗi: 'diagonal' không phù hợp với kiểu literal được chỉ định
+```
+
+Trong ví dụ này, biến `direction` chỉ có thể nhận một trong các giá trị chuỗi cụ thể là `'left'`, `'right'`, `'up'`, hoặc `'down'`. Bất kỳ giá trị nào khác sẽ không được chấp nhận.
+
+_Ví dụ 2:_ **Literal numbers (Số literal)**: Tương tự như chuỗi literal, đây là một số với giá trị cụ thể.
+
+```ts
+let diceRoll: 1 | 2 | 3 | 4 | 5 | 6;
+
+diceRoll = 4; // Hợp lệ
+diceRoll = 1; // Hợp lệ
+diceRoll = 7; // Lỗi: 7 không phù hợp với kiểu literal được chỉ định
+```
+
+Biến `diceRoll` chỉ có thể nhận một trong các giá trị số cụ thể là `1`, `2`, `3`, `4`, `5`, hoặc `6`.
+
+- **Kiểu literal và Kiểu const**
+
+| | Kiểu literal | Kiểu const |
+| :--: | :--: | :--: |
+| Khái niệm | là một kiểu dữ liệu cụ thể đại diện cho một giá trị cụ thể | là từ khóa để khai báo biến không thể gán lại (hằng số) |
+| Áp dụng | Kiểu literal áp dụng cho việc xác định các giá trị có thể của biến | Áp dụng cho việc bảo vệ sự không thay đổi của biến sau khi được gán. | 
+
+- **Sử dụng kết hợp**
+
+Bạn có thể kết hợp kiểu literal và `const` để tạo ra các hằng số với giá trị cụ thể và đảm bảo rằng giá trị của chúng không thay đổi:
+
+```ts
+const color: 'red' | 'green' | 'blue' = 'blue';
+```
+
+Trong ví dụ này, `color` là một hằng số và chỉ có thể nhận một trong ba giá trị là `'red'`, `'green'`, hoặc `'blue'`
+
+### 3. Kiểu union và Tagged union
+[:arrow_up: Mục lục](#mục-lục)
