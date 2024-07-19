@@ -76,6 +76,12 @@
 
 </details>
 
+<details>
+  <summary>Một số lỗi có thể gặp</summary>
+
+- [1. error:0308010C:digital envelope routines::unsupported](#1-error0308010cdigital-envelope-routinesunsupported)
+</details>
+
 ## I. SPA/MPA là gì?
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -5363,4 +5369,44 @@ document.querySelector("#add-five").addEventListener("click", () => {
 ```
 
 Chúng ta có thể gọi `incrementBy(1)`, `incrementBy(5)` hoặc bất kỳ giá trị nào khác ở đây. Giá trị này sẽ được nhận dưới dạng `action.payload` mà bạn sau đó có thể sử dụng để cập nhật trạng thái.
+
+
+## 1. error:0308010C:digital envelope routines::unsupported
+
+```
+Error: error:0308010C:digital envelope routines::unsupported
+    at new Hash (node:internal/crypto/hash:67:19)
+    at Object.createHash (node:crypto:130:10)
+    at module.exports (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/util/createHash.js:135:53)
+    at NormalModule._initBuildHash (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:417:16)
+    at handleParseError (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:471:10)
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:503:5
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:358:12
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:373:3
+    at iterateNormalLoaders (/Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:214:10)
+    at iterateNormalLoaders (/Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:221:10)
+/Users/user/Programming Documents/WebServer/untitled/node_modules/react-scripts/scripts/start.js:19
+  throw err;
+  ^
+```
+
+**Khắc phục:**
+
+On Unix-like (Linux, macOS, Git bash, etc.):
+
+```
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On Windows command prompt:
+
+```
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On PowerShell:
+
+```
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
+```
 
