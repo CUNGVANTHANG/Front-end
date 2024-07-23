@@ -2111,3 +2111,43 @@ type ArrayKeys = keyof number[]; // "length" | "push" | "pop" | ...
 ### 7. Toán tử in
 [:arrow_up: Mục lục](#mục-lục)
 
+Toán tử `in` được sử dụng để **kiểm tra** xem một **thuộc tính** có **tồn tại** trong một **đối tượng** hay không
+
+_Ví dụ 1:_ Kiểm Tra Sự Tồn Tại của Thuộc Tính trong Đối Tượng
+
+```ts
+interface Person {
+    name: string;
+    age: number;
+    address?: string; // Thuộc tính tùy chọn
+}
+
+const person: Person = {
+    name: "Alice",
+    age: 30
+};
+
+console.log("name" in person); // true
+console.log("address" in person); // false, vì address không có trong đối tượng
+```
+
+_Ví dụ 2:_ Sử Dụng `in` với Kiểm Tra Điều Kiện
+
+Toán tử `in` thường được sử dụng trong các kiểm tra điều kiện để xử lý các đối tượng một cách an toàn.
+
+```ts
+function printAddress(obj: Person) {
+    if ("address" in obj) {
+        console.log(`Address: ${obj.address}`);
+    } else {
+        console.log("Address not provided");
+    }
+}
+
+printAddress(person); // Output: Address not provided
+```
+
+_Ví dụ 3:_ Sử Dụng `in` với Kiểu Kết Hợp (Union Types)
+
+Toán tử `in` rất hữu ích khi làm việc với các kiểu kết hợp (union types) để xác định kiểu chính xác của đối tượng.
+
