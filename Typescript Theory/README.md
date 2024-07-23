@@ -4,6 +4,7 @@
 <details>
   <summary>I. Các kiến thức cơ bản về biến</summary>
 
+ - [Cài đặt](#cài-đặt)
  - [1. Type Annotations](#1-type-annotations)
  - [2. Type Inference](#2-type-inference)
  - [3. Khai báo biến trong mã lệnh không được định kiểu](#3-khai-báo-biến-trong-mã-lệnh-không-được-định-kiểu)
@@ -103,10 +104,23 @@
   <summary>XI. Chia sẻ mã nguồn</summary>
 
 - [1. Không gian tên `namespace`](#1-không-gian-tên-namespace)
+- [2. Lazy-load module](#2-lazy-load-module)
 </details>
 
 ## I. Các kiến thức cơ bản về biến
 [:arrow_up: Mục lục](#mục-lục)
+
+### Cài đặt
+
+```
+npm install -g typescript
+```
+
+Kiểm tra version
+
+```
+tsc -v
+```
 
 ### 1. Type Annotations
 **Typescript sử dụng cú pháp:**
