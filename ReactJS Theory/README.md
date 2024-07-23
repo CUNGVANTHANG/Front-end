@@ -73,6 +73,9 @@
 - [XI. Redux Toolkit](#xi-redux-toolkit)
   - [1. Slices](#1-slices)
   - [2. Actions & payloads](#2-actions--payloads)
+  - [3. Provider](#3-provider)
+  - [4. Hook - useSelector](#4-hook---useselector)
+  - [5. Hook - useDispatch](#5-hook---usedispatch)
 
 </details>
 
@@ -5370,8 +5373,135 @@ document.querySelector("#add-five").addEventListener("click", () => {
 
 Chúng ta có thể gọi `incrementBy(1)`, `incrementBy(5)` hoặc bất kỳ giá trị nào khác ở đây. Giá trị này sẽ được nhận dưới dạng `action.payload` mà bạn sau đó có thể sử dụng để cập nhật trạng thái.
 
+### 3. Provider
+[:arrow_up: Mục lục](#mục-lục)
+
+Trong ứng dụng React, bạn có thể làm cho `store` có thể được **truy cập bởi bất kỳ component con nào** bằng cách **đóng gói toàn bộ** ứng dụng bằng **component Provider**
+
+Để làm điều đó, bạn cần thêm `Provider` từ `react-redux` (dưới dạng named import) và sau đó đóng gói toàn bộ ứng dụng bằng `Provider`. Giả sử bạn có đoạn code sau:
+
+```jsx
+import { createRoot } from 'react-dom/client';
+import { store } from './store.js';
+
+render(<App />, document.querySelector('#react-root'));
+```
+
+Trong ví dụ này, ta giả định rằng ta đang thêm một `store` (được tạo bằng phương thức `configureStore` của `@reduxjs/toolkit`).
+
+Bây giờ, ta sẽ thêm `Provider` và đóng gói toàn bộ ứng dụng bằng `Provider` và truyền `store` dưới dạng `prop store`:
+
+```jsx
+import { createRoot } from 'react-dom/client';
+import { store } from './store.js';
+import { Provider } from 'react-redux';
+
+const root = document.querySelector('#react-root');
+
+createRoot(root).render(<Provider store={store}>
+    <App />
+</Provider>);
+```
+
+Đừng quên `store={store}`. Nó cho phép chúng ta truyền `store` vào ứng dụng, làm cho `store` có thể được **truy cập bởi tất cả các component con** của **component Provider**.
+
+### 4. Hook - useSelector
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook `useSelector` cho phép bạn **trích xuất dữ liệu** từ `store` của redux.
+
+Nó nhận một hàm callback, hàm này nhận toàn bộ `state` làm đối số. Sau đó, bạn có thể quyết định dữ liệu mà bạn muốn lấy. Hãy xem một ví dụ với store được tạo từ `slice` sau:
+
+```jsx
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+  },
+});
+```
+
+Component `<Counter />` sẽ cần hiển thị giá trị của `counter`. Hãy quan sát `initialState`. Đó là một đối tượng có khóa `value` mà chúng ta cần trích xuất.
+
+```jsx
+import {useSelector} from "react-redux";
+
+function Counter() {
+    const counter = useSelector(state => state.value);
+
+    return <h1>Counter: {counter}</h1>
+}
+```
+
+Đoạn code trên thêm hook `useSelector` từ gói `react-redux`.
+
+Sau đó, nó sử dụng hook này và truyền hàm callback sau:
+
+```jsx
+state => state.value
+```
+
+Đây là một hàm mũi tên trích xuất giá trị của `counter` từ `state`.
+
+### 5. Hook - useDispatch
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook `useDispatch` **trả về** một **tham chiếu** đến hàm `dispatch` từ `store` của Redux. Khi bạn sử dụng `useDispatch`, bạn có thể **gọi** hàm `dispatch()` để **gửi một hành động** đến `store`.
+
+Hãy xem một ví dụ với store `counter` và hành động `increment` đã được định nghĩa trong `store.js`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+const { increment } = counterSlice.actions;
+
+export {store, increment};
+```
+
+Dưới đây là cách chúng ta hoàn thiện component `Counter` để component tăng giá trị biến đếm khi nhấp vào nút:
+
+```jsx
+import {useDispatch} from "react-redux";
+import {increment} from "./store.js";
+
+export default function Counter() {
+    const dispatch = useDispatch();
+
+    return <button onClick={() => dispatch(increment())}>Add 1</button>;
+}
+```
+
+Ta bắt đầu bằng cách thêm hook `useDispatch` từ `react-redux`.
+
+Sau đó, ta sử dụng hook đó để trích xuất hàm dispatch: `const dispatch = useDispatch()`. 
+
+Ta cũng đã thêm hàm (hành động) `increment` từ store.
+
+Cuối cùng, khi người dùng nhấp vào nút, ta gọi `dispatch(increment())`
 
 ## 1. error:0308010C:digital envelope routines::unsupported
+[:arrow_up: Mục lục](#mục-lục)
 
 ```
 Error: error:0308010C:digital envelope routines::unsupported
