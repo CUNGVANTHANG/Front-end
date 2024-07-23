@@ -65,6 +65,12 @@
 <details>
   <summary>VII. Sử dụng biến nâng cao</summary>
 
+- [1. Kết hợp các Kiểu dữ liệu, Interface và Kiểu Generic](#1-kết-hợp-các-kiểu-dữ-liệu-interface-và-kiểu-generic)
+- [2. Kiểu literal](#2-kiểu-literal)
+- [3. Kiểu union và Tagged union](#3-kiểu-union-và-tagged-union)
+- [4. Kiểu as const](#4-kiểu-as-const)
+- [5. Kiểu Tuple](#5-kiểu-tuple)
+- [6. Toán tử keyof](#6-toán-tử-keyof)
 </details>
 
 <details>
@@ -1852,3 +1858,256 @@ Trong ví dụ này, `color` là một hằng số và chỉ có thể nhận m�
 
 ### 3. Kiểu union và Tagged union
 [:arrow_up: Mục lục](#mục-lục)
+
+- **Kiểu union**
+
+Kiểu union dùng để **định nghĩa** một **biến** có thể **thuộc một kiểu** hoặc **kiểu khác**.
+
+```ts
+let u1: string | boolean = true;
+type UStringBoolean = string | boolean;
+let u2: UStringBoolean = true;
+```
+
+- **Tagged union**
+
+Kiểu tagged union, còn được gọi là _discriminated union_ hoặc _algebraic data type_. Dùng để định nghĩa một kiểu có thể có nhiều dạng khác nhau. Mỗi dạng được phân biệt bởi một thuộc tính literal, được gọi là `"tag"` hoặc `"discriminator"`
+
+_Ví dụ:_
+
+```ts
+type Circle = {
+    kind: "circle";
+    radius: number;
+};
+
+type Square = {
+    kind: "square";
+    sideLength: number;
+};
+
+type Rectangle = {
+    kind: "rectangle";
+    width: number;
+    height: number;
+};
+
+type Shape = Circle | Square | Rectangle;
+
+function area(shape: Shape): number {
+    switch (shape.kind) {
+        case "circle":
+            return Math.PI * shape.radius * shape.radius;
+        case "square":
+            return shape.sideLength * shape.sideLength;
+        case "rectangle":
+            return shape.width * shape.height;
+        default:
+            // Kiểm tra toàn diện để đảm bảo tất cả các trường hợp đều được xử lý
+            const _exhaustiveCheck: never = shape;
+            return _exhaustiveCheck;
+    }
+}
+```
+
+Trong ví dụ này:
+
+1. Chúng ta định nghĩa ba kiểu: `Circle`, `Square` và `Rectangle`. Mỗi kiểu có một thuộc tính `kind` với một giá trị literal.
+2. Chúng ta tạo một kiểu liên hợp `Shape` có thể là `Circle`, `Square` hoặc `Rectangle`.
+3. Trong hàm `area`, chúng ta sử dụng câu lệnh `switch` để kiểm tra thuộc tính `kind` và tính toán diện tích tương ứng.
+4. Trường hợp `default` với `never` đảm bảo rằng tất cả các trường hợp có thể xảy ra đều được xử lý, cung cấp một cách an toàn để đảm bảo kiểm tra toàn diện.
+
+### 4. Kiểu as const
+[:arrow_up: Mục lục](#mục-lục)
+
+Ban đầu, `as const` trông có vẻ dư thừa vì ta vốn có thể khai báo biến với `const` và làm cho giá trị không thể thay đổi (**dòng 1**).
+
+Tuy nhiên, `const` và `as const` là hai khái niệm khác nhau. Với `as const` (**dòng 3**), khai báo được thực hiện bằng `let`, cho phép giá trị có thể thay đổi. Tuy nhiên, sự thay đổi này chỉ được áp dụng cho kiểu hằng. Dưới đây là một ví dụ:
+
+```ts
+const v1 = 10;
+// v1 = 10; // Does not compile
+let v2 = 10 as const;
+v2 = 10;
+```
+
+- **Khai báo mảng là const thì sao?**
+
+Mảng chỉ đọc có thể hữu ích trong một số trường hợp. Mảng được khai báo bằng const không thể được gán lại, tuy nhiên bạn vẫn có thể thay đổi các giá trị bên trong nó.
+
+```ts
+// Const
+const myArr1 = [1, 2, 3];
+myArr1.push(4);
+console.log(myArr1);
+
+// myArr1 = []; // Doest not compile because const
+```
+
+Ngược lại, một mảng được khai báo bằng `as const` sẽ chứa các giá trị không thể thay đổi. 
+
+```ts
+let myArr2 = [1, 2, 3] as const;
+// myArr2.push(4); // Does not provide the auto-complete, neither compile.
+```
+
+- **Khai báo đối tượng bằng as const**
+
+Tương tự như mảng, ta có thể sử dụng `as const` để tạo một đối tượng bất biến. Thay đổi kiểu của đối tượng hoặc thêm thành viên mới bằng chữ ký chỉ số đều dẫn đến lỗi biên dịch.
+
+```ts
+let immutable1 = { id: "1" } as const;
+// immutable1.id = 2; // Does not compile
+// immutable1["newprop"] = 2; // Does not compile
+console.log(immutable1);
+```
+
+### 5. Kiểu Tuple
+[:arrow_up: Mục lục](#mục-lục)
+
+Kiểu Tuple là một **mảng** chứa các **phần tử đã được định nghĩa**. Để khai báo tuple, bạn sử dụng dấu **ngoặc vuông** như được thể hiện ở **dòng 1**, tuy nhiên thay vì chỉ định giá trị, bạn chỉ định kiểu.
+
+```ts
+let numberTuple: [number, number, number];
+
+let myTuple: [number, string] = [0, "1"];
+myTuple = [1, "test"];
+const numberVariable: number = myTuple[0];
+const stringVariable: string = myTuple[1];
+```
+
+```ts
+// Khai báo một tuple với kiểu cố định
+let person: [string, number];
+
+// Gán giá trị cho tuple
+person = ["Alice", 30]; // Hợp lệ
+
+// Gán giá trị sai kiểu
+// person = [30, "Alice"]; // Lỗi, vì thứ tự các kiểu không khớp
+```
+
+- **Truy Cập và Thao Tác Tuples**
+
+Bạn có thể truy cập các phần tử của tuple giống như một mảng và có thể sử dụng các phương thức mảng trên tuples.
+
+```ts
+let person: [string, number] = ["Alice", 30];
+
+// Truy cập phần tử
+console.log(person[0]); // "Alice"
+console.log(person[1]); // 30
+
+// Sử dụng các phương thức mảng
+person.push("Engineer"); // Hợp lệ, nhưng thêm kiểu không được định nghĩa ban đầu
+console.log(person); // ["Alice", 30, "Engineer"]
+
+// Gán giá trị mới cho một phần tử
+person[1] = 31; // Hợp lệ
+console.log(person); // ["Alice", 31, "Engineer"]
+```
+
+- **Tuple chỉ đọc**
+
+Tương tự, ta cũng có thể sử dụng từ khóa readonly để khai báo một tuple chỉ đọc.
+
+```ts
+let firstTuple: [number, number] = [1, 2];
+let secondTuple: readonly [number, number,] = [3, 4];
+
+firstTuple[0] = 100;
+// secondTuple[0] = 1000; //Error! Read-only Tuple
+
+console.log(firstTuple);
+console.log(secondTuple);
+```
+
+Ta vẫn có thể sử dụng `Readonly<T>` trên một tập hợp được định kiểu. Đoạn code sau không biên dịch vì tuple là chỉ đọc.
+
+```ts
+let firstTuple: Readonly<[number, number]> = [1, 2];
+firstTuple[0] = 100;
+
+console.log(firstTuple);
+```
+
+Ta có thể dùng tuple chỉ đọc có thể được tạo bằng cách sử dụng từ khóa `as const`
+
+```ts
+let firstTuple: readonly [number, number] = [1, 2];
+let secondTuple: Readonly<[number, number]> = [1, 2];
+let thirdTuple = [1, 2] as const;
+
+// firstTuple[0] = 0;
+// secondTuple[0] = 0;
+// thirdTuple[0] = 0;
+```
+
+### 6. Toán tử keyof
+[:arrow_up: Mục lục](#mục-lục)
+
+Toán tử `keyof` giúp bạn **lấy** ra các tên **khóa (key)** của một **đối tượng** dưới dạng một kiểu
+
+_Ví dụ 1:_
+
+```ts
+interface Person {
+    name: string;
+    age: number;
+    address: string;
+}
+
+type PersonKeys = keyof Person; // "name" | "age" | "address"
+```
+
+Trong ví dụ này, `PersonKeys` là một union type của các khóa trong đối tượng `Person`, cụ thể là `"name" | "age" | "address"`.
+
+_Ví dụ 2:_
+
+```ts
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+const person: Person = {
+    name: "Alice",
+    age: 30,
+    address: "123 Main St"
+};
+
+const name = getProperty(person, "name"); // "Alice"
+const age = getProperty(person, "age");   // 30
+```
+
+Hàm `getProperty` lấy một đối tượng `obj` và một khóa `key`, và trả về giá trị tương ứng với khóa đó. Toán tử `keyof` đảm bảo rằng `key` là một khóa hợp lệ của `obj`.
+
+_Ví dụ 3:_
+
+```ts
+interface Car {
+    make: string;
+    model: string;
+    year: number;
+}
+
+type CarKeys = keyof Car; // "make" | "model" | "year"
+
+const car: Car = {
+    make: "Toyota",
+    model: "Corolla",
+    year: 2020
+};
+
+const make = getProperty(car, "make"); // "Toyota"
+const model = getProperty(car, "model"); // "Corolla"
+```
+
+_Ví dụ 4:_ Khi sử dụng `keyof` với mảng, kết quả sẽ là các khóa thông thường của đối tượng mảng, như `length`, `push`, `pop`, v.v.
+
+```ts
+type ArrayKeys = keyof number[]; // "length" | "push" | "pop" | ...
+```
+
+### 7. Toán tử in
+[:arrow_up: Mục lục](#mục-lục)
+
