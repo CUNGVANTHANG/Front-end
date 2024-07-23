@@ -80,11 +80,15 @@
   <summary>VIII. Ngoại lệ</summary>
 
 - [1. Tạo ngoại lệ](#1-tạo-ngoại-lệ)
+- [2. Bắt ngoại lệ đồng bộ](#2-bắt-ngoại-lệ-đồng-bộ)
+- [3. Bắt ngoại lệ bất đồng bộ](#3-bắt-ngoại-lệ-bất-đồng-bộ)
+- [4. Hàm khẳng định (Assertion Functions)](#4-hàm-khẳng-định-assertion-functions)
 </details>
 
 <details>
   <summary>IX. Bí danh</summary>
 
+- [1. Tạo bí danh `type`](#1-tạo-bí-danh-type)
 </details>
 
 <details>
@@ -2482,4 +2486,333 @@ try {
 ```
 
 - **Thu hẹp ngoại lệ bằng instanceOf**
+
+Trong TypeScript, việc thu hẹp kiểu dữ liệu (type narrowing) bằng cách sử dụng từ khóa `instanceof` là một cách để xác định kiểu cụ thể của một đối tượng tại runtime.
+
+```ts
+class NetworkError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "NetworkError";
+    }
+}
+
+class ValidationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "ValidationError";
+    }
+}
+
+function riskyOperation() {
+    // Một số logic có thể gây ra ngoại lệ
+    throw new NetworkError("Failed to connect to the server");
+}
+
+try {
+    riskyOperation();
+} catch (error) {
+    if (error instanceof NetworkError) {
+        console.error("Network error occurred:", error.message);
+        // Xử lý lỗi mạng
+    } else if (error instanceof ValidationError) {
+        console.error("Validation error occurred:", error.message);
+        // Xử lý lỗi xác thực
+    } else {
+        console.error("An unknown error occurred:", error);
+        // Xử lý các lỗi khác
+    }
+}
+```
+
+1. Định nghĩa các lớp ngoại lệ: Trong ví dụ này, chúng ta định nghĩa hai lớp ngoại lệ tùy chỉnh: `NetworkError` và `ValidationError`. Cả hai lớp này đều kế thừa từ lớp `Error` chuẩn của JavaScript.
+
+2. Hàm `riskyOperation`: Hàm này là một ví dụ cho một hoạt động có thể gây ra ngoại lệ. Trong trường hợp này, nó luôn luôn ném ra một ngoại lệ `NetworkError`.
+
+3. Khối try...catch:
+
+- Trong khối `try`, chúng ta gọi hàm `riskyOperation`.
+- Trong khối `catch`, chúng ta sử dụng `instanceof` để kiểm tra kiểu của ngoại lệ và xử lý tương ứng.
+  - Nếu ngoại lệ là `NetworkError`, chúng ta xử lý lỗi mạng.
+  - Nếu ngoại lệ là `ValidationError`, chúng ta xử lý lỗi xác thực.
+  - Nếu ngoại lệ không phải là một trong hai loại trên, chúng ta xử lý nó như một lỗi không xác định.
+ 
+### 3. Bắt ngoại lệ bất đồng bộ
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Promise**
+
+Đoạn code sau thực thi không thành công:
+
+```ts
+Promise.resolve("value to be in the argument of then")
+    .then((response: string) => {
+        throw new Error("Error message");
+    });
+```
+
+Trong đoạn code sau, **dòng 3** ném ra một lỗi. Vấn đề ở đây là không có mã xử lý lỗi, vì vậy nó sẽ đưa ra một ngoại lệ chưa được xử lý.
+
+Trong trường hợp đó, promise gây ra ngoại lệ nên đặt khối `catch` trực tiếp sau code `promise` mà không đóng gói nó trong một câu lệnh `try-catch`.
+
+Trong đoạn code sau, **dòng 5** bắt một lỗi. Nó lưu lỗi gốc trong biến `err`.
+
+```ts
+Promise.resolve("value to be in the argument of then")
+    .then((response: string) => {
+        throw new Error("Error message");
+    })
+    .catch((err: Error) => {
+        console.log("Error Message#2", err.message);
+    });
+```
+
+**Promise không hỗ trợ khái niệm `finally`.** Để mô phỏng mệnh đề `finally`, code cần một mệnh đề `then` sau mệnh đề `catch`. Trong thuật ngữ bất đồng bộ, `finally` là một đoạn code luôn được thực thi bất kể trạng thái thực thi (thành công hoặc thất bại).
+
+Trong đoạn code trên, `"Error message"` được hiển thị **hai lần** vì nó được ghi vào console trong khối catch đầu tiên. Sau đó, `"Always called"` được hiển thị vì mệnh đề `then` cuối cùng nằm trong khối `finally`.
+
+- **Giải pháp await/async**
+
+Đoạn code sau thay thế việc sử dụng promise trong ví dụ trên bằng `await` và `async` để minh họa cách bắt ngoại lệ.
+
+```ts
+function returnPromise(): Promise<string> {
+  const p = Promise.resolve("value to be in the argument of then");
+  throw new Error("Error Message");
+  return p;
+}
+
+async function functionHandlePromise() {
+  try {
+    await returnPromise();
+  }
+  catch (err) {
+    console.log("Error Message #2", err.message);
+  }
+  finally {
+    console.log("Always called");
+  }
+}
+functionHandlePromise();
+```
+
+### 4. Hàm khẳng định (Assertion Functions)
+[:arrow_up: Mục lục](#mục-lục)
+
+Hàm khẳng định (assertion functions) trong TypeScript là một công cụ mạnh mẽ để **xác định** các **điều kiện** cụ thể và **đảm bảo** rằng một **giá trị thỏa mãn** các **điều kiện** này tại một điểm **nhất định** trong mã nguồn
+
+```ts
+function showLandArea(address, x, y) { // No typê
+    assert(typeof address === "string");
+    assert(typeof x === "number");
+    assert(typeof y === "number");
+
+    console.log(`The house ${address.substr(10)} as an area of ${x * y} meters`)
+}
+showLandArea("1234 Street ABCDE", 10, 5);
+// showLandArea("1234 Street ABCDE", "10", "5"); // Assertion will catch the 10 and 5 as string
+```
+
+_Ví dụ 1:_ Kiểm Tra Giá Trị Không null hoặc undefined
+
+```ts
+function assertIsDefined<T>(value: T): asserts value is NonNullable<T> {
+    if (value === undefined || value === null) {
+        throw new Error("Value must be defined");
+    }
+}
+
+// Sử dụng hàm khẳng định
+function processValue(value: string | undefined) {
+    assertIsDefined(value); // Khẳng định giá trị không phải undefined hoặc null
+    console.log(value.toUpperCase()); // TypeScript hiểu rằng value chắc chắn là string
+}
+
+processValue("Hello"); // Output: HELLO
+processValue(undefined); // Lỗi: Value must be defined
+```
+
+Trong ví dụ này:
+
+1. Hàm `assertIsDefined` kiểm tra xem `value` có phải là `null` hoặc `undefined` không. Nếu có, nó sẽ ném ra một lỗi.
+2. Từ khóa `asserts value is NonNullable<T>` cho TypeScript biết rằng sau khi gọi hàm này, `value` sẽ chắc chắn không phải là `null` hoặc `undefined`.
+3. Trong hàm processValue, sau khi gọi `assertIsDefined(value)`, TypeScript hiểu rằng `value` chắc chắn là `string`, và do đó bạn có thể gọi các phương thức của `string` trên `value` mà không gặp lỗi kiểm tra kiểu.
+
+_Ví dụ 2:_ Kiểm Tra Kiểu Dữ Liệu Cụ Thể
+
+```ts
+interface Cat {
+    meow: () => void;
+}
+
+interface Dog {
+    bark: () => void;
+}
+
+function assertIsCat(pet: Cat | Dog): asserts pet is Cat {
+    if (!('meow' in pet)) {
+        throw new Error("Not a cat");
+    }
+}
+
+// Sử dụng hàm khẳng định
+function makeSound(pet: Cat | Dog) {
+    assertIsCat(pet); // Khẳng định pet là Cat
+    pet.meow(); // TypeScript hiểu rằng pet chắc chắn là Cat
+}
+
+const myCat: Cat = { meow: () => console.log("Meow") };
+const myDog: Dog = { bark: () => console.log("Woof") };
+
+makeSound(myCat); // Output: Meow
+makeSound(myDog); // Lỗi: Not a cat
+```
+
+Trong ví dụ này:
+
+1. Hàm `assertIsCat` kiểm tra xem pet có phương thức `meow` không. Nếu không, nó sẽ ném ra một lỗi.
+2. Sau khi gọi `assertIsCat(pet)`, TypeScript hiểu rằng pet chắc chắn là `Cat`, và do đó bạn có thể gọi phương thức `meow` trên `pet`.
+
+## IX. Bí danh 
+### 1. Tạo bí danh `type`
+[:arrow_up: Mục lục](#mục-lục)
+
+Bí danh (alias) trong TypeScript là một cách để **định nghĩa** một **tên** mới cho một **kiểu dữ liệu** hiện có hoặc tổ hợp của các kiểu dữ liệu.
+
+Bí danh giúp mã nguồn trở nên dễ đọc hơn và có thể tái sử dụng các kiểu phức tạp một cách dễ dàng. 
+
+Bí danh được khai báo bằng từ khóa `type`.
+
+- **Tạo bí danh cho kiểu nguyên thủy**
+
+```ts
+type IP = string;
+
+function giveLenght(ip: IP): void {
+  console.log(ip.length);
+}
+
+giveLenght("127.0.0.1"); // Works with a string that is an IP
+giveLenght("NotI"); // Works with a string that is not an IP
+const localHost:IP = "127.0.0.1";
+giveLenght(localHost); // Works with IP
+```
+
+Ví dụ sau cho thấy hàm nhận một kiểu là `IP`, được định nghĩa là `string` trên **dòng 3**. Sự khác biệt ở đây là code dễ hiểu hơn khi ta mô tả rõ ràng điều mà ta mong đợi từ chuỗi đó - một địa chỉ **IP**.
+
+- **Tạo bí danh cho kiểu union**
+
+Một trường hợp sử dụng phổ biến là gộp nhiều kiểu nguyên thủy thành một bí danh kiểu. Điều này giúp tránh việc lặp lại union.
+
+Ví dụ, thay vì viết:
+
+```ts
+function setId(id: number | string | null): void { }
+function getId(): number | string | null{ return null; }
+function validId(id: number | string | null): void { }
+```
+
+Ta có thể viết:
+
+```ts
+type ID = number | string | null;
+function setId(id: ID): void { }
+function getId(): ID { return null; }
+function validId(id: ID): void { }
+```
+
+- **Tạo bí danh cho kiểu của hàm**
+
+Ta có thể đặt bí danh cho kiểu của mảng, các kiểu khác và thậm chí là hàm. Giả sử bạn đang sử dụng một hàm làm tham số của hàm khác và hàm đó yêu cầu một sắp xếp cụ thể của các tham số.
+
+Thay vì viết như đoạn code dưới đây:
+
+```ts
+function execute(code: (id: number, name: string) => boolean, error: (message: string) => void): void {
+  if (!code(1, "Name1")) {
+    error("Does not work");
+  }
+}
+
+const myAlgorithm: (id: number, name: string) => boolean = (id: number, name: string): boolean => {
+  return false;
+}
+
+const errorHandling: (message: string) => void = (message: string): void => {
+  console.log(message);
+}
+
+execute(myAlgorithm, (errorHandling));
+```
+
+
+Bạn có thể viết một bí danh cho kiểu của hàm như được định nghĩa ở **dòng 1-2** trong ví dụ sau. Hãy so sánh **dòng 1** của ví dụ trên với **dòng 3** của ví dụ dưới. Đoạn code dưới đây chắc chắn dễ đọc hơn so với đoạn code trên.
+
+```ts
+type Code = (id: number, name: string) => boolean;
+type ErrorCallback = (message: string) => void;
+
+function execute(code: Code, error: ErrorCallback): void {
+  if (!code(1, "Name1")) {
+    error("Does not work");
+  }
+}
+
+const myAlgorithm: Code = (id: number, name: string): boolean => {
+  return false;
+}
+
+const errorHandling: ErrorCallback = (message: string): void => {
+  console.log(message);
+}
+
+execute(myAlgorithm, (errorHandling));
+```
+
+_Ví dụ 1:_ Tạo bí danh với generic
+
+```ts
+type Response<T> = {
+    status: number;
+    data: T;
+    error?: string;
+};
+
+let userResponse: Response<User> = {
+    status: 200,
+    data: {
+        id: "1",
+        name: "Alice",
+        age: 25,
+    },
+};
+```
+
+- **Type intersect**
+
+_Ví dụ 2:_ Tạo bí danh với Intersection Types
+
+```ts
+type Name = {
+    firstName: string;
+    lastName: string;
+};
+
+type Contact = {
+    email: string;
+    phone: string;
+};
+
+type Person = Name & Contact;
+
+let person: Person = {
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    phone: "123-456-7890",
+};
+```
+
+### 2. Sự khác biệt giữa bí danh và interface
+[:arrow_up: Mục lục](#mục-lục)
 
