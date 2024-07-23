@@ -89,21 +89,20 @@
   <summary>IX. Bí danh</summary>
 
 - [1. Tạo bí danh `type`](#1-tạo-bí-danh-type)
+- [2. Sự khác biệt giữa bí danh và interface](#2-sự-khác-biệt-giữa-bí-danh-và-interface)
 </details>
 
 <details>
   <summary>X. Kiểm tra kiểu</summary>
 
+- [1. Kiểm tra kiểu bằng `typeof`](#1-kiểm-tra-kiểu-bằng-typeof)
+- [2. Kiểm tra kiểu bằng `instanceof`](#2-kiểm-tra-kiểu-bằng-instanceof)
 </details>
 
 <details>
-  <summary>XI. Thao tác đối tượng và mảng</summary>
+  <summary>XI. Chia sẻ mã nguồn</summary>
 
-</details>
-
-<details>
-  <summary>XII. Chia sẻ mã nguồn</summary>
-
+- [1. Không gian tên `namespace`](#1-không-gian-tên-namespace)
 </details>
 
 ## I. Các kiến thức cơ bản về biến
@@ -2816,3 +2815,218 @@ let person: Person = {
 ### 2. Sự khác biệt giữa bí danh và interface
 [:arrow_up: Mục lục](#mục-lục)
 
+- **Mở Rộng và Kết Hợp (interface tốt hơn)**
+
+Bí danh có thể kết hợp các kiểu bằng cách sử dụng union (`|`) và intersection (`&`).
+
+```ts
+type Admin = User & { isAdmin: boolean };
+```
+
+Tuy nhiên, bí danh **không thể tự mở rộng** hoặc **hợp nhất** như `interface`.
+
+interface có thể mở rộng (`extend`) các interface khác và thậm chí có thể hợp nhất với các interface cùng tên, tạo ra một cấu trúc hợp nhất.
+
+```ts
+interface User {
+    id: string;
+    name: string;
+    age: number;
+}
+
+interface User {
+    email?: string; // Hợp nhất với interface User trước đó
+}
+
+interface Admin extends User {
+    isAdmin: boolean;
+}
+```
+
+- **Khả Năng Sử Dụng với Các Kiểu Dữ Liệu Khác (Bí danh tốt hơn)**
+
+Bí danh có thể đại diện cho bất kỳ kiểu dữ liệu nào, bao gồm các kiểu cơ bản, các hàm, các kiểu tuple, các kiểu union và intersection.
+
+```ts
+type StringOrNumber = string | number;
+
+type Callback = () => void;
+
+type Point = [number, number];
+```
+
+interface chủ yếu được sử dụng để mô tả cấu trúc của đối tượng và không thể đại diện cho các kiểu dữ liệu khác như union hoặc các kiểu cơ bản.
+
+```ts
+// Interface chỉ mô tả đối tượng
+interface Point {
+    x: number;
+    y: number;
+}
+```
+
+**Khi Nào Nên Sử Dụng Cái Nào?**
+
+- Interface: Nên sử dụng khi bạn cần **mở rộng**, **hợp nhất** các **kiểu** và muốn tận dụng tính năng thực hiện (implements) bởi các **lớp**. Thích hợp cho việc mô tả **cấu trúc của đối tượng**.
+- Bí Danh: Nên sử dụng khi bạn cần một cách linh hoạt để **định nghĩa các kiểu phức hợp**, union, intersection, hoặc khi bạn cần đại diện cho các **kiểu dữ liệu khác ngoài đối tượng**.
+
+## X. Kiểm tra kiểu
+### 1. Kiểm tra kiểu bằng `typeof`
+[:arrow_up: Mục lục](#mục-lục)
+
+Toán tử `typeof` được sử dụng để kiểm tra **kiểu dữ liệu cơ bản** (primitive) của một giá trị. Nó **trả về** một **chuỗi** (string) biểu thị kiểu dữ liệu của giá trị đó.
+
+```ts
+let num = 42;
+console.log(typeof num); // Output: "number"
+
+let str = "hello";
+console.log(typeof str); // Output: "string"
+
+let bool = true;
+console.log(typeof bool); // Output: "boolean"
+
+let undef;
+console.log(typeof undef); // Output: "undefined"
+
+let obj = { name: "Alice" };
+console.log(typeof obj); // Output: "object"
+
+let arr = [1, 2, 3];
+console.log(typeof arr); // Output: "object"
+
+let func = () => {};
+console.log(typeof func); // Output: "function"
+
+let nul = null;
+console.log(typeof nul); // Output: "object" (đây là một bug lịch sử trong JavaScript)
+```
+
+### 2. Kiểm tra kiểu bằng `instanceof`
+[:arrow_up: Mục lục](#mục-lục)
+
+Toán tử `instanceof` được sử dụng để **kiểm tra** xem một **đối tượng** có phải là một **thể hiện** của một **lớp** hoặc **hàm tạo** (constructor function) **cụ thể** hay không. Nó trả về `true` hoặc `false`.
+
+```ts
+class Person {
+    constructor(public name: string) {}
+}
+
+let alice = new Person("Alice");
+console.log(alice instanceof Person); // Output: true
+
+let date = new Date();
+console.log(date instanceof Date); // Output: true
+
+console.log(date instanceof Person); // Output: false
+
+let arr = [1, 2, 3];
+console.log(arr instanceof Array); // Output: true
+
+console.log(arr instanceof Object); // Output: true (mảng là đối tượng trong JavaScript)
+```
+
+## XI. Chia sẻ mã nguồn
+### 1. Không gian tên `namespace`
+[:arrow_up: Mục lục](#mục-lục)
+
+Không gian tên (namespace) là một cách để **tổ chức** và **quản lý** mã nguồn bằng cách nhóm các **biến, hàm, lớp và các không gian tên khác** vào trong một phạm vi cụ thể. Không gian tên giúp **tránh xung đột tên** và làm cho mã nguồn **dễ bảo trì** hơn.
+
+Bạn có thể định nghĩa một `namespace` bằng từ khóa `namespace`, sau đó đặt các khai báo và định nghĩa bên trong cặp dấu ngoặc nhọn `{}`.
+
+```ts
+namespace MyNamespace {
+    export const myVariable = "Hello";
+    
+    export function myFunction() {
+        console.log(myVariable);
+    }
+
+    export class MyClass {
+        sayHello() {
+            console.log("Hello from MyClass");
+        }
+    }
+}
+```
+
+Để truy cập các thành phần trong một `namespace`, bạn cần sử dụng cú pháp `NamespaceName.MemberName`.
+
+```ts
+// Truy cập biến trong namespace
+console.log(MyNamespace.myVariable);
+
+// Gọi hàm trong namespace
+MyNamespace.myFunction();
+
+// Sử dụng lớp trong namespace
+const myInstance = new MyNamespace.MyClass();
+myInstance.sayHello();
+```
+
+Namespace cũng có thể được chia thành nhiều file để quản lý mã nguồn tốt hơn. Để làm điều này, bạn có thể sử dụng từ khóa `export` và `import`.
+
+_Ví dụ:_
+
+**file1.ts**
+
+```ts
+namespace MyNamespace {
+    export const myVariable = "Hello";
+
+    export function myFunction() {
+        console.log(myVariable);
+    }
+
+    export class MyClass {
+        sayHello() {
+            console.log("Hello from MyClass");
+        }
+    }
+}
+```
+
+Import Namespace vào Một File Khác
+
+**file2.ts**
+
+```ts
+/// <reference path="file1.ts" />
+
+console.log(MyNamespace.myVariable);
+
+MyNamespace.myFunction();
+
+const myInstance = new MyNamespace.MyClass();
+myInstance.sayHello();
+```
+
+Lưu ý rằng việc sử dụng `/// <reference path="...">` là một cách để kết nối các file TypeScript khi sử dụng namespace. Cách này ít được sử dụng hơn so với các module ES6 hiện đại nhưng vẫn rất hữu ích trong một số trường hợp
+
+### 2. Lazy-load module
+[:arrow_up: Mục lục](#mục-lục)
+
+Lazy loading (tải chậm) module là một kỹ thuật trong lập trình mà bạn chỉ tải các module hoặc thành phần khi chúng thực sự cần thiết, thay vì tải toàn bộ ứng dụng ngay từ đầu. Điều này giúp cải thiện hiệu suất ứng dụng và giảm thời gian tải trang ban đầu.
+
+_Ví dụ:_ **Ví Dụ Cơ Bản với Dynamic Imports**
+
+Dynamic imports là một cách phổ biến để thực hiện lazy loading. Đây là cú pháp chuẩn để tải module một cách không đồng bộ.
+
+```ts
+// main.ts
+async function loadModule() {
+    const module = await import('./module');
+    module.sayHello();
+}
+
+loadModule();
+```
+
+```ts
+// module.ts
+export function sayHello() {
+    console.log("Hello from dynamically loaded module!");
+}
+```
+
+Khi bạn gọi `loadModule()`, Webpack sẽ tạo ra một file bundle riêng cho module `module.ts`, và chỉ tải nó khi `loadModule` được gọi.
