@@ -79,6 +79,7 @@
 <details>
   <summary>VIII. Ngoại lệ</summary>
 
+- [1. Tạo ngoại lệ](#1-tạo-ngoại-lệ)
 </details>
 
 <details>
@@ -2348,4 +2349,137 @@ if (myMap.has(10)) {
 ```
 
 Tiếp theo, chúng ta đang truy cập giá trị. Vì `Map` có đối tượng và không cho phép lưu trữ giá trị `undefined`, vì ta đã xác định kiểu là `Map<Person>`, ta biết rằng việc truy cập trường thuộc tính `name` sẽ không gây ra lỗi tham chiếu `null`.
+
+## VIII. Ngoại lệ
+### 1. Tạo ngoại lệ
+[:arrow_up: Mục lục](#mục-lục)
+
+```ts
+// Không nên dùng
+function throw1() {
+    throw "error in string";
+}
+
+// Nên dùng
+function throw2() {
+    throw Error("Message Here");
+}
+
+// Nên dùng
+function throw3() {
+    const err: Error = new Error("Message Here");
+    throw err;
+}
+
+// throw1();
+// throw2();
+// throw3();
+```
+
+Đoạn code trên có ba dòng được comment. Dòng đầu tiên, **dòng 14**, trả về một string. Khi chuỗi được ném ra, đầu ra của chương trình là:
+
+```
+/usercode/index.ts:3 throw “error in string”;
+```
+
+Hãy comment **dòng 14** ra và chạy thử **dòng 15** và sau đó là dòng 16. Cả hai đều trả về đầu ra chi tiết hơn:
+
+```
+/usercode/index.ts:6 throw Error(“Message Here”); ^ Error: Message Here at throw2 (/usercode/index.ts:6:11) at Object. (/usercode/index.ts:15:1) at Module._compile (internal/modules/cjs/loader.js:778:30) at Module.m._compile (/usr/lib/node_modules/ts-node/src/index.ts:473:23) at Module._extensions…js (internal/modules/cjs/loader.js:789:10) at Object.require.extensions.(anonymous function) [as .ts] (/usr/lib/node_modules/ts-node/src/index.ts:476:12) at Module.load (internal/modules/cjs/loader.js:653:32) at tryModuleLoad (internal/modules/cjs/loader.js:593:12) at Function.Module._load (internal/modules/cjs/loader.js:585:3) at Function.Module.runMain (internal/modules/cjs/loader.js:831:12)
+```
+
+_Ví dụ:_ Khi một hàm gặp lỗi, hàm có thể trả về một đối tượng lỗi hoặc `undefined`. Tuy nhiên, việc trả về tùy chọn có nhược điểm là nó chiếm vị trí của giá trị trả về tiềm năng. Để giải quyết vấn đề này, ta có thể trả về một union bao gồm kiểu mong muốn và kiểu ngoại lệ.
+
+```ts
+function withReturn(p1: number)
+   : number | Error {
+   if(wrong){
+        return new Error("My error message");
+   }
+   return "String as expected when all good";
+}
+```
+
+hoặc
+
+```ts
+function withCallback(
+   p1:number, 
+   error:(errMsg: string) => void)
+   :string {
+   if(wrong){
+        error("My error message");
+   }
+   return "String as expected when all good";
+}
+```
+
+Cuối cùng, một phương án khả thi trong trường hợp code sử dụng promises là từ chối promise.
+
+```ts
+function withPromise(p1: number) 
+   => Promise<Error>{
+   if(wrong){
+        return Promise.reject("My error message);
+   }
+   return Promise.resolve("String as expected when all good");
+}
+```
+
+- **Lỗi tùy chỉnh**
+
+```ts
+class MySpecificError extends Error {
+    public data: string;
+    constructor(data: string, message: string) {
+        super(message);
+        Object.setPrototypeOf(this, MySpecificError.prototype); // Restore prototype chain
+        // OR:
+        // Object.setPrototypeOf(this, new.target.prototype); // Restore prototype chain
+        this.data = data;
+    }
+}
+
+throw new MySpecificError("dataHere", "My Message");
+```
+
+### 2. Bắt ngoại lệ đồng bộ
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Bắt ngoại lệ**
+
+Cấu trúc `try` và `catch` xử lý ngoại lệ giống như các ngôn ngữ phổ biến khác như Java và C#.
+
+```ts
+function throw1() {
+  throw "error in string";
+}
+
+function throw2() {
+  throw Error("Message Here");
+}
+
+function throw3() {
+  const err: Error = { name: "Error", message: "Message" };
+  throw err;
+}
+
+try {
+  throw1();
+} catch (e) {
+  console.log("Exception 1", e); // String
+}
+try {
+  throw2();
+} catch (e) {
+  console.log("Exception 2", e); // Full stack
+}
+try {
+  throw3();
+} catch (e) {
+  console.log("Exception 2", e); // Object
+}
+```
+
+- **Thu hẹp ngoại lệ bằng instanceOf**
 
