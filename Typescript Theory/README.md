@@ -71,6 +71,9 @@
 - [4. Kiểu as const](#4-kiểu-as-const)
 - [5. Kiểu Tuple](#5-kiểu-tuple)
 - [6. Toán tử keyof](#6-toán-tử-keyof)
+- [7. Toán tử in](#7-toán-tử-in)
+- [8. Từ khóa infer](#8-từ-khóa-infer)
+- [9. Set và Dictionary](#9-set-và-dictionary)
 </details>
 
 <details>
@@ -2150,4 +2153,199 @@ printAddress(person); // Output: Address not provided
 _Ví dụ 3:_ Sử Dụng `in` với Kiểu Kết Hợp (Union Types)
 
 Toán tử `in` rất hữu ích khi làm việc với các kiểu kết hợp (union types) để xác định kiểu chính xác của đối tượng.
+
+```ts
+type Fish = { swim: () => void };
+type Bird = { fly: () => void };
+
+function move(animal: Fish | Bird) {
+    if ("swim" in animal) {
+        animal.swim();
+    } else {
+        animal.fly();
+    }
+}
+```
+
+Trong ví dụ này, `move` nhận vào một đối tượng có thể là `Fish` hoặc `Bird`. Sử dụng `in` để kiểm tra xem thuộc tính `swim` có tồn tại trong `animal` hay không, từ đó xác định đúng kiểu và thực hiện hành động tương ứng
+
+_Ví dụ 4:_ Sử Dụng `in` với Mảng và Chuỗi
+
+Toán tử `in` cũng có thể được sử dụng với mảng và chuỗi để kiểm tra sự tồn tại của chỉ số hoặc ký tự.
+
+```ts
+const fruits = ["apple", "banana", "cherry"];
+
+console.log(0 in fruits); // true
+console.log(3 in fruits); // false
+```
+
+```ts
+const text = "hello";
+
+console.log(0 in text); // true
+console.log(5 in text); // false
+```
+
+### 8. Từ khóa infer
+[:arrow_up: Mục lục](#mục-lục)
+
+Từ khóa `infer` trong TypeScript được sử dụng trong ngữ cảnh của các **conditional types** (kiểu điều kiện) để **suy ra một kiểu** trong quá trình **kiểm tra kiểu**
+
+_Cú pháp:_
+
+```ts
+type Conditional<T> = T extends SomeType ? infer U : DefaultType;
+```
+
+Trong cú pháp này, `infer U` được sử dụng để suy ra kiểu của `U` từ `T` nếu `T` thỏa mãn điều kiện `extends SomeType`.
+
+_Ví dụ 1:_ Trích Xuất Kiểu Phần Tử trong Mảng
+
+Giả sử bạn có một kiểu mảng và bạn muốn trích xuất kiểu của phần tử bên trong mảng:
+
+```ts
+type ElementType<T> = T extends (infer U)[] ? U : T;
+
+// Sử dụng với kiểu mảng
+type StringArray = string[];
+type StringElement = ElementType<StringArray>; // string
+
+// Sử dụng với kiểu không phải mảng
+type NumberType = number;
+type NumberElement = ElementType<NumberType>; // number
+```
+
+Trong ví dụ này, `ElementType` kiểm tra xem `T` có phải là một mảng hay không. Nếu phải, nó sẽ suy ra kiểu phần tử `U` trong mảng đó; nếu không, nó sẽ trả về kiểu `T`
+
+_Ví dụ 2:_ Trích Xuất Kiểu Hàm Trả Về
+
+```ts
+type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+// Sử dụng với một hàm cụ thể
+type Func = () => string;
+type FuncReturn = ReturnType<Func>; // string
+```
+
+Trong ví dụ này, `ReturnType` kiểm tra xem `T` có phải là một hàm hay không. Nếu phải, nó sẽ suy ra kiểu trả về `R` của hàm đó; nếu không, nó sẽ trả về `never`
+
+_Ví dụ 3:_ Trích Xuất Kiểu Tham Số của Hàm
+
+Bạn có thể sử dụng infer để trích xuất kiểu của tham số trong hàm
+
+```ts
+type ParameterType<T> = T extends (infer P) => any ? P : never;
+
+// Sử dụng với một hàm cụ thể
+type Func = (x: number) => void;
+type FuncParameter = ParameterType<Func>; // number
+```
+
+Trong ví dụ này, `ParameterType` kiểm tra xem `T` có phải là một hàm hay không. Nếu phải, nó sẽ suy ra kiểu tham số `P` của hàm đó; nếu không, nó sẽ trả về `never`.
+
+### 9. Set và Dictionary
+[:arrow_up: Mục lục](#mục-lục)
+
+Từ điển (dictionary) và tập hợp (set) có hiệu suất tốt nhất vì có độ phức tạp thuật toán là **O(1)**, tức là thời gian thực thi các thao tác không đổi bất kể có bao nhiêu phần tử được lưu trữ.
+
+- **Chữ ký chỉ số:**
+
+```ts
+interface Person { id: number, name: string };
+
+interface PersonDictionary {
+  [id: number]: Person;
+}
+
+const dict: PersonDictionary = {
+  [1]: { id: 1, name: "First" },
+  [10]: { id: 10, name: "Tenth" },
+};
+console.log(dict[10].name);
+```
+
+Trong ví dụ dưới đây, **dòng 4** định nghĩa chữ ký chỉ số. Các **dòng 8-9** xác định các giá trị được gắn vào từ điển. Khóa dùng để truy cập giá trị được đặt trong cặp dấu ngoặc vuông. Trong trường hợp này, các khóa là **1** và **10**. Việc truy cập giá trị ở **dòng 11** diễn ra rất nhanh chóng vì ta không cần duyệt qua danh sách hoặc sử dụng thuật toán phức tạp nào.
+
+- **Set**
+
+Set là một tập hợp các giá trị **duy nhất**. Mỗi **giá trị** chỉ có thể **xuất hiện một lần** trong Set.
+
+```ts
+// Tạo một Set rỗng
+let mySet = new Set<number>();
+
+// Thêm phần tử vào Set
+mySet.add(1);
+mySet.add(2);
+mySet.add(3);
+mySet.add(1); // Giá trị 1 đã tồn tại, sẽ không thêm vào
+
+console.log(mySet); // Output: Set { 1, 2, 3 }
+
+// Kiểm tra sự tồn tại của một phần tử
+console.log(mySet.has(1)); // Output: true
+console.log(mySet.has(4)); // Output: false
+
+// Xóa một phần tử
+mySet.delete(2);
+console.log(mySet); // Output: Set { 1, 3 }
+
+// Duyệt qua các phần tử
+mySet.forEach(value => {
+    console.log(value);
+});
+
+// Xóa tất cả phần tử
+mySet.clear();
+console.log(mySet); // Output: Set {}
+```
+
+- **Map**
+
+Map là một tập hợp các cặp **khóa-giá trị**. Khóa có thể là bất kỳ kiểu dữ liệu nào, không nhất thiết phải là chuỗi như trong đối tượng (object).
+
+```ts
+// Tạo một Map rỗng
+let myMap = new Map<string, number>();
+
+// Thêm cặp khóa-giá trị vào Map
+myMap.set("one", 1);
+myMap.set("two", 2);
+myMap.set("three", 3);
+
+console.log(myMap); // Output: Map { 'one' => 1, 'two' => 2, 'three' => 3 }
+
+// Lấy giá trị từ Map bằng khóa
+console.log(myMap.get("two")); // Output: 2
+
+// Kiểm tra sự tồn tại của một khóa
+console.log(myMap.has("three")); // Output: true
+console.log(myMap.has("four")); // Output: false
+
+// Xóa một cặp khóa-giá trị
+myMap.delete("two");
+console.log(myMap); // Output: Map { 'one' => 1, 'three' => 3 }
+
+// Duyệt qua các cặp khóa-giá trị
+myMap.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+});
+
+// Xóa tất cả các cặp khóa-giá trị
+myMap.clear();
+console.log(myMap); // Output: Map {}
+```
+
+- **Toán tử chấm than (!)**
+
+Toán tử này thường được sử dụng để yêu cầu TypeScript bỏ qua cảnh báo lỗi. Đoạn code sau được triển khai một cách an toàn vì ta đang xem xét xem giá trị có tồn tại hay không bằng cách sử dụng `has`.
+
+```ts
+if (myMap.has(10)) {
+    console.log(myMap.get(10)!.name);
+}
+```
+
+Tiếp theo, chúng ta đang truy cập giá trị. Vì `Map` có đối tượng và không cho phép lưu trữ giá trị `undefined`, vì ta đã xác định kiểu là `Map<Person>`, ta biết rằng việc truy cập trường thuộc tính `name` sẽ không gây ra lỗi tham chiếu `null`.
 
