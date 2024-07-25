@@ -2,9 +2,15 @@
 ## Mục lục
 
 <details>
-  <summary>I. Các kiến thức cơ bản về biến</summary>
+  <summary>Mở đầu</summary>
 
- - [Cài đặt](#cài-đặt)
+- [Cài đặt](#cài-đặt)
+
+</details>
+
+<details>
+  <summary>I. Biến cơ bản</summary>
+
  - [1. Type Annotations](#1-type-annotations)
  - [2. Type Inference](#2-type-inference)
  - [3. Khai báo biến trong mã lệnh không được định kiểu](#3-khai-báo-biến-trong-mã-lệnh-không-được-định-kiểu)
@@ -64,7 +70,7 @@
 </details>
 
 <details>
-  <summary>VII. Sử dụng biến nâng cao</summary>
+  <summary>VII. Biến nâng cao</summary>
 
 - [1. Kết hợp các Kiểu dữ liệu, Interface và Kiểu Generic](#1-kết-hợp-các-kiểu-dữ-liệu-interface-và-kiểu-generic)
 - [2. Kiểu literal](#2-kiểu-literal)
@@ -105,6 +111,11 @@
 
 - [1. Không gian tên `namespace`](#1-không-gian-tên-namespace)
 - [2. Lazy-load module](#2-lazy-load-module)
+</details>
+
+<details>
+  <summary>XII. Decorator</summary>
+
 </details>
 
 ## I. Các kiến thức cơ bản về biến
@@ -3044,3 +3055,113 @@ export function sayHello() {
 ```
 
 Khi bạn gọi `loadModule()`, Webpack sẽ tạo ra một file bundle riêng cho module `module.ts`, và chỉ tải nó khi `loadModule` được gọi.
+
+### 1. Decorators
+[:arrow_up: Mục lục](#mục-lục)
+
+Decorators có **5** loại: Class Decorators, Method Decorators, Accessor Decorators, Property Decorators, Parameter Decorators
+
+Để có thể sử dụng được Decorator trong TypeScript thì cần phải bật tùy chọn `experimentalDecorators` trên câu lệnh hoặc file `tsconfig.json`
+
+```
+tsc --target ES5 --experimentalDecorators
+```
+
+```
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "experimentalDecorators": true
+  }
+}
+```
+
+**Ví dụ sau sẽ giúp ta hiểu hơn về Decorator. Kết quả sẽ biểu thị sau dấu `//`**
+
+_Ví dụ 1:_ Để xây dựng Method Decorators cần phải đủ **3 arguments** như sau
+
+```ts
+function logger(target: any, property: string, descriptor: PropertyDescriptor) {
+    console.log(target); // Test: {}
+    console.log(property); // "test"
+    console.log(descriptor.value); // test() { console.log('hello'); }
+}
+
+class Test {
+    @logger
+    public test() {
+        console.log('hello');
+    }
+}
+
+const test = new Test();
+```
+
+_Ví dụ 2:_ Cho thấy tác dụng của desciptor
+
+```ts
+function logger(target: any, property: string, descriptor: PropertyDescriptor) {
+    descriptor.value = function() {
+        console.log('122');
+    }
+}
+
+class Test {
+    @logger
+    public test() {
+        console.log('hello');
+    }
+}
+
+const test = new Test();
+test.test(); // 122
+```
+
+Kết quả in ra là `122` mà không phải là `hello`, có nghĩa là ta đã thực hiện hành vi thay đổi hết nội dung trong function `test()` thành `console.log('122')`. Vậy thì có cách nào để ta thay đổi được nội dung và cũng có thể sử dụng được nội dung từ function `test()` đang có
+
+_Ví dụ 3:_ Sẽ cho thấy cách thực hiện sử dụng được nội dung từ function `test()` đang có
+
+```ts
+function logger(target: any, property: string, descriptor: PropertyDescriptor) {
+    const method = descriptor.value;
+    descriptor.value = (...args: any[]) => {
+        console.log(...args); // 1 2
+        return method(...args);
+    }
+}
+
+class Test {
+    @logger
+    add(a: number, b: number) {
+        return a + b;
+    }
+}
+
+const test = new Test();
+console.log(test.add(1, 2)); // 3
+```
+
+_Ví dụ 3:_ Ta cũng có thể truyền tham số vào decorator bằng cách viết lồng function này trả về function kia như sau
+
+```ts
+function mutiply(x: number) {
+    return function (target: any, property: string, descriptor: PropertyDescriptor) {
+        const method = descriptor.value;
+        descriptor.value = (...args: any[]) => {
+            console.log(...args); // 1 2
+            return x * method(...args);
+        }
+    }
+}
+
+class Test {
+    @mutiply(2)
+    add(a: number, b: number) {
+        return a + b;
+    }
+}
+
+const test = new Test();
+console.log(test.add(1, 2)); // 6
+```
