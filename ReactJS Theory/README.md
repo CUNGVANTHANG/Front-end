@@ -60,7 +60,29 @@
   - [1. Điều hướng cơ bản](#1-điều-hướng-cơ-bản)
   - [2. Tham số URL](#2-tham-số-url)
   - [3. Hook - useParams](#3-hook---useparams)
+  - [4. Nested routes](#4-nested-routes)
+  - [5. Hook - useOutletContext](#5-hook---useoutletcontext)
+  - [6. Xử lý lỗi 404](#6-xử-lý-lỗi-404)
+  - [7. Trang hoạt động NavLink](#7-trang-hoạt-động-navlink)
+  - [8. Hook - useNavigate](#8-hook---usenavigate)
+  - [9. Hook - useLocation](#9-hook---uselocation)
+- [X. Redux](#x-redux)
+  - [1. Redux là gì](#1-redux-là-gì)
+  - [2. State, Store và Reducer](#2-state-store-và-reducer)
+  - [3. Thực hiện dispatch một action](#3-thực-hiện-dispatch-một-action)
+- [XI. Redux Toolkit](#xi-redux-toolkit)
+  - [1. Slices](#1-slices)
+  - [2. Actions & payloads](#2-actions--payloads)
+  - [3. Provider](#3-provider)
+  - [4. Hook - useSelector](#4-hook---useselector)
+  - [5. Hook - useDispatch](#5-hook---usedispatch)
 
+</details>
+
+<details>
+  <summary>Một số lỗi có thể gặp</summary>
+
+- [1. error:0308010C:digital envelope routines::unsupported](#1-error0308010cdigital-envelope-routinesunsupported)
 </details>
 
 ## I. SPA/MPA là gì?
@@ -791,6 +813,64 @@ createRoot(root).render(<App />);
 
 Ngoài ra, đoạn code hiển thị Footer hai lần bằng cách sử dụng component hai lần trong component App.
 
+**Class Component:**
+
+Functional component sau đây:
+
+```jsx
+import {createRoot} from "react-dom/client";
+
+function App() {
+    return (<h1>Hello World</h1>);
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
+Có thể được viết dưới dạng lớp:
+
+```jsx
+import React from "react";
+import {createRoot} from "react-dom/client";
+
+class App extends React.Component {
+    render() {
+        return (<h1>Hello World</h1>);
+    }
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
+Để ý là phần `react-dom` không thay đổi chút nào. Điểm khác biệt duy nhất là chúng ta **định nghĩa một lớp thay vì hàm**.
+
+**Class... kế thừa từ React.Component**
+
+Thêm một chi tiết nữa: lớp phải mở rộng (kế thừa) từ `React.Component`.
+
+Điều này sẽ cho phép component kế thừa tất cả các chức năng cần thiết từ thư viện React.
+
+Bạn có thể thấy cú pháp `React.Component` hơi khó hiểu vì những lý do sau:
+
+- React là một đối tượng.
+- Component là một trường thuộc tính trên đối tượng React mà bạn truy cập bằng `React.Component`.
+- `React.Component` là một lớp nên chúng ta có thể kế thừa từ nó.
+
+Nếu muốn, bạn cũng có thể thêm trực tiếp Component từ một file khác trong React, sau đó code trở thành:
+
+```jsx
+import {Component} from "react"; // this changed
+import {createRoot} from "react-dom/client";
+
+class App extends Component { // this changed
+    render() {
+        return (<h1>Hello World</h1>);
+    }
+}
+
+createRoot(document.querySelector("#react-root")).render(<App />);
+```
+
 ### 3. Props
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -882,6 +962,78 @@ Trong ví dụ này, `props.children` là một mảng chứa 3 mục:
 <HeroTitle>Welcome!</HeroTitle>
 <div>Some content</div>
 <p>Another content</p>
+```
+
+**Props trong class Component:**
+
+Trong class component, các `props` được nhận bởi `constructor` của lớp `React.Component` và được lưu trữ như các biến thực thể `this.props`.
+
+Vì vậy, nếu bạn muốn truy cập vào `props` từ bất kỳ đâu bên trong component, bạn cần sử dụng `this.props`. Ví dụ:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    render() {
+        console.log(this.props); // {size: "large"}
+        return (<h1>Hello World</h1>);
+    }
+}
+
+const element = <App size="large" />;
+```
+
+Bạn có thể **truy cập** vào `props` **ở bất kỳ đâu** trong lớp bằng cách sử dụng `this.props`.
+
+**Ghi đè constructor (cách cũ)**
+
+Chúng ta có thể sẽ cần ghi đè `constructor` để xử lý sự kiện. Trong trường hợp đó, bạn cần cẩn thận và đảm bảo truyền `props` cho `constructor` cha bằng `super(props)`.
+
+Vì lớp kế thừa từ `React.Component` và bạn đang ghi đè `constructor()`, điều này có nghĩa là `constructor()` của `React.Component` sẽ không được thực thi nữa.
+
+Vì vậy, bạn sẽ phải gọi `super(props)`, điều này sẽ truyền `props` cho `constructor` của `React.Component`. Sau đây là cú pháp:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    constructor(props) {
+        super(props); // has to be the first line inside the constructor
+        // the rest of your constructor code can go here
+        this.state = {};
+    }
+
+    render() {
+        console.log(this.props); // {...}
+        return (<h1>Hello World</h1>);
+    }
+}
+```
+
+Ở trên, `constructor()` nhận `props` và sau đó truyền chúng cho `constructor` của lớp cha (`React.Component`) bằng cách sử dụng `super(props)`.
+
+Nhắc lại kiến thức cũ, `super` là một từ khóa JavaScript cho phép bạn truy cập vào các phương thức trên lớp cha.
+
+`super(props)` phải là dòng đầu tiên trong `constructor`. Và sau đó, trong `constructor` đó, bạn có thể truy cập `props` bằng `this.props` hoặc `props`. Hãy nhớ rằng không bao giờ thay đổi giá trị của `props`.
+
+**Sử dụng public class fields (cách mới)**
+
+Bạn nên sử dụng cú pháp mới này vì nó đơn giản hơn. Bạn không cần ghi đè `constructor` hoặc gọi `super`.
+
+Sử dụng cú pháp `public class fields` của JavaScript, bạn có thể định nghĩa biến trạng thái như sau:
+
+```jsx
+import React from "react";
+
+class App extends React.Component {
+    // public class fields
+    state = {};
+
+    render() {
+        console.log(this.props); // {...}
+        return (<h1>Hello World</h1>);
+    }
+}
 ```
 
 ### 4. Cách viết hàm chuẩn
@@ -1338,6 +1490,53 @@ const Counter = () => {
 
     return <div onClick={handleIncrement}>Increment {count}</div>;
 };
+```
+
+**State trong class Component:**
+
+Với class component, trạng thái được khai báo như một biến thực thể tên là `state`. Do đó, bạn có thể truy cập vào nó bằng `this.state`.
+
+Vì vậy, functional component sau đây:
+
+```jsx
+import {useState} from "react";
+
+function Button() {
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    return <button disabled={isDisabled}>Button text</button>;
+}
+```
+
+có thể được viết lại thành một class component:
+
+```jsx
+class Button extends React.Component {
+    state = {
+        isDisabled: false
+    };
+
+    render() {
+        return <button disabled={this.state.isDisabled}>Button text</button>;
+    }
+}
+```
+
+**Cập nhật trạng thái**
+
+Tương tự như với hook, việc cập nhật trạng thái trực tiếp không được phép. Thay vào đó, bạn phải sử dụng một phương thức đặc biệt. Trong class component, bạn có sẵn phương thức thực thể `this.setState()` được thừa kế từ `React.Component`.
+
+**Nhiều trạng thái**
+
+Chúng ta cũng có thể định nghĩa nhiều trạng thái trong cùng một class component. Biến thực thể `state` là một đối tượng, vì vậy bạn có thể thêm nhiều prop `key/value`. Ví dụ:
+
+```jsx
+// inside the constructor
+this.state = {
+    isDisabled: false,
+    grades: [10, 20],
+    counter: 0
+}
 ```
 
 ### 2. Closures
@@ -4582,5 +4781,762 @@ function About() {
         <Outlet context={data} />
     </>;
 }
+```
+
+**Hook useOutletContext**
+
+Đây là lúc hook `useOutletContext` trở nên hữu ích. Chúng ta có thể sử dụng nó trong bất kỳ component nào cần được hiển thị bên trong `<Outlet />`. Ví dụ, trong component `AboutUs`:
+
+```jsx
+import {useOutletContext} from "react-router-dom";
+
+function AboutUs() {
+    const context = useOutletContext();
+    console.log(context); // {someValue: 123}
+    console.log(context.someValue); // 123
+
+    // ...
+}
+```
+
+### 6. Xử lý lỗi 404
+[:arrow_up: Mục lục](#mục-lục)
+
+Đối với các dự án lớn, việc xử lý các route không tồn tại là rất quan trọng. Đôi khi chúng được gọi là “404 route” vì mã trạng thái HTTP 404 được trả về khi không tìm thấy tài liệu trên máy chủ. 
+
+Khi không có route nào khớp với `URL` hiện tại của trình duyệt, chúng ta sẽ tạo một route đại diện cho các trường hợp không khớp như sau:
+
+```jsx
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+
+function App() {
+    return <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<p>Landing page here</p>}></Route>
+            <Route path="/products" element={<p>Products page here</p>}></Route>
+            <Route path="*" element={<p>404 page here</p>}></Route>
+        </Routes>
+    </BrowserRouter>
+}
+```
+
+Bây giờ khi người dùng truy cập vào `/`, họ sẽ thấy Landing page here. Tương tự, khi họ truy cập vào `/products`, họ sẽ thấy `Products page here`. Và đối với tất cả các liên kết khác, họ sẽ thấy `404 page here`.
+
+Tại sao lại như vậy? Đó là vì `<Route>` mà chúng ta đã tạo cho trang 404 có trường thuộc tính path được đặt thành `*`. React Router sẽ kích hoạt route này chỉ **khi không có route nào khớp với URL hiện tại**.
+
+### 7. Trang hoạt động NavLink
+[:arrow_up: Mục lục](#mục-lục)
+
+Giả sử bạn có một menu điều hướng với hai liên kết:
+
+1. `Home` chuyển hướng người dùng đến `/`
+2. `About` chuyển hướng người dùng đến `/about`
+
+Bạn có thể tự động làm nổi bật liên kết `About` với React Router khi người dùng đang truy cập route `/about`. Tương tự, bạn có thể làm nổi bật liên kết `Home` khi người dùng đang truy cập route `/`.
+
+```jsx
+import {NavLink} from "react-router-dom";
+
+function getClassName({isActive}) {
+    if (isActive) {
+        return "active"; // CSS class
+    }
+}
+
+function App() {
+    return <ul>
+        <li>
+            <NavLink to="/" className={getClassName}>Home</NavLink>
+        </li>
+        <li>
+            <NavLink to="/about" className={getClassName}>About</NavLink>
+        </li>
+    </ul>
+}
+```
+
+Đoạn code trên yêu cầu viết một số code CSS cho lớp `active`. Hãy làm cho liên kết của trang hiện tại trong menu được làm nổi bật bằng chữ đậm:
+
+```css
+.active {
+    font-weight: bold;
+}
+```
+
+Bạn có thể nhận thấy là ở đây chúng ta đang sử dụng `NavLink` thay vì `Link`.
+
+Điều này rất quan trọng vì component `<Link />` **không hỗ trợ truyền một định nghĩa hàm vào trường thuộc tính** `className`.
+
+Một lỗi phổ biến là **sử dụng ClassName với định nghĩa hàm trên component** `<Link />`, nhưng điều đó sẽ làm **code không hoạt động**!
+
+### 8. Hook - useNavigate
+[:arrow_up: Mục lục](#mục-lục)
+
+_Ví dụ_: bạn gửi một yêu cầu `fetch` và dựa trên kết quả đó, bạn muốn chuyển hướng người dùng đến một trang cụ thể.
+
+Sau đây là một số ví dụ khác:
+
+1. Chuyển hướng người dùng đến trang `/login` nếu họ chưa đăng nhập.
+2. Chuyển hướng người dùng đến trang `/dashboard` sau khi yêu cầu `fetch()` cho đăng nhập thành công.
+
+Để làm điều đó, bạn cần sử dụng hook `useNavigate()`, nó trả về một phương thức mà bạn có thể gọi để điều hướng đến một route mới một cách tự động. Hãy xem ví dụ sau:
+
+```jsx
+import React, {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+
+function HelpPage() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLoggedIn = window.localStorage.getItem("isLoggedIn");
+        if (!isLoggedIn) {
+            navigate("/login");
+        }
+    }, []);
+
+    return <h2>Help page</h2>;
+}
+```
+
+Trong ví dụ này, chúng ta kiểm tra xem `localStorage` có chứa giá trị cho khóa `isLoggedIn` hay không. Nếu không, chúng ta điều hướng người dùng trở lại trang `/login` bằng cách gọi `navigate("/login")`.
+
+**Hook `useNavigate` chỉ hoạt động trong `BrowserRouter`**
+
+Bạn cần gọi hook `useNavigate()` **trong một component được lồng** trong `<BrowserRouter />`, nếu không, hook sẽ không hoạt động.
+
+Do đó đoạn code dưới đây SẼ KHÔNG hoạt động:
+
+```jsx
+import React from "react";
+import {BrowserRouter, useNavigate} from "react-router-dom";
+
+function App() {
+    // ❌ This breaks because the component was not wrapped by BrowserRouter, but its children are.
+    const history = useNavigate();
+
+    return <BrowserRouter>
+        {/* ... */}
+    </BrowserRouter>;
+}
+```
+
+Như bạn thấy, hook `useNavigate()` sẽ không hoạt động trong component `App()` vì nó không được đóng gói bởi `<BrowserRouter/>`. Tuy nhiên, tất cả các component con bên trong App sẽ được đóng gói bởi `<BrowserRouter />`, vì vậy bạn có thể sử dụng `useNavigate()` trong các component con đó.
+
+### 9. Hook - useLocation
+[:arrow_up: Mục lục](#mục-lục)
+
+Nếu bạn **muốn chạy một đoạn code mỗi khi React Router điều hướng đến một URL mới** thì bạn sẽ làm như thế nào?
+
+Bạn có thể làm điều đó bằng cách sử dụng hook `useLocation`.
+
+Hook `useLocation` trả về thông tin liên quan đến route hiện đang hoạt động.
+
+Dưới đây là cách bạn sử dụng hook `useLocation`:
+
+```jsx
+import {BrowserRouter, Routes, Route, useLocation} from "react-router-dom";
+import {createRoot} from "react-dom/client";
+
+function App() {
+    const location = useLocation();
+    console.log(location.pathname);
+
+    return <Routes>
+        {/* routes here... */}
+    </Routes>
+}
+
+createRoot(document.querySelector("#react-root")).render(<BrowserRouter><App /></BrowserRouter>);
+```
+
+Biến `location` sẽ là một đối tượng chứa `pathname`.
+
+Sau đó, bạn có thể sử dụng `location.pathname` để biết **route hiện tại mà người dùng đang duyệt**. Ví dụ: `/` hoặc `/about`, v.v., tùy thuộc vào các route hiện có.
+
+Giống như hook `useNavigate`, bạn cần đảm bảo rằng code **được chạy trong một component được đóng gói bởi** `<BrowserRouter />`, nếu không, hook sẽ không hoạt động.
+
+**Thay đổi vị trí**
+
+Bằng cách sử dụng `useLocation` và cách lấy `pathname` hiện tại, bạn có thể chạy một đoạn code mỗi khi React Router điều hướng đến một `URL` mới bằng cách đóng gói code bằng `useEffect` với một phụ thuộc trên `location`. Cách triển khai như sau:
+
+```jsx
+import React, {useEffect} from "react";
+import {BrowserRouter, Routes, Route, useLocation} from "react-router-dom";
+import {createRoot} from "react-dom/client";
+
+function App() {
+    const location = useLocation();
+
+    // run a piece of code on location change
+    useEffect(() => {
+        console.log(location.pathname);
+        // send it to analytic, or do some conditional logic here
+    }, [location]);
+
+    return <Routes>
+        {/* routes here... */}
+    </Routes>
+}
+
+createRoot(document.querySelector("#react-root")).render(<BrowserRouter><App /></BrowserRouter>);
+```
+
+Code trong hook `useEffect` sẽ chạy mỗi khi đối tượng `location` thay đổi, điều này xảy ra mỗi khi người dùng điều hướng đến một route mới.
+
+## X. Redux
+[:arrow_up: Mục lục](#mục-lục)
+
+### 1. Redux là gì
+[:arrow_up: Mục lục](#mục-lục)
+
+Lí do dùng Redux:
+
+  - Nhiều thành viên tham gia vào dự án.
+
+  - Bạn có nhiều biến state đang được sử dụng trong nhiều component.
+
+  - Bạn đã rất quen thuộc với Redux và việc sử dụng nó sẽ giúp tăng năng suất thay vì gây trở ngại.
+
+  - Ứng dụng có nhiều trạng thái cần cập nhật nhiều lần (liên quan đến trạng thái được sử dụng trong nhiều component).
+
+- **Redux so với Chuyển trạng thái lên trên**
+
+**Việc chuyển trạng thái** lên cấp độ cao hơn có thể nhanh chóng trở nên phức tạp khi số biến lượng trạng thái cần di chuyển ngày càng tăng lên. Đôi khi, bạn cần chuyển trạng thái qua nhiều cấp component (5 cấp độ), quá trình này càng trở nên cồng kềnh và phức tạp.
+
+Bạn sẽ không gặp vấn đề này với `redux`, vì mỗi component sẽ lựa chọn dữ liệu cụ thể mà nó cần và cập nhật trạng thái.
+
+- **Redux so với Context**
+
+Đối với các cập nhật trạng thái toàn cục diễn ra thường xuyên, việc sử dụng Context **sẽ gây ra vấn đề về hiệu suất**. Trong trường hợp này, việc sử dụng Redux sẽ hợp lý hơn. Ngoài ra, với số lượng lớn trạng thái được cập nhật, Redux **giúp dễ dàng theo dõi** các thay đổi và quản lý mọi thứ.
+
+Nhìn chung, ứng dụng **càng nhỏ/đơn giản thì bạn càng ít cần sử dụng Redux.**
+
+### 2. State, Store và Reducer
+[:arrow_up: Mục lục](#mục-lục)
+
+#### 1. Trạng thái (State)
+
+Trong React, chúng ta có thể tạo một trạng thái lưu trữ giá trị **boolean, số, chuỗi, v.v.**
+
+Tuy nhiên trong Redux, trạng thái luôn luôn là **một đối tượng**
+
+_Ví dụ:_ Đối với ứng dụng đếm, ta sẽ tạo đối tượng trạng thái sau:
+
+```jsx
+const state = {
+    value: 0 // starting value of the counter
+};
+```
+
+Tên của biến không quan trọng. Điều quan trọng là `state` **là một đối tượng**. Và trong trường hợp này, đối tượng có **khóa** `value` với **giá trị** ban đầu là `0`.
+
+#### 2. Reducer
+
+Reducer là một hàm nhận 2 tham số: **trạng thái hiện tại** và **một hành động (action)**
+
+Dựa vào hành động nhận được, nó có thể trả về một trạng thái mới. Nếu không, nó sẽ trả về trạng thái hiện tại mà không thay đổi gì.
+
+_Ví dụ 1:_ Hãy xem xét ví dụ chưa hoàn chỉnh sau đây:
+
+```jsx
+const initialState = {
+    value: 0,
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  return state; // return the state as is
+};
+```
+
+Đây là reducer cơ bản nhất. Nó nhận trạng thái hiện tại và trả về chính xác trạng thái đó như nó đã nhận. Để ý tham số `state = initialState`. Điều này có nghĩa là nếu chúng ta gọi `counterReducer` mà không có tham số nào, nó sẽ mặc định là `initialState`. Điều này sẽ xảy ra vào lần đầu tiên chúng ta gọi reducer này.
+
+Sử dụng code trên, dưới đây là cách chúng ta sử dụng reducer này:
+
+```jsx
+const state = counterReducer(); // state will default to initialState
+console.log(state); // {value: 0}
+```
+
+_Ví dụ 2:_ 
+
+Bây giờ, hãy cùng **tăng giá trị của bộ đếm**. Để làm điều đó, chúng ta sẽ **truyền một hành động** là `{type: "counter/increment"}`. Action (hành động) là một **đối tượng** được **sử dụng** để thực hiện **thay đổi trạng thái**.
+
+Vì vậy, chúng ta cần cập nhật reducer để xử lý hành động này với `if (action.type === "counter/increment")`:
+
+```jsx
+const initialState = {
+    value: 0,
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  if (action.type === "counter/increment") {
+    return {
+        value: state.value + 1 // important: do NOT mutate the state.
+    };
+  }
+
+  return state; // return the state as is (in all other cases)
+};
+```
+
+Dưới đây là cách sử dụng reducer này:
+
+```jsx
+const state = counterReducer(); // state will default to initialState
+console.log(state); // {value: 0}
+const newState = counterReducer(state, {type: "counter/increment"});
+console.log(newState); // {value: 1}
+```
+
+#### 3. Cửa hàng (Store)
+
+Cửa hàng là một **đối tượng chứa reducer và trạng thái (state)**. 
+
+Muốn cập nhật trạng thái, chúng ta sẽ phải **yêu cầu cửa hàng** thực hiện cập nhật (**gửi hành động**).
+
+Cửa hàng sau đó sẽ sử dụng phương thức reducer để tính toán trạng thái mới.
+
+Giả sử chúng ta có hàm `counterReducer` như ở trên, dưới đây là cách tạo một cửa hàng trong Redux:
+
+```jsx
+import { createStore } from "redux";
+
+const store = createStore(counterReducer);
+```
+
+**Chương trình hoàn chỉnh:**
+
+```jsx
+import { createStore } from "redux";
+
+const initialState = {
+    value: 0
+};
+
+const counterReducer = (state = initialState, action = {}) => {
+  if (action.type === "counter/increment") {
+    return {
+        value: state.value + 1 // important: do NOT mutate the state.
+    };
+  }
+
+  return state; // return the state as is (in all other cases)
+};
+
+const store = createStore(counterReducer);
+```
+
+### 3. Thực hiện dispatch một action
+[:arrow_up: Mục lục](#mục-lục)
+
+Chúng ta **không được phép thay đổi trạng thái** được lưu trữ trong cửa hàng bằng cách **thủ công**. Thay vào đó, chúng ta phải **yêu cầu** cửa hàng **thực hiện thay đổi** bằng cách gửi một **hành động**.
+
+Chúng ta đã học rằng các hành động là các đối tượng với cấu trúc sau:
+
+```jsx
+{
+    type: "counter/increment", // example of an action
+}
+```
+
+Để gửi hành động, bạn phải sử dụng hàm `store.dispatch(action)`:
+
+```jsx
+store.dispatch({type: "counter/increment"});
+// another example
+store.dispatch({type: "counter/reset"});
+```
+
+Gọi phương thức `store.dispatch()` sẽ **yêu cầu** cửa hàng gọi reducer để tính toán trạng thái mới. Nếu trạng thái **đã thay đổi**, giao diện người dùng sẽ được kích hoạt để **cập nhật**
+
+**Gửi hành động khi nhấp chuột**
+
+Bạn có thể **gửi hành động ở bất kỳ đâu** trong code. Một trường hợp sử dụng phổ biến là gửi hành động khi nhấp chuột vào nút. Đây là điều mà chúng ta đã làm trong ứng dụng đếm:
+
+```jsx
+const addButton = document.querySelector("#add-button");
+
+addButton.addEventListener("click", () => {
+    store.dispatch({ type: "counter/increment" });
+});
+```
+
+_Ví dụ:_ Chương trình hoàn chỉnh
+
+```jsx
+import { createStore } from "redux";
+
+const initialState = { value: 0 };
+
+const counterReducer = (state = initialState, action) => {
+    if (action.type === "counter/increment") {
+        return {
+            value: state.value + 1 // important: do NOT mutate the state.
+        };
+    }
+
+    return state; // return the state as is (in all other cases)
+};
+
+const store = createStore(counterReducer);
+
+const addButton = document.querySelector("#add-button");
+
+addButton.addEventListener("click", () => {
+    store.dispatch({ type: "counter/increment" });
+});
+```
+
+## XI. Redux Toolkit
+[:arrow_up: Mục lục](#mục-lục)
+
+Mặc dù tên gói redux là `redux` nhưng tên gói Redux Toolkit là `@reduxjs/toolkit`.
+
+**Tính bất biến với immer**
+
+**immer** là một thư viện JavaScript cho phép bạn **cập nhật trạng thái theo cách bất biến** trong khi vẫn viết code JavaScript theo cách truyền thống.
+
+Điều này làm cho cú pháp trở nên đơn giản hơn khi làm việc với các cấu trúc dữ liệu phức tạp như đối tượng, mảng và mảng đối tượng.
+
+### 1. Slices
+[:arrow_up: Mục lục](#mục-lục)
+
+Khi bạn cấu hình một Redux store mới, đôi khi quá trình này có thể hơi phức tạp, đặc biệt khi store mở rộng để chứa nhiều hơn một loại hành động. Tuy nhiên, việc xử lý thêm các hành động cho app có thể làm cho quá trình trở nên phức tạp hơn. Đó là lý do tại sao Redux Toolkit giới thiệu khái niệm `slice`.
+
+Redux Slice là một tập hợp **các reducer và hành động** liên quan đến một tính năng cụ thể của ứng dụng.
+
+_Ví dụ:_ Chúng ta có slice `counter` và sau đó là slice `app`. Hai slice này sẽ được cấu hình riêng biệt nhưng được cung cấp cho cùng một store.
+
+Hãy xem cách tạo một slice và cấu hình store trong Redux Toolkit:
+
+```jsx
+import { createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // TODO: write reducer code here
+    }
+  },
+});
+```
+
+Chúng ta đã thêm hàm `createSlice` từ `@reduxjs/toolkit` và sau đó gọi hàm này và cung cấp `name`, `initialState` và `reducers`.
+
+Chúng ta không cần thêm tiền tố `counter/` cho reducer như đã làm trước đây (ví dụ: `counter/increment`, `counter/decrement`, vv). Điều này bởi vì `slice` này chỉ cung cấp các hành động liên quan đến `counter` mà ta đã cung cấp trong `name`.
+
+- **Viết reducer (và sử dụng immer)**
+
+Trong đoạn code trên, chúng ta đã tạo một hàm reducer gọi là `increment`. Trong hàm reducer này, chúng ta được phép viết code như thể ta đang thay đổi trạng thái trực tiếp. Điều này bởi vì Redux Toolkit đã tải **immer**. Trong đoạn code trên, dù có vẻ như chúng ta đang thay đổi trực tiếp trạng thái, thực tế là code này đang **chạy theo cách bất biến**
+
+**Immer** tạo ra một **phiên bản tạm thời** của **trạng thái hiện tại từ các thay đổi** và sau đó **tạo ra một trạng thái bất biến** hoàn toàn mới **dựa trên những thay đổi** đó.
+
+Vì vậy, code reducer `increment` sẽ trông như sau:
+
+```jsx
+// ...
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    }
+  },
+  // ...
+```
+
+- **Cấu hình store**
+
+Để tạo `store`, bạn phải thêm hàm `configureStore` và truyền reducer cho hàm:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+```
+
+Để ý chúng ta đã truyền `counterSlice.reducer` (không phải `reducers`). Nó khác với `reducers` mà bạn đã định nghĩa trong hàm `createSlice()`.
+
+### 2. Actions & payloads
+[:arrow_up: Mục lục](#mục-lục)
+
+- **Hành động (Action)**
+
+Trước đây với `redux`, chúng ta gửi một hành động bằng cách sử dụng code sau:
+
+```jsx
+store.dispatch({type: "counter/increment"});
+```
+
+Với Redux Toolkit, chúng ta nhận được một hàm mà chúng ta có thể trích xuất từ `slice.actions`. Sau đó, chúng ta có thể sử dụng hàm này kết hợp với `store.dispatch()`. Hãy cùng xem cách thức hoạt động.
+
+Chúng ta bắt đầu với đoạn code trong bài học trước và mở rộng bằng code `dispatch`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      // While this looks like it's mutating the state, immer creates a draft state and then produces immutable state changes
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+// extract the increment function from counterSlice.actions
+const { increment } = counterSlice.actions;
+
+document.querySelector("#add").addEventListener("click", () => {
+  // dispatch an increment() action
+  store.dispatch(increment());
+});
+```
+
+Hàm `increment` có thể được truy cập bên trong `counterSlice.actions`. **Tên** của nó **trùng khớp** với tên của hàm mà ta đã cung cấp trong **reducers** ở trên.
+
+Bạn có thể sử dụng **object destructuring** như trong ví dụ trên hoặc truy cập hàm bằng cách sử dụng `counterSlice.actions.increment`.
+
+Nếu bạn có nhiều hàm (có nhiều reducers trong slice), bạn có thể trích xuất chúng theo cùng một cách:
+
+```jsx
+const { increment, decrement } = counterSlice.actions;
+```
+
+- **Cung cấp payload**
+
+Cho đến nay, chúng ta chủ yếu làm việc với các hành động không nhận bất kỳ payload nào. Chúng luôn thực hiện cùng một hành động (ví dụ: tăng 1 hoặc giảm 1).
+
+Tuy nhiên, đôi khi, bạn muốn tạo một hành động mà **giá trị** của nó **tăng theo số đơn vị cụ thể** (có thể là 1, 5 hoặc một số khác). Giá trị này được gọi là **payload**.
+
+Mọi reducer đều **nhận một đối số thứ 2** gọi là `action`. Bạn có thể truy cập `action.payload` để có quyền truy cập vào giá trị đã được truyền cho `action` khi nó được gọi. Hãy xem một ví dụ triển khai tính năng `incrementBy(value)`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    incrementBy: (state, action) => {
+        console.log(action.payload); // visualize payload
+        state.value += action.payload;
+    }
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+const { incrementBy } = counterSlice.actions;
+
+document.querySelector("#add").addEventListener("click", () => {
+  // the payload is 1
+  store.dispatch(incrementBy(1));
+});
+
+document.querySelector("#add-five").addEventListener("click", () => {
+  // the payload is 5
+  store.dispatch(incrementBy(5));
+});
+```
+
+Chúng ta có thể gọi `incrementBy(1)`, `incrementBy(5)` hoặc bất kỳ giá trị nào khác ở đây. Giá trị này sẽ được nhận dưới dạng `action.payload` mà bạn sau đó có thể sử dụng để cập nhật trạng thái.
+
+### 3. Provider
+[:arrow_up: Mục lục](#mục-lục)
+
+Trong ứng dụng React, bạn có thể làm cho `store` có thể được **truy cập bởi bất kỳ component con nào** bằng cách **đóng gói toàn bộ** ứng dụng bằng **component Provider**
+
+Để làm điều đó, bạn cần thêm `Provider` từ `react-redux` (dưới dạng named import) và sau đó đóng gói toàn bộ ứng dụng bằng `Provider`. Giả sử bạn có đoạn code sau:
+
+```jsx
+import { createRoot } from 'react-dom/client';
+import { store } from './store.js';
+
+render(<App />, document.querySelector('#react-root'));
+```
+
+Trong ví dụ này, ta giả định rằng ta đang thêm một `store` (được tạo bằng phương thức `configureStore` của `@reduxjs/toolkit`).
+
+Bây giờ, ta sẽ thêm `Provider` và đóng gói toàn bộ ứng dụng bằng `Provider` và truyền `store` dưới dạng `prop store`:
+
+```jsx
+import { createRoot } from 'react-dom/client';
+import { store } from './store.js';
+import { Provider } from 'react-redux';
+
+const root = document.querySelector('#react-root');
+
+createRoot(root).render(<Provider store={store}>
+    <App />
+</Provider>);
+```
+
+Đừng quên `store={store}`. Nó cho phép chúng ta truyền `store` vào ứng dụng, làm cho `store` có thể được **truy cập bởi tất cả các component con** của **component Provider**.
+
+### 4. Hook - useSelector
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook `useSelector` cho phép bạn **trích xuất dữ liệu** từ `store` của redux.
+
+Nó nhận một hàm callback, hàm này nhận toàn bộ `state` làm đối số. Sau đó, bạn có thể quyết định dữ liệu mà bạn muốn lấy. Hãy xem một ví dụ với store được tạo từ `slice` sau:
+
+```jsx
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+  },
+});
+```
+
+Component `<Counter />` sẽ cần hiển thị giá trị của `counter`. Hãy quan sát `initialState`. Đó là một đối tượng có khóa `value` mà chúng ta cần trích xuất.
+
+```jsx
+import {useSelector} from "react-redux";
+
+function Counter() {
+    const counter = useSelector(state => state.value);
+
+    return <h1>Counter: {counter}</h1>
+}
+```
+
+Đoạn code trên thêm hook `useSelector` từ gói `react-redux`.
+
+Sau đó, nó sử dụng hook này và truyền hàm callback sau:
+
+```jsx
+state => state.value
+```
+
+Đây là một hàm mũi tên trích xuất giá trị của `counter` từ `state`.
+
+### 5. Hook - useDispatch
+[:arrow_up: Mục lục](#mục-lục)
+
+Hook `useDispatch` **trả về** một **tham chiếu** đến hàm `dispatch` từ `store` của Redux. Khi bạn sử dụng `useDispatch`, bạn có thể **gọi** hàm `dispatch()` để **gửi một hành động** đến `store`.
+
+Hãy xem một ví dụ với store `counter` và hành động `increment` đã được định nghĩa trong `store.js`:
+
+```jsx
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    value: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.value += 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+
+const { increment } = counterSlice.actions;
+
+export {store, increment};
+```
+
+Dưới đây là cách chúng ta hoàn thiện component `Counter` để component tăng giá trị biến đếm khi nhấp vào nút:
+
+```jsx
+import {useDispatch} from "react-redux";
+import {increment} from "./store.js";
+
+export default function Counter() {
+    const dispatch = useDispatch();
+
+    return <button onClick={() => dispatch(increment())}>Add 1</button>;
+}
+```
+
+Ta bắt đầu bằng cách thêm hook `useDispatch` từ `react-redux`.
+
+Sau đó, ta sử dụng hook đó để trích xuất hàm dispatch: `const dispatch = useDispatch()`. 
+
+Ta cũng đã thêm hàm (hành động) `increment` từ store.
+
+Cuối cùng, khi người dùng nhấp vào nút, ta gọi `dispatch(increment())`
+
+## 1. error:0308010C:digital envelope routines::unsupported
+[:arrow_up: Mục lục](#mục-lục)
+
+```
+Error: error:0308010C:digital envelope routines::unsupported
+    at new Hash (node:internal/crypto/hash:67:19)
+    at Object.createHash (node:crypto:130:10)
+    at module.exports (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/util/createHash.js:135:53)
+    at NormalModule._initBuildHash (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:417:16)
+    at handleParseError (/Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:471:10)
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:503:5
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/webpack/lib/NormalModule.js:358:12
+    at /Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:373:3
+    at iterateNormalLoaders (/Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:214:10)
+    at iterateNormalLoaders (/Users/user/Programming Documents/WebServer/untitled/node_modules/loader-runner/lib/LoaderRunner.js:221:10)
+/Users/user/Programming Documents/WebServer/untitled/node_modules/react-scripts/scripts/start.js:19
+  throw err;
+  ^
+```
+
+**Khắc phục:**
+
+On Unix-like (Linux, macOS, Git bash, etc.):
+
+```
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On Windows command prompt:
+
+```
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
+On PowerShell:
+
+```
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
 ```
 
