@@ -116,6 +116,7 @@
 <details>
   <summary>XII. Decorator</summary>
 
+- [1. Decorators](#1-decorators)
 </details>
 
 ## I. Các kiến thức cơ bản về biến
