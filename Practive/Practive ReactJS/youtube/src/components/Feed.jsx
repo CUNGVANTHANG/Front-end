@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 const Feed = () => {
   return <div>Feed</div>;
