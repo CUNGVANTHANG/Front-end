@@ -43,6 +43,7 @@
   - [2. Các hiệu ứng yêu cầu phải dọn dẹp](#2-các-hiệu-ứng-yêu-cầu-phải-dọn-dẹp)
   - [3. Effect dependencies](#3-effect-dependencies)
   - [4. Local Storage](#4-local-storage)
+  - [5. Life cycle](#5-life-cycle)
 - [V. Fetch](#v-fetch)
   - [1. Fetch API](#1-fetch-api)
   - [2. Fetch POST](#2-fetch-post)
@@ -3038,6 +3039,70 @@ function App() {
 
 ```jsx
 const [array, setArray] = useState(() => JSON.parse(localStorage.getItem("key-here")));
+```
+
+### 5. Life cycle
+[:arrow_up: Mục lục](#mục-lục)
+
+Vòng đời của một component trong ReactJS bao gồm các giai đoạn chính sau: **Mounting**, **Updating**, và **Unmounting**.
+
+_Ví dụ:_
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  // Chạy một lần sau lần render đầu tiên
+  useEffect(() => {
+    console.log('componentDidMount: Component has been mounted.');
+
+    // Hàm cleanup sẽ chạy khi component bị gỡ bỏ
+    return () => {
+      console.log('componentWillUnmount: Component will be unmounted.');
+    };
+  }, []);
+
+  // Chạy mỗi khi 'count' thay đổi
+  useEffect(() => {
+    console.log('componentDidUpdate: count has been updated to', count);
+  }, [count]);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+    </div>
+  );
+}
+
+createRoot(document.querySelector("#react-root")).render(<Counter />);
+```
+
+Khi ứng dụng bắt đầu chạy và component `Counter` được render lần đầu tiên:
+
+```
+componentDidMount: Component has been mounted.
+```
+
+Khi bạn nhấn nút "Increase" lần đầu tiên:
+
+```
+componentDidUpdate: count has been updated to 1
+```
+
+Khi bạn nhấn nút "Increase" lần thứ hai:
+
+```
+componentDidUpdate: count has been updated to 2
+```
+
+Khi component `Counter` bị gỡ bỏ (ví dụ, nếu bạn chuyển sang một trang khác hoặc gỡ bỏ component bằng cách nào đó):
+
+```
+componentWillUnmount: Component will be unmounted.
 ```
 
 ## V. Fetch
