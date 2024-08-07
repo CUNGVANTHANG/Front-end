@@ -47,6 +47,7 @@
 - [V. Fetch](#v-fetch)
   - [1. Fetch API](#1-fetch-api)
   - [2. Fetch POST](#2-fetch-post)
+  - [3. Axios](#3-axios)
 - [VI. Custom Hooks](#vi-custom-hooks)
   - [1. Custom hooks với useEffect](#1-custom-hooks-với-useeffect)
   - [2. Custom hooks với useState](#2-custom-hooks-với-usestate)
@@ -700,6 +701,29 @@ function getHeroBanner() {
 }
 ```
 
+Sử dụng `React.Fragment` (`<></>`) để bọc các phần tử con và bạn cần cung cấp một thuộc tính `key` để mỗi phần tử trong danh sách có một định danh duy nhất. Thuộc tính `key` giúp React theo dõi và cập nhật hiệu quả các phần tử trong danh sách khi chúng thay đổi.
+
+_Ví dụ:_
+
+```jsx
+import React from 'react';
+
+function MyComponent({ items }) {
+  return (
+    <div>
+      {items.map(item => (
+        <React.Fragment key={item.id}>
+          <h1>{item.title}</h1>
+          <p>{item.description}</p>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
 ### 2. Component
 [:arrow_up: Mục lục](#mục-lục)
 
@@ -760,8 +784,8 @@ Quy ước là định nghĩa **một component trong mỗi file riêng biệt**
 
 Tên file phải khớp với tên Component, ví dụ:
 
-- file: Footer.js cho Component Footer
-- file: AppNavbar.js cho Component AppNavbar
+- file: `Footer.js` cho Component Footer
+- file: `AppNavbar.js` cho Component AppNavbar
 
 **index.js**
 
@@ -773,7 +797,7 @@ _Ví dụ:_
 
 Hãy xem một ví dụ bằng cách sử dụng hai file: **Footer.js** và **index.js**:
 
-File Footer.js định nghĩa component Footer:
+File `Footer.js` định nghĩa component Footer:
 
 ```jsx
 //Footer.js
@@ -3754,6 +3778,124 @@ function App() {
 ```
 
 `fetch POST` thường được đặt trong hàm `handleFormSubmit`, trong đó bạn gửi một trong các biến state trong body.
+
+### 3. Axios
+[:arrow_up: Mục lục](#mục-lục)
+
+**Cài đặt Axios:**
+
+```
+npm install axios
+```
+
+**Sử dụng Axios để gọi API:**
+
+```jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function DataFetching() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then(response => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError('Something went wrong!');
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <div>
+      {loading ? 'Loading...' : null}
+      {error ? error : null}
+      <ul>
+        {data.map(post => (
+          <li key={post.id}>{post.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DataFetching;
+```
+
+- `useState`: Hook này được sử dụng để tạo và quản lý state trong function component. Ở đây, `data`, `loading`, và `error` được tạo để lưu trữ dữ liệu API, trạng thái tải, và lỗi nếu có.
+
+- `useEffect`: Hook này được sử dụng để thực hiện các side effect trong function component. Ở đây, chúng ta gọi API khi component được `mount` lần đầu tiên.
+
+- `axios.get`: Gửi một yêu cầu GET tới URL `https://jsonplaceholder.typicode.com/posts`. Khi yêu cầu thành công, chúng ta cập nhật state `data` và `loading`. Nếu yêu cầu thất bại, chúng ta cập nhật state `error` và `loading`.
+
+**Tạo một yêu cầu POST với Axios:**
+
+```jsx
+import React, { useState } from 'react';
+import axios from 'axios';
+
+function PostData() {
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [response, setResponse] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post('https://jsonplaceholder.typicode.com/posts', {
+      title: title,
+      body: body,
+      userId: 1
+    })
+    .then(response => {
+      setResponse(response.data);
+    })
+    .catch(error => {
+      console.error('There was an error!', error);
+    });
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Body</label>
+          <input
+            type="text"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+      {response && (
+        <div>
+          <h3>Response</h3>
+          <p>{JSON.stringify(response)}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default PostData;
+```
+
+- `handleSubmit`: Hàm này được gọi khi form được submit. Nó ngăn hành động submit mặc định của form và gửi một yêu cầu POST tới API với dữ liệu từ form.
+
+- `axios.post`: Gửi một yêu cầu POST tới URL `https://jsonplaceholder.typicode.com/posts` với dữ liệu title, body và userId. Khi yêu cầu thành công, state `response` được cập nhật với dữ liệu từ server.
 
 ## VI. Custom Hooks
 [:arrow_up: Mục lục](#mục-lục)
