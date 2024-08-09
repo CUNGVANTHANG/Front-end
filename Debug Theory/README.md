@@ -20,3 +20,8 @@ Kết quả tự động thực hiện debug
 
 <img src="https://github.com/user-attachments/assets/3f889bd5-676b-40d7-bffd-33956daf25ec" width="500px" >
 
+## 3. Watch expressions
+
+Watch expressions dùng để theo dõi giá trị của biến. Trong phần debug của dev tool chọn biến muốn theo dõi vào phần watch
+
+<img src="https://github.com/user-attachments/assets/8fe86a11-7913-43bf-b4cc-5fcd107d409b" width="500px" >
