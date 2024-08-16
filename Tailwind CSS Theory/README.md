@@ -51,3 +51,7 @@ module.exports = {
 ```
 npx tailwindcss -i ./src/index.css -o ./build/index.css --watch
 ```
+
+### Chức năng
+
+Tài liệu: https://tailwindcss.com/docs/
