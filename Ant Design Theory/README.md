@@ -13,6 +13,8 @@ yarn add antd
 
 ## Using
 
+Import component bất kỳ vào trong `{}` từ `antd`
+
 ```
 import {} from `antd`
 ```
