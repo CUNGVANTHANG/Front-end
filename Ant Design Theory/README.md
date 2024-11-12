@@ -125,4 +125,21 @@ const [loading, setLoading] = useState(false)
 <Progress type='circle' percent={33} strokeColor="red" />
 ```
 
+### 10. Icon
+
+Install:
+
+```
+npm install @ant-design/icons --save
+yarn add @ant-design/icons
+```
+
+```
+<PieChartFilled style={{color: "purple", fontSize: 100}} />
+<AppleFilled style={{color: "green", fontSize: 100}} />
+<LoadingOutlined spin style={{color: "red", fontSize: 100}} />
+<HeartIcon style={{color: "green", fontSize: 100}} />
+<Button icon={<LogoutOutlined />}>Button with Custom Icon</Button>
+```
+
 ## II. Custom
