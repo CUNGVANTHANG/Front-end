@@ -2,12 +2,17 @@
 ## Mục lục
 
 <details>
-  <summary>A. HTML</summary>
+  <summary>A. Website</summary>
   
 </details>
 
 <details>
-  <summary>B. CSS</summary>
+  <summary>B. HTML</summary>
+  
+</details>
+
+<details>
+  <summary>C. CSS</summary>
 
   - [I. CSS mặc định của các thẻ HTML](#i-css-mặc-định-của-các-thẻ-html)
   - [II. Các cách chèn CSS và đặt tên class](#ii-các-cách-chèn-css-và-đặt-tên-class)
@@ -17,7 +22,42 @@
   - [VI. CSS pseudo classes, pseudo elements](#vi-css-pseudo-classes-pseudo-elements)
 </details>
 
-## A. HTML
+## A. Website
+## I. Web hoạt động như thế nào
+[:arrow_up: Mục lục](#mục-lục)
+
+Web là một hệ thống mạng phân tán trên toàn cầu, kết nối một số lượng lớn các thiết bị và cho phép chúng tương tác với nhau.
+
+> Kiến thức: Mạng máy tính
+
+## II. HTTP & HTTPS
+[:arrow_up: Mục lục](#mục-lục)
+
+Giao thức cơ bản và chính yếu để **web client** (thường là trình duyệt) và **web server** giao tiếp với nhau là **HTTP**
+
+**HTTP** là viết tắt của **HyperText Transfer Protocol**, tức **Giao thức truyền tải siêu văn bản**. Nó là một giao thức **tầng ứng dụng** trong bộ giao thức TCP/IP
+
+![image](https://github.com/user-attachments/assets/8192d627-6059-45e8-a98c-7978ffd82780)
+
+HTTP hoạt động theo mô hình dựa trên thông điệp (**message-based model**), theo đó máy khách gửi tới máy chủ một **thông điệp truy vấn (request message)** và máy chủ gửi lại cho máy khách một **thông điệp phản hồi (response message)**
+
+HTTP là giao thức không trạng thái (**stateless**), tức là trong giao thức này không có cơ chế ghi nhớ kết quả của các truy vấn trước, khi thực hiện các truy vấn sau.
+
+**HTTPS** là từ viết tắt của **HyperText Transfer Protocol Secure** và về cơ bản nó chỉ là phiên bản có bảo mật của HTTP. Điều này có nghĩa là thông tin liên lạc giữa trình duyệt và máy chủ lưu trữ được mã hóa để không bên thứ ba nào trên mạng có thể truy cập thông tin mà không được phép.
+
+## III. Port & Socket
+[:arrow_up: Mục lục](#mục-lục)
+
+Port liên quan đến việc giao tiếp và truyền thông giữa các ứng dụng và thiết bị trên mạng
+
+Socket là một giao diện lập trình ứng dụng (API) cho phép các ứng dụng truy cập và giao tiếp với mạng thông qua giao thức TCP/IP
+
+Có hai loại socket chính:
+
+- Socket Client: Đại diện cho ứng dụng hoặc thiết bị trên mạng gửi yêu cầu và nhận phản hồi từ một socket server.
+- Socket Server: Đại diện cho ứng dụng hoặc thiết bị trên mạng lắng nghe và xử lý các yêu cầu từ socket client, sau đó phản hồi lại client.
+
+## B. HTML
 ## I. Các thẻ trong HTML
 [:arrow_up: Mục lục](#mục-lục)
 ### 1. Các thẻ chuẩn trong HTML
@@ -143,7 +183,7 @@
 
 ```
 
-## B. CSS
+## C. CSS
 ## I. CSS mặc định của các thẻ HTML
 [:arrow_up: Mục lục](#mục-lục)
 - **Thẻ html**
