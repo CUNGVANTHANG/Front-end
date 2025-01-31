@@ -3,12 +3,18 @@
 
 <details>
   <summary>A. Website</summary>
+
+- [I. Web hoạt động như thế nào](#i-web-hoạt-động-như-thế-nào)
+- [II. HTTP & HTTPS](#ii-http--https)
+- [III. Port & Socket](#iii-port--socket)
   
 </details>
 
 <details>
   <summary>B. HTML</summary>
-  
+
+- [I. Các thẻ chuẩn trong HTML](#i-các-thẻ-chuẩn-trong-html)
+- [II. Các thẻ Semantic trong HTML (SEM)](#ii-các-thẻ-semantic-trong-html-sem)  
 </details>
 
 <details>
@@ -58,9 +64,7 @@ Có hai loại socket chính:
 - Socket Server: Đại diện cho ứng dụng hoặc thiết bị trên mạng lắng nghe và xử lý các yêu cầu từ socket client, sau đó phản hồi lại client.
 
 ## B. HTML
-## I. Các thẻ trong HTML
-[:arrow_up: Mục lục](#mục-lục)
-### 1. Các thẻ chuẩn trong HTML
+## I. Các thẻ chuẩn trong HTML
 [:arrow_up: Mục lục](#mục-lục)
 
 ```html
@@ -128,7 +132,7 @@ Có hai loại socket chính:
 </html>
 ```
 
-### 2. Các thẻ Semantic trong HTML (SEM)
+## II. Các thẻ Semantic trong HTML (SEM)
 [:arrow_up: Mục lục](#mục-lục)
 
 ![image](https://github.com/CUNGVANTHANG/Front-end/assets/96326479/70eab7fb-157a-4bab-80d8-3372a2571670)
