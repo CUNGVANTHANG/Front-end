@@ -25,6 +25,8 @@ import {} from `antd`
 <Button type="primary">My first Button</Button>
 ```
 
+![image](https://github.com/user-attachments/assets/7ffbe4c9-5798-4c30-ae44-29aee4dd8401)
+
 ### 2. Input
 
 ```tsx
@@ -33,9 +35,13 @@ import {} from `antd`
 
 Trong đó `<UserOutlined />` là logo của thư viện
 
+![image](https://github.com/user-attachments/assets/83c71a75-8ef8-4e88-b76c-d0d12ae11534)
+
 ```
 <Input.Search placeholder='Name' maxLength={10} prefix={<UserOutlined />}></Input.Search>
 ```
+
+![image](https://github.com/user-attachments/assets/11acac7a-ffb1-4378-913f-657898312540)
 
 ### 3. Select
 
@@ -49,6 +55,8 @@ const fruits: string[] = ['Apple', 'Banana', 'Orange', 'Grapes']
 </Select>
 ```
 
+![image](https://github.com/user-attachments/assets/63c9c0d6-f741-43f7-8901-1c7bd37a3966)
+
 ```tsx
 const fruits: string[] = ['Apple', 'Banana', 'Orange', 'Grapes']
 ...
@@ -58,6 +66,9 @@ const fruits: string[] = ['Apple', 'Banana', 'Orange', 'Grapes']
   {fruits.map(fruit => <Select.Option key={fruit} value={fruit}>{fruit}</Select.Option>)}
 </Select>
 ```
+
+![image](https://github.com/user-attachments/assets/6289c7d7-507d-46e9-b163-d1ea9f914827)
+
 
 ### 4. Form
 
@@ -86,11 +97,16 @@ const handleOnSubmit = (value: FormValues) => {
 </Form>
 ```
 
+![image](https://github.com/user-attachments/assets/04f56acd-543d-4e65-871a-b9a6e429be52)
+
+
 ### 5. Alert
 
 ```tsx
 <Alert message="Form submitted successfully" type="success" showIcon closable />
 ```
+
+![image](https://github.com/user-attachments/assets/95080f29-6ef7-44e3-bec8-68f9a33e7e98)
 
 ### 6. Table
 
@@ -102,6 +118,9 @@ const handleOnSubmit = (value: FormValues) => {
 </Table>
 ```
 
+![image](https://github.com/user-attachments/assets/529233cc-d66e-485c-bd05-3036489291e8)
+
+
 ### 7. DatePicker, TimePicker
 
 ```tsx
@@ -109,6 +128,9 @@ const handleOnSubmit = (value: FormValues) => {
 <DatePicker.RangePicker picker="date" />
 <TimePicker />
 ```
+
+![image](https://github.com/user-attachments/assets/0423fadb-62fd-4335-84f9-77f6b3fca0f5)
+
 
 ### 8. Loading
 
@@ -119,11 +141,17 @@ const [loading, setLoading] = useState(false)
 <Spin spinning={loading} />
 ```
 
+![image](https://github.com/user-attachments/assets/9a6c55a2-c946-4e6e-8f1d-02cbb9183712)
+
+
 ### 9. Progress
 
 ```tsx
 <Progress type='circle' percent={33} strokeColor="red" />
 ```
+
+![image](https://github.com/user-attachments/assets/fec72d18-4fd6-4b06-9e57-d6a8da671145)
+
 
 ### 10. Icon
 
