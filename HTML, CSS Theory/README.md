@@ -510,4 +510,16 @@ _CSS:_
 ## VI. CSS pseudo classes, pseudo elements 
 [:arrow_up: Mục lục](#mục-lục)
 
+## VII. Web responsive 
+[:arrow_up: Mục lục](#mục-lục)
+
+Web responsive hay responsive web design là một phương pháp thiết kế website sao cho nội dung trên website có thể tự điều chỉnh phù hợp với kích thước màn hình của người dùng. Dù bạn đang xem trang web trên một máy tính để bàn, máy tính xách tay, máy tính bảng, hoặc điện thoại di động, một trang web responsive sẽ tự động thay đổi cấu trúc layout, kích thước hình ảnh, và các phần tử khác để phù hợp với kích thước màn hình của bạn.
+
+Để tạo một website responsive, có một số kỹ thuật quan trọng mà bạn nên sử dụng:
+
+- **Media Queries**: Media Queries là một phần quan trọng của CSS3, cho phép bạn áp dụng các quy tắc CSS đặc biệt cho các loại thiết bị và kích cỡ màn hình khác nhau.
+- **CSS Flexbox**: Flexbox, hay Flexible Box Layout, là một mô hình layout dựa trên CSS cho phép bạn dễ dàng thay đổi chiều cao, chiều rộng, và thứ tự của các phần tử con bên trong một container, không phụ thuộc vào kích thước ban đầu của chúng. Flexbox rất phù hợp cho các layout một chiều (một hàng hoặc một cột).
+- **CSS Grid**: Grid Layout là một mô hình layout mạnh mẽ cho phép bạn thiết kế các layout dựa trên lưới, với khả năng điều chỉnh và định vị các phần tử trên hai trục (hàng và cột). CSS Grid cho phép bạn tạo ra các layout phức tạp và linh hoạt mà không cần phải sử dụng các kỹ thuật CSS khác như float hay positioning.
+- **Viewport Meta Tag**: Tag này được sử dụng trong HTML để điều khiển cách mà trình duyệt hiển thị trang web trên các thiết bị di động. Nó cho phép trình duyệt biết cách điều chỉnh kích thước và tỷ lệ của nội dung.
+
 
