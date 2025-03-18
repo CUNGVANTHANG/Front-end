@@ -26,6 +26,7 @@
   - [IV. CSS display](#iv-css-display)
   - [V. CSS position](#v-css-position)
   - [VI. CSS pseudo classes, pseudo elements](#vi-css-pseudo-classes-pseudo-elements)
+  - [VII. Web responsive](#vii-web-responsive)
 </details>
 
 ## A. Website
@@ -477,15 +478,124 @@ _CSS:_
 
 <img src="https://github.com/CUNGVANTHANG/Front-end/assets/96326479/5151e29b-4cf7-4cf4-9a52-cf123ab5e652" style="height: 200px;">
 
+🚀 **So sánh `display: block;` và `display: inline-block;`**
+
+| Thuộc tính |	`display: block;` |	`display: inline-block;` |
+| :--: | :--: | :--: |
+| Chiếm toàn bộ chiều rộng? |	✅ Có |	❌ Không |
+| Xuống dòng mới? |	✅ Có |	❌ Không |
+| Có thể đặt chiều rộng (width) và chiều cao (height)? |	✅ Có |	✅ Có |
+| Nằm trên cùng một dòng với phần tử khác? |	❌ Không |	✅ Có |
+
 ### 3. `display: flex;`
 [:arrow_up: Mục lục](#mục-lục)
 
+Trang web tham khảo flexbox: https://codepen.io/enxaneta/full/adLPwv/
 
+Flexbox là một phương pháp sắp xếp và điều chỉnh các phần tử trong một container trong CSS. Nó cung cấp một cách dễ dàng và linh hoạt để tạo các bố cục linh hoạt và phản ứng trên các trình duyệt và thiết bị khác nhau.
+
+Để sử dụng Flexbox, bạn cần thực hiện các bước sau:
+
+**Bước 1**: Đặt thuộc tính `display` của container thành `flex`:
+
+```css
+.container {
+  display: flex;
+}
+```
+
+Sắp xếp và điều chỉnh các phần tử con bên trong container bằng cách sử dụng các thuộc tính Flexbox, như `flex-direction`, `justify-content`, `align-items`, và `align-content`. Dưới đây là một số thuộc tính quan trọng:
+
+- `flex-direction`: Xác định hướng xếp các phần tử con trong container. Ví dụ, `row` sẽ xếp theo hàng ngang, `column` sẽ xếp theo cột.
+
+_Ví dụ:_
+
+|  | `flex-direction: row-reverse;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/a155db3c-6c42-4e35-a0e8-bf04da170e6b) |  ![image](https://github.com/user-attachments/assets/35353637-0ab6-4035-a0fc-901f3fb35a3b) |
+
+- `justify-content`: Xác định cách các phần tử con được căn chỉnh theo trục chính. Ví dụ, `flex-start` sẽ căn chỉnh từ bên trái (hoặc từ trên cùng nếu dùng `column`), `center` sẽ căn chỉnh ở giữa, `flex-end` sẽ căn chỉnh từ bên phải (hoặc từ dưới cùng nếu dùng `column`).
+
+_Ví dụ:_
+
+|  | `justify-content: center;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/a4581be2-f0d9-422a-8f7a-53bb3c7667cb) | ![image](https://github.com/user-attachments/assets/bd16fa0b-c258-468b-85d6-7085eba0dfa2) |
+
+- `align-items`: Xác định cách các phần tử con được căn chỉnh theo trục phụ. Ví dụ, `flex-start` sẽ căn chỉnh từ trên cùng (hoặc từ bên trái nếu dùng `column`), `center` sẽ căn chỉnh ở giữa, `flex-end` sẽ căn chỉnh từ dưới cùng (hoặc từ bên phải nếu dùng `column`).
+
+_Ví dụ:_
+
+|  | `align-items: flex-end;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/012c5aaf-6703-45d7-a8e6-c8067004182e) | ![image](https://github.com/user-attachments/assets/0c2e6747-38b6-4565-857d-bb2e37281c8a) |
+
+- `align-content`: Xác định cách các hàng hoặc cột của các phần tử con được căn chỉnh theo trục phụ khi có nhiều hàng hoặc cột. Ví dụ, `flex-start` sẽ căn chỉnh từ trên cùng (hoặc từ bên trái nếu dùng `column`), `center` sẽ căn chỉnh ở giữa, `flex-end` sẽ căn chỉnh từ dưới cùng (hoặc từ bên phải nếu dùng `column`).
+
+_Ví dụ:_
+
+|  | `align-content: center;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/3cafd420-4465-408b-9f34-f5bd6165a6d4) | ![image](https://github.com/user-attachments/assets/d1dfdf6b-75de-41b9-b66a-77104199190a) |
+
+Flexbox còn rất nhiều thuộc tính và khả năng linh hoạt khác để tạo các bố cục và điều chỉnh phần tử. Dưới đây là một số thuộc tính và khái niệm quan trọng khác mà bạn có thể sử dụng để tùy chỉnh bố cục và điều chỉnh phần tử trong Flexbox:
+
+- `flex-grow`: Xác định khả năng mở rộng của một phần tử con trong container Flexbox khi có không gian dư thừa. Giá trị càng lớn, phần tử sẽ chiếm nhiều không gian dư thừa hơn so với các phần tử khác.
+
+_Ví dụ:_ Phần tử thứ nhất sẽ có kích thước tăng nhanh gấp 3 lần so với kích thước của phần tử thứ hai khi phần tử cha tăng kích thước.
+
+|  | `#child1 {flex-grow: 3;} #child2 {flex-grow: 1;}` |
+| :--: | :--: |
+![image](https://github.com/user-attachments/assets/f2dd5a76-e2bf-4b2e-8123-713cf6bcb58b) | ![image](https://github.com/user-attachments/assets/1804c3bf-f85b-4cf9-89da-9da96221c98a)
+
+- `flex-shrink`: Xác định khả năng co lại của một phần tử con trong container Flexbox khi không đủ không gian. Giá trị càng lớn, phần tử sẽ co lại nhiều hơn so với các phần tử khác.
+
+_Ví dụ:_ Phần tử thứ nhất sẽ có kích thước được thu hẹp lại gấp 4 lần so với kích thước của phần tử thứ 2.
+
+|  | `#child1 {flex-shrink: 4;} #child2 {flex-shrink: 1;}` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/13f6dcc7-f395-4fdb-bb29-de81809a4f64) | ![image](https://github.com/user-attachments/assets/b18a0980-5099-4284-9d66-aeaf16d1837e)|
+
+- `flex-basis`: Xác định kích thước ban đầu của một phần tử con trong container Flexbox trước khi Flexbox phân phối không gian dư thừa hoặc co lại không gian không đủ.
+
+|  | `#child1 {flex-basis: 12em;} #child2 {flex-basics: 24em;}` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/4703a3f2-12ae-4340-bd44-24513f27ad8b) | ![image](https://github.com/user-attachments/assets/1660bd8f-075a-435c-96d7-58ae6029365a) |
+
+- `flex`: Kết hợp các thuộc tính `flex-grow`, `flex-shrink` và `flex-basis` thành một giá trị ngắn gọn. Ví dụ: `flex: 1 0 200px` có nghĩa là phần tử có khả năng mở rộng, không khả năng co lại, và kích thước ban đầu là `200px`.
+
+_Ví dụ:_
+
+|  | `#child1 {flex: 3 2 20em;} #child2 {flex: 1 1 24em;}` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/12b358b6-e63f-4f14-9879-0b946811b5ca) | ![image](https://github.com/user-attachments/assets/263de608-6c9f-4b16-b4aa-895b9251605e) |
+
+- `align-self`: Điều chỉnh căn chỉnh theo trục phụ của một phần tử con cụ thể trong container Flexbox, ghi đè lên giá trị `align-items` của container.
+
+_Ví dụ:_
+
+|  | `#child1 {align-self: flex-start;} #child2 {align-self: center;}` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/ba35aba9-d14a-428d-a221-17e5c624d8d3) | ![image](https://github.com/user-attachments/assets/749ec07f-f14e-49bf-867c-ac7c3b7c267a) |
+
+- `order`: Xác định thứ tự hiển thị của các phần tử con trong container Flexbox. Mặc định, giá trị order là 0 và các phần tử được sắp xếp theo thứ tự xuất hiện trong HTML. Bạn có thể sử dụng các giá trị âm hoặc dương để xác định thứ tự hiển thị tùy ý.
+
+_Ví dụ:_
+
+|  | `#child1 {order: 2;} #child2 {order: 1;}` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/46323e43-ab2a-4846-abab-9e6f5634f644) | ![image](https://github.com/user-attachments/assets/e6a728a0-9339-4804-8d77-b7ecf2765339) |
+
+- `flex-wrap`: Xác định xem liệu các phần tử con có nên xuống dòng khi không đủ không gian hay không. Giá trị `nowrap` (mặc định) sẽ không cho phép xuống dòng, trong khi giá trị `wrap` sẽ cho phép xuống dòng nếu cần thiết.
+
+_Ví dụ:_
+
+|  | `flex-wrap: wrap;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/df271320-d48d-4c6f-b69c-fe2db68adae4) | ![image](https://github.com/user-attachments/assets/4d80734a-7492-4485-9281-8bd2456eeac8) | 
 
 ### 4. `display: inline-flex;`
 [:arrow_up: Mục lục](#mục-lục)
-
-
 
 ### 5. `display: grid;`
 [:arrow_up: Mục lục](#mục-lục)
