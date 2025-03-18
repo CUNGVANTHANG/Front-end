@@ -504,7 +504,7 @@ Flexbox là một phương pháp sắp xếp và điều chỉnh các phần t�
 }
 ```
 
-Sắp xếp và điều chỉnh các phần tử con bên trong container bằng cách sử dụng các thuộc tính Flexbox, như `flex-direction`, `justify-content`, `align-items`, và `align-content`. Dưới đây là một số thuộc tính quan trọng:
+**Bước 2:**  Sắp xếp và điều chỉnh các phần tử con bên trong container bằng cách sử dụng các thuộc tính Flexbox, như `flex-direction`, `justify-content`, `align-items`, và `align-content`. Dưới đây là một số thuộc tính quan trọng:
 
 - `flex-direction`: Xác định hướng xếp các phần tử con trong container. Ví dụ, `row` sẽ xếp theo hàng ngang, `column` sẽ xếp theo cột.
 
@@ -597,8 +597,95 @@ _Ví dụ:_
 ### 4. `display: inline-flex;`
 [:arrow_up: Mục lục](#mục-lục)
 
+🚀 **So sánh `display: flex;` và `display: inline-flex;`**
+
+`display: flex;` và `display: inline-flex;` đều tạo ra một Flex Container để sắp xếp các phần tử con (flex items), nhưng sự khác biệt chính giữa chúng nằm ở cách chúng chiếm không gian trong bố cục.
+
+| Thuộc tính |	display: flex; |	display: inline-flex; |
+| :--: | :--: | :--: |
+| Chiếm toàn bộ dòng?	 | ✅ Có	| ❌ Không |
+| Có thể căn chỉnh phần tử con bằng Flexbox? |	✅ Có	 | ✅ Có |
+| Có thể nằm trên cùng một dòng với phần tử khác? |	❌ Không |	✅ Có |
+
 ### 5. `display: grid;`
 [:arrow_up: Mục lục](#mục-lục)
+
+CSS Grid là một hệ thống layout hai chiều trong CSS, cho phép bạn điều chỉnh cả hàng và cột trên trang web của mình. Đây là công cụ mạnh mẽ cho phép bạn tạo ra các loại layout phức tạp mà không cần phải sử dụng nhiều công cụ khác nhau như floats, positioning và Flexbox.
+
+Ví dụ về cách sử dụng CSS Grid:
+
+```html
+<div class="grid-container">
+    <div class="grid-item">1</div>
+    <div class="grid-item">2</div>
+    <div class="grid-item">3</div>
+    <div class="grid-item">4</div>
+</div>
+```
+
+```css
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+}
+
+.grid-item {
+    background-color: #ddd;
+    padding: 20px;
+    text-align: center;
+}
+```
+
+Trong đoạn mã trên, `.grid-container` được đặt làm một grid với 3 cột (`grid-template-columns: auto auto auto`). Khoảng cách giữa các hàng và cột (`gap`) là `10px`. Mỗi `.grid-item` sẽ tự động được bố trí vào vị trí tiếp theo trên grid.
+
+**Các thuộc tính quan trọng của CSS Grid**
+
+CSS Grid là một hệ thống layout hai chiều trong CSS, cho phép điều chỉnh cả hàng và cột trong một container. Dưới đây là một số thuộc tính chính và quan trọng của CSS Grid:
+
+- `grid-template-columns` / `grid-template-rows`: Định nghĩa số lượng, kích thước và vị trí của các cột / hàng bằng cách liệt kê các giá trị. Ví dụ: `grid-template-columns: 200px 100px auto`;
+
+_Ví dụ:_
+
+- `grid-template-areas`: Cho phép bạn đặt tên cho các phần của layout và sau đó sử dụng tên đó để định vị các mục.
+
+_Ví dụ:_
+
+- `grid-auto-columns` / `grid-auto-rows`: Định nghĩa kích thước của các cột / hàng tự động được tạo.
+
+_Ví dụ:_
+
+- `grid-column-start` / `grid-column-end` / `grid-row-start` / `grid-row-end`: Xác định vị trí mục grid bắt đầu và kết thúc trên cột / hàng.
+
+_Ví dụ:_
+
+- `grid-column` / `grid-row`: Kết hợp của `grid-column-start` / `grid-column-end` và `grid-row-start` / `grid-row-end`
+
+_Ví dụ:_
+
+- `grid-area`: Kết hợp của tất cả các thuộc tính bắt đầu và kết thúc, hoặc định nghĩa tên khu vực grid.
+
+_Ví dụ:_
+
+- `justify-items` / `align-items`: Xác định cách các mục được căn chỉnh trong container dọc theo trục hàng (justify-items) và trục cột (align-items)
+
+_Ví dụ:_
+
+- `justify-content` / `align-content`: Xác định cách các dòng / cột được căn chỉnh trong container khi có thêm không gian
+
+_Ví dụ:_
+
+- `grid-gap` / `column-gap` / `row-gap`: Xác định khoảng cách giữa các hàng / cột.
+
+_Ví dụ:_
+
+- `grid-auto-flow`: Xác định cách mà các mục tự động được đặt trong grid.
+
+_Ví dụ:_
+
+- `grid-template` / `grid`: Kết hợp của nhiều thuộc tính grid khác vào một thuộc tính duy nhất.
+
+_Ví dụ:_
 
 ### 6. `display: inline-grid;`
 [:arrow_up: Mục lục](#mục-lục)
