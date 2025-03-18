@@ -522,4 +522,11 @@ Web responsive hay responsive web design là một phương pháp thiết kế w
 - **CSS Grid**: Grid Layout là một mô hình layout mạnh mẽ cho phép bạn thiết kế các layout dựa trên lưới, với khả năng điều chỉnh và định vị các phần tử trên hai trục (hàng và cột). CSS Grid cho phép bạn tạo ra các layout phức tạp và linh hoạt mà không cần phải sử dụng các kỹ thuật CSS khác như float hay positioning.
 - **Viewport Meta Tag**: Tag này được sử dụng trong HTML để điều khiển cách mà trình duyệt hiển thị trang web trên các thiết bị di động. Nó cho phép trình duyệt biết cách điều chỉnh kích thước và tỷ lệ của nội dung.
 
+**1. Làm cho Typography Responsive**
 
+Có 4 đơn vị đo lường màn hình khác nhau như sau:
+
+- `vw` (chiều rộng của màn): `27vw` biểu diễn `27%` kích thước chiều rộng của màn hình hiển thị.
+- `vh` (chiều cao của màn): `8vh` biểu diễn `8%` kích thước chiều cao của màn hình hiển thị.
+- `vmin` (kích thước theo chiều nhỏ hơn của màn hình): `82vmin` biểu diễn `82%` kích thước của chiều không gian hiển thị nhỏ hơn của màn hình hiện tại.
+- `vmax` (kích theo chiều lớn hơn của màn hình): `92vmax` biểu diễn `92%` kích thước của chiều không gian hiển thị lớn hơn của màn hình hiện tại.
