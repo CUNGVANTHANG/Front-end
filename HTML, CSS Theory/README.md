@@ -643,9 +643,23 @@ Trong đoạn mã trên, `.grid-container` được đặt làm một grid với
 
 CSS Grid là một hệ thống layout hai chiều trong CSS, cho phép điều chỉnh cả hàng và cột trong một container. Dưới đây là một số thuộc tính chính và quan trọng của CSS Grid:
 
-- `grid-template-columns` / `grid-template-rows`: Định nghĩa số lượng, kích thước và vị trí của các cột / hàng bằng cách liệt kê các giá trị. Ví dụ: `grid-template-columns: 200px 100px auto`;
+- `grid-template-columns` / `grid-template-rows`: Định nghĩa số lượng, kích thước và vị trí của các cột / hàng bằng cách liệt kê các giá trị.
 
-_Ví dụ:_
+`grid-template-columns: 200px 100px auto;` trong đó container sẽ có 3 cột. Cột đầu tiên sẽ có chiều rộng là `200px`, cột thứ hai sẽ có chiều rộng `100px`, và cột thứ ba sẽ tự động mở rộng để chiếm phần còn lại của không gian trong container.
+
+_Ví dụ:_ Tạo 2 cột trong grid container, trong đó các cột đều có chiều rộng là `120px`.
+
+|  | `grid-template-columns: 120px 120px auto;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/bc645596-287a-4261-b7b4-43985173c3ec) | ![image](https://github.com/user-attachments/assets/e8320594-b4b7-49a0-bd3b-5a41efb06a0d) | 
+
+`grid-template-rows: 100px 200px auto;` trong đó container grid sẽ có 3 hàng. Hàng đầu tiên có chiều cao `100px`, hàng thứ hai có chiều cao `200px`, và hàng thứ ba sẽ tự động mở rộng để chiếm phần còn lại của không gian trong container.
+
+_Ví dụ:_ Tạo 2 hàng trong grid container, trong đó các hàng đều có chiều cao là `120px`.
+
+|  | `grid-template-rows: 120px 120px auto;` |
+| :--: | :--: |
+| ![image](https://github.com/user-attachments/assets/bc645596-287a-4261-b7b4-43985173c3ec) | ![image](https://github.com/user-attachments/assets/c7d4dda9-db8d-4ce5-b7ae-30048d997970) | 
 
 - `grid-template-areas`: Cho phép bạn đặt tên cho các phần của layout và sau đó sử dụng tên đó để định vị các mục.
 
