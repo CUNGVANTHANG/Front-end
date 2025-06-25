@@ -66,6 +66,58 @@ Link tham khảo: https://ads.google.com/home/tools/keyword-planner/
 
 ![image](https://github.com/user-attachments/assets/a034b5ab-b452-4e05-a5e9-06dde33f7364)
 
+**2. Các kỹ thuật SEO phổ biến**
 
+**Các loại link:**
 
+- Internal link (Liên kết nội bộ): là các liên kết dẫn đến các trang khác trong cùng một website
+- External link (Liên kết bên ngoài): là các liên kết dẫn đến một trang web khác ngoài website của bạn
+- Backlink (Liên kết ngược): là liên kết từ các trang web khác trỏ về website của bạn.
 
+**Nghiên cứu website đặt backlinks:**
+
+- Website báo tin tức (vnexpress, vietnamnet, kenh14...)
+- Diễn đàn (vietdesigner, webtretho...)
+- Website đối tác
+- Website chuyên ngành, review (foody, tinhte, batdongsan...)
+
+Tham khảo website: https://www.similarweb.com/ dùng để kiểm tra chất lượng website
+
+**Nghiên cứu đối thủ:**
+
+Tham khảo website: https://ahrefs.com/backlink-checker dùng để xem số lượng backlinks
+
+![image](https://github.com/user-attachments/assets/c233e0ec-59a1-44ec-8510-77eacb63ad32)
+
+**Viết bài chèn backlink:**
+
+- Bài PR chèn link
+- Forum seeding
+- Bài review
+- Đặt backlink đúng từ khóa, đúng nội dung
+
+**3. On-page SEO**
+
+- URL ngắn gọn, súc tích, chứa keyword
+- Khai báo đầy đủ thẻ meta, chứa keyword
+- Thêm alt text cho hình ảnh
+- Khai báo đầy đủ heading chứa keyword
+- Tối ưu tốc độ tải trang và hiển thị thiết bị di động
+
+**4. Kỹ thuật viết content chuẩn SEO**
+
+**Tiêu chí Google đánh giá nội dung:**
+
+- Nguyên bản, không sao chép, chưa từng đăng tải
+- Tiêu đề (title) và đề mục lớn (heading) có chứa từ khóa
+- Website được cập nhật nội dung thường xuyên
+- Kích thích người đọc tương tác, chia sẻ
+
+**Thủ thuật viết nội dung chuẩn SEO:**
+- Mật độ từ khóa 2 - 3%
+- Tiêu đề và những dòng đầu kích thích click
+- Title dài 55 - 65 ký tự, description dài 150 - 160 kí tự
+- Sử dụng bôi đậm, in nghiêng linh hoạt và cho các từ khóa
+- Sử dụng hình ảnh và video hấp dẫn (đừng quên alt text)
+- Bật chức năng bình luận và chia sẻ
+- Nội dung càng dài càng tốt 700 - 2000 chữ
